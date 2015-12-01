@@ -1,0 +1,11 @@
+CRF++ was used to experiment with SMSNP full training data.
+For CRF++ experiments on SMSNP data, the commands used were:
+1. Check exec.sh, the first part is for multiple O tags (O-B, O-I, O-A), the second is for single O tag
+2. The training data SMSNP.conll.singleO.{train,test} were modified versions of SMSNP.conll.{train,test} from
+   ../../data/SMSNP
+   The files were modified manually using regex substitution (s/O-[AIB]$/O/)
+3. Run exec.sh to get all the result files:
+  - crfpp.alldata.4.0.model
+  - crfpp.alldata.4.0.singleO.model
+  - crfpp.alldata.4.0.result
+  - crfpp.alldata.4.0.singleO.result
