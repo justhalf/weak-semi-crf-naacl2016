@@ -19,9 +19,9 @@
  */
 package com.statnlp.experiment.smsnp.linear_crf;
 
+import com.statnlp.example.linear_crf.LinearCRFNetworkCompiler.NODE_TYPES;
 import com.statnlp.experiment.smsnp.SMSNPInstance;
 import com.statnlp.experiment.smsnp.SMSNPNetwork;
-import com.statnlp.experiment.smsnp.SMSNPTokenizer;
 import com.statnlp.experiment.smsnp.SMSNPTokenizer.TokenizerMethod;
 import com.statnlp.hybridnetworks.FeatureArray;
 import com.statnlp.hybridnetworks.FeatureManager;
@@ -30,34 +30,39 @@ import com.statnlp.hybridnetworks.Network;
 import com.statnlp.hybridnetworks.NetworkIDMapper;
 
 /**
- * @author wei_lu
+ * 
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
  *
  */
 public class LinearCRFFeatureManager extends FeatureManager{
 
 	private static final long serialVersionUID = -4880581521293400351L;
 	
+	public int wordHalfWindowSize = 1;
+	public boolean wordOnlyLeftWindow = true;
+	
 	public enum FeatureType {
-		PREV_EMISSION,
-		EMISSION,
-		TRANSITION,
+		WORD(true),
+		WORD_BIGRAM(false),
+		TRANSITION(true),
 		;
 		
-		private boolean isEnabled;
+		private boolean isEnabled = true;
+		
 		private FeatureType(){
-			isEnabled = true;
+			this(true);
 		}
 		
-		private FeatureType(boolean isEnabled){
-			this.isEnabled = isEnabled;
+		private FeatureType(boolean enabled){
+			this.isEnabled = enabled;
 		}
 		
 		public void enable(){
-			isEnabled = true;
+			this.isEnabled = true;
 		}
 		
 		public void disable(){
-			isEnabled = false;
+			this.isEnabled = false;
 		}
 		
 		public boolean enabled(){
@@ -85,61 +90,83 @@ public class LinearCRFFeatureManager extends FeatureManager{
 	@Override
 	protected FeatureArray extract_helper(Network network, int parent_k, int[] children_k) {
 		SMSNPNetwork net = (SMSNPNetwork)network;
-		
 		SMSNPInstance instance = (SMSNPInstance)net.getInstance();
 		
-		String input = instance.getInput();
-		String[] words = SMSNPTokenizer.tokenize(input, tokenizerMethod);
+		String[] words = instance.getInputTokenized(tokenizerMethod, true, false);
+		int size = words.length;
 		
 		long curNode = net.getNode(parent_k);
 		int[] arr = NetworkIDMapper.toHybridNodeArray(curNode);
 		
 		int pos = arr[0]-1;
-		int tag_id = arr[1];
+		int tag_id = arr[1]-1;
 		int nodeType = arr[4];
 		
-		String curWord = null;
-		String prevWord = null;
-		int child_tag_id = -1;
-		switch (LinearCRFNetworkCompiler.NODE_TYPES.values()[nodeType]){
-		case LEAF:
+		if(nodeType == NODE_TYPES.LEAF.ordinal() || (nodeType == NODE_TYPES.ROOT.ordinal() && pos < size)){
 			return FeatureArray.EMPTY;
-		case ROOT:
-			child_tag_id = NetworkIDMapper.toHybridNodeArray(net.getNode(children_k[0]))[1];
-			curWord = LinearCRFNetworkCompiler.NODE_TYPES.values()[nodeType].name();
-			if(pos == 0){
-				prevWord = LinearCRFNetworkCompiler.NODE_TYPES.LEAF.name();
-			} else {
-				prevWord = words[pos-1];
-			}
-			break;
-		case NODE:
-			curWord = words[pos];
-			if(pos == 0){
-				child_tag_id = -1;
-				prevWord = LinearCRFNetworkCompiler.NODE_TYPES.LEAF.name();
-			} else {
-				child_tag_id = NetworkIDMapper.toHybridNodeArray(net.getNode(children_k[0]))[1];
-				prevWord = words[pos-1];
-			}
-			break;
-		default:
-			throw new RuntimeException("Should not happen");
 		}
-	
+		
+		int child_tag_id = network.getNodeArray(children_k[0])[1]-1;
+		
 		GlobalNetworkParam param_g = this._param_g;
-		int prevEmissionFeature = param_g.toFeature(FeatureType.PREV_EMISSION.name(), tag_id+"", prevWord);
-		int emissionFeature = param_g.toFeature(FeatureType.EMISSION.name(), tag_id+"", curWord);
-		int transitionFeature = param_g.toFeature(FeatureType.TRANSITION.name(), tag_id+"", child_tag_id+" "+tag_id);
+
+		FeatureArray features = new FeatureArray(new int[0]);
+		// Word window features
+		if(FeatureType.WORD.enabled() && nodeType != NODE_TYPES.ROOT.ordinal()){
+			int wordWindowSize = wordHalfWindowSize*2+1;
+			if(wordWindowSize < 0){
+				wordWindowSize = 0;
+			}
+			int[] wordWindowFeatures = new int[wordWindowSize];
+			for(int i=0; i<wordWindowFeatures.length; i++){
+				String word = "***";
+				int relIdx = (i-wordHalfWindowSize);
+				int idx = pos + relIdx;
+				if(idx >= 0 && idx < size){
+					word = words[idx];
+				}
+				if(wordOnlyLeftWindow && idx > pos) continue;
+				wordWindowFeatures[i] = param_g.toFeature(FeatureType.WORD+":"+relIdx, tag_id+"", word);
+			}
+			FeatureArray wordFeatures = new FeatureArray(wordWindowFeatures, features);
+			features = wordFeatures;
+		}
 		
-		FeatureArray featureArr = null;
-		featureArr = new FeatureArray(new int[]{
-												prevEmissionFeature,
-												emissionFeature,
-												transitionFeature,
-											});
+		// Word bigram features
+		if(FeatureType.WORD_BIGRAM.enabled()){
+			int[] bigramFeatures = new int[2];
+			for(int i=0; i<2; i++){
+				String bigram = "";
+				for(int j=0; j<2; j++){
+					int idx = pos+i+j-1;
+					if(idx >=0 && idx < size){
+						bigram += words[idx];
+					} else {
+						bigram += "***";
+					}
+					if(j<1){
+						bigram += " ";
+					}
+				}
+				bigramFeatures[i] = param_g.toFeature(FeatureType.WORD_BIGRAM+":"+i, tag_id+"", bigram);
+			}
+			features = new FeatureArray(bigramFeatures, features);
+		}
 		
-		return featureArr;
+		// Label transition feature
+		if(FeatureType.TRANSITION.enabled()){
+			if(child_tag_id == -1){
+				
+			} else {
+				int transitionFeature = param_g.toFeature(FeatureType.TRANSITION.name(), child_tag_id+"-"+tag_id, "");
+				features = new FeatureArray(new int[]{transitionFeature}, features);
+			}
+		}
+		
+//		int cheatFeature = param_g.toFeature("CHEAT", tag_id+"", instance.getInstanceId()+" "+pos+""+child_tag_id);
+//		features = new FeatureArray(new int[]{cheatFeature}, features);
+		
+		return features;
 	}
 
 }

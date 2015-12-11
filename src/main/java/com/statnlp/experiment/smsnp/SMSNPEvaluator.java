@@ -77,7 +77,7 @@ public class SMSNPEvaluator {
 	}
 	
 	private static void printScore(Instance[] instances, PrintStream... outstream){
-		int size = Label.LABELS.size();
+		int size = SpanLabel.LABELS.size();
 		int[] corrects = new int[size];
 		int[] totalGold = new int[size];
 		int[] totalPred = new int[size];
@@ -88,7 +88,7 @@ public class SMSNPEvaluator {
 			for(Span span: actual){
 				if(predicted.contains(span)){
 					predicted.remove(span);
-					Label label = span.label;
+					SpanLabel label = span.label;
 					corrects[label.id] += 1;
 					totalPred[label.id] += 1;
 				}
@@ -104,7 +104,7 @@ public class SMSNPEvaluator {
 			double recall = (totalGold[i] == 0) ? 0.0 : 1.0*corrects[i]/totalGold[i];
 			double f1 = (precision == 0.0 || recall == 0.0) ? 0.0 : 2/((1/precision)+(1/recall));
 			avgF1 += f1;
-			print(String.format("%6s: #Corr:%2$3d, #Pred:%3$3d, #Gold:%4$3d, Pr=%5$#5.2f%% Rc=%6$#5.2f%% F1=%7$#5.2f%%", Label.get(i).form, corrects[i], totalPred[i], totalGold[i], precision*100, recall*100, f1*100), outstream);
+			print(String.format("%6s: #Corr:%2$3d, #Pred:%3$3d, #Gold:%4$3d, Pr=%5$#5.2f%% Rc=%6$#5.2f%% F1=%7$#5.2f%%", SpanLabel.get(i).form, corrects[i], totalPred[i], totalGold[i], precision*100, recall*100, f1*100), outstream);
 		}
 		print(String.format("Macro average F1: %.2f%%", 100*avgF1/size), outstream);
 	}

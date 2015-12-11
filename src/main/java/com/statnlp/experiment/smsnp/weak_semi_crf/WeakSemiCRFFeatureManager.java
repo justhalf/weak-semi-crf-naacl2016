@@ -115,14 +115,14 @@ public class WeakSemiCRFFeatureManager extends FeatureManager {
 		
 		if(FeatureType.CHEAT.enabled()){
 			int instanceId = Math.abs(instance.getInstanceId());
-			int cheatFeature = param_g.toFeature(FeatureType.CHEAT.name(), parentLabelId+"", instanceId+" "+parentPos+" "+childPos+" "+parentLabelId+" "+childLabelId);
+			int cheatFeature = param_g.toFeature(FeatureType.CHEAT.name(), "", instanceId+" "+parentPos+" "+childPos+" "+parentLabelId+" "+childLabelId);
 			return new FeatureArray(new int[]{cheatFeature});
 		}
 		
 		List<Integer> commonFeatures = new ArrayList<Integer>();
 		
 		if(FeatureType.BIGRAM.enabled()){
-			int bigramFeature = param_g.toFeature(FeatureType.BIGRAM.name(), parentLabelId+"", parentLabelId+" "+childLabelId);
+			int bigramFeature = param_g.toFeature(FeatureType.BIGRAM.name(), childLabelId+"-"+parentLabelId, "");
 			commonFeatures.add(bigramFeature);
 		}
 		

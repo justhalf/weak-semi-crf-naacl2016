@@ -24,12 +24,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.statnlp.commons.types.Instance;
-import com.statnlp.experiment.smsnp.Label;
 import com.statnlp.experiment.smsnp.SMSNPInstance;
 import com.statnlp.experiment.smsnp.SMSNPNetwork;
-import com.statnlp.experiment.smsnp.SMSNPTokenizer;
 import com.statnlp.experiment.smsnp.SMSNPTokenizer.TokenizerMethod;
-import com.statnlp.experiment.smsnp.Span;
+import com.statnlp.experiment.smsnp.WordLabel;
 import com.statnlp.hybridnetworks.LocalNetworkParam;
 import com.statnlp.hybridnetworks.Network;
 import com.statnlp.hybridnetworks.NetworkCompiler;
@@ -39,16 +37,18 @@ public class LinearCRFNetworkCompiler extends NetworkCompiler{
 	
 	private static final long serialVersionUID = -3829680998638818730L;
 	
-	private Label[] _labels;
+	public static final boolean DEBUG = false;
+	
+	public WordLabel[] _labels;
 	public enum NODE_TYPES {LEAF, NODE, ROOT};
-	private static int MAX_LENGTH = 100;
+	private static int MAX_LENGTH = 500;
 	
 	private long[] _allNodes;
 	private int[][][] _allChildren;
 	
 	private TokenizerMethod tokenizerMethod;
 	
-	public LinearCRFNetworkCompiler(Label[] labels, TokenizerMethod tokenizerMethod){
+	public LinearCRFNetworkCompiler(WordLabel[] labels, TokenizerMethod tokenizerMethod){
 		this._labels = labels;
 		this.compile_unlabled_generic();
 		this.tokenizerMethod = tokenizerMethod;
@@ -66,10 +66,45 @@ public class LinearCRFNetworkCompiler extends NetworkCompiler{
 	}
 	
 	
+	private SMSNPNetwork compile_labeled(int networkId, SMSNPInstance inst, LocalNetworkParam param){
+		SMSNPNetwork network = new SMSNPNetwork(networkId, inst, param);
+		List<WordLabel> outputs = inst.getOutputTokenized();
+		
+		// Add leaf
+		long leaf = toNode_leaf();
+		network.addNode(leaf);
+		
+		long prevNode = leaf;
+		
+		for(int i=0; i<outputs.size(); i++){
+			int labelId = outputs.get(i).id;
+			long node = toNode(i, labelId);
+			network.addNode(node);
+			network.addEdge(node, new long[]{prevNode});
+			prevNode = node;
+		}
+		
+		// Add root
+		long root = toNode_root(outputs.size());
+		network.addNode(root);
+		network.addEdge(root, new long[]{prevNode});
+		
+		network.finalizeNetwork();
+		
+		if(DEBUG){
+			SMSNPNetwork unlabeled = compile_unlabeled(networkId, inst, param);
+			System.out.println(inst);
+			System.out.println(inst.wordSpans);
+			System.out.println(outputs);
+			System.out.println(network);
+			System.out.println(unlabeled.contains(network));
+		}
+		
+		return network;
+	}
+
 	private SMSNPNetwork compile_unlabeled(int networkId, SMSNPInstance inst, LocalNetworkParam param){
-		String input = inst.input;
-		String[] words = SMSNPTokenizer.tokenize(input, tokenizerMethod);
-		int size = words.length;
+		int size = inst.getInputTokenized(tokenizerMethod, false, false).length;
 		long root = this.toNode_root(size);
 		
 		int pos = Arrays.binarySearch(this._allNodes, root);
@@ -91,8 +126,8 @@ public class LinearCRFNetworkCompiler extends NetworkCompiler{
 		prevNodes.add(leaf);
 		
 		for(int k = 0; k <MAX_LENGTH; k++){
-			for(int tag_id = 0; tag_id < this._labels.length; tag_id++){
-				long node = this.toNode(k, tag_id);
+			for(int tag_idx = 0; tag_idx < this._labels.length; tag_idx++){
+				long node = this.toNode(k, _labels[tag_idx].id);
 				currNodes.add(node);
 				network.addNode(node);
 				for(long prevNode : prevNodes){
@@ -123,52 +158,24 @@ public class LinearCRFNetworkCompiler extends NetworkCompiler{
 	}
 	
 	private long toNode(int pos, int tag_id){
-		int[] arr = new int[]{pos+1, tag_id, 0, 0, NODE_TYPES.NODE.ordinal()};
+		int[] arr = new int[]{pos+1, tag_id+1, 0, 0, NODE_TYPES.NODE.ordinal()};
 		return NetworkIDMapper.toHybridNodeID(arr);
 	}
 	
 	private long toNode_root(int size){
-		int[] arr = new int[]{size, this._labels.length, 0, 0, NODE_TYPES.ROOT.ordinal()};
+		int[] arr = new int[]{size, this._labels.length+1, 0, 0, NODE_TYPES.ROOT.ordinal()};
 		return NetworkIDMapper.toHybridNodeID(arr);
 	}
 
-	
-	private SMSNPNetwork compile_labeled(int networkId, SMSNPInstance inst, LocalNetworkParam param){
-		SMSNPNetwork network = new SMSNPNetwork(networkId, inst, param);
-		List<Span> outputs = inst.getOutput();
-		
-		// Add leaf
-		long leaf = toNode_leaf();
-		network.addNode(leaf);
-		
-		long prevNode = leaf;
-		
-		for(int i=0; i<outputs.size(); i++){
-			Span span = outputs.get(i);
-			long node = toNode(i, span.label.id);
-			network.addNode(node);
-			network.addEdge(node, new long[]{prevNode});
-			prevNode = node;
-		}
-		
-		// Add root
-		long root = toNode_root(outputs.size());
-		network.addNode(root);
-		network.addEdge(root, new long[]{prevNode});
-		
-		network.finalizeNetwork();
-		
-		return network;
-	}
 	
 	@Override
 	public SMSNPInstance decompile(Network network) {
 		SMSNPNetwork lcrfNetwork = (SMSNPNetwork)network;
 		SMSNPInstance instance = (SMSNPInstance)lcrfNetwork.getInstance();
-		int size = instance.size();
+		int size = instance.getInputTokenized().length;
 		
 		SMSNPInstance result = instance.duplicate();
-		List<String> predictionForms = new ArrayList<String>();
+		List<WordLabel> predictionForms = new ArrayList<WordLabel>();
 		long root = toNode_root(size);
 		int node_k = Arrays.binarySearch(_allNodes, root);
 		
@@ -177,12 +184,12 @@ public class LinearCRFNetworkCompiler extends NetworkCompiler{
 			int child_k = children_k[0];
 			long child = lcrfNetwork.getNode(child_k);
 			int[] child_arr = NetworkIDMapper.toHybridNodeArray(child);
-			int tag_id = child_arr[1];
-			predictionForms.add(0, Label.get(tag_id).form);
+			int tag_id = child_arr[1]-1;
+			predictionForms.add(0, WordLabel.get(tag_id));
 			node_k = child_k;
 		}
 		
-		result.setPrediction(predictionForms);
+		result.setPredictionTokenized(predictionForms);
 		
 		return result;
 	}

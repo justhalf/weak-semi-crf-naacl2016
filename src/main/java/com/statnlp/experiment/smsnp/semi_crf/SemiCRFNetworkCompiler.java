@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.statnlp.commons.types.Instance;
-import com.statnlp.experiment.smsnp.Label;
+import com.statnlp.experiment.smsnp.SpanLabel;
 import com.statnlp.experiment.smsnp.SMSNPInstance;
 import com.statnlp.experiment.smsnp.SMSNPNetwork;
 import com.statnlp.experiment.smsnp.Span;
@@ -21,7 +21,7 @@ public class SemiCRFNetworkCompiler extends NetworkCompiler {
 	private final static boolean DEBUG = false;
 	
 	private static final long serialVersionUID = 6585870230920484539L;
-	public Label[] labels;
+	public SpanLabel[] labels;
 	public int maxLength = 500;
 	public int maxSegmentLength = 20;
 	public long[] allNodes;
@@ -37,7 +37,7 @@ public class SemiCRFNetworkCompiler extends NetworkCompiler {
 		NetworkIDMapper.setCapacity(new int[]{10000, 10, 100});
 	}
 
-	public SemiCRFNetworkCompiler(Label[] labels, int maxLength, int maxSegmentLength) {
+	public SemiCRFNetworkCompiler(SpanLabel[] labels, int maxLength, int maxSegmentLength) {
 		this.labels = labels;
 		this.maxLength = Math.max(maxLength, this.maxLength);
 		this.maxSegmentLength = Math.max(maxSegmentLength, this.maxSegmentLength);
@@ -171,7 +171,7 @@ public class SemiCRFNetworkCompiler extends NetworkCompiler {
 				prevEnd += 1;
 			}
 			if(parentNodeType != NodeType.ROOT){
-				prediction.add(new Span(prevEnd, curEnd, Label.get(labelId)));
+				prediction.add(new Span(prevEnd, curEnd, SpanLabel.get(labelId)));
 			}
 			
 			// Set variables for next iteration
