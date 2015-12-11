@@ -2,7 +2,6 @@ package com.statnlp.experiment.smsnp;
 
 import static com.statnlp.experiment.smsnp.SMSNPUtil.print;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -53,18 +52,11 @@ public class Main {
 		boolean useCoNLLData = false;
 		Algorithm algo = null;
 		
-		String train_filename;
-		String test_filename;
-		SMSNPInstance[] trainInstances;
-		SMSNPInstance[] testInstances;
+		String train_filename = null;
+		String test_filename = null;
+		SMSNPInstance[] trainInstances = null;
+		SMSNPInstance[] testInstances = null;
 		
-		if(useCoNLLData){
-			train_filename = "data/SMSNP.conll.train";
-			test_filename = "data/SMSNP.conll.dev";
-		} else {
-			train_filename = "data/SMSNP.train";
-			test_filename = "data/SMSNP.train";
-		}
 		int maxLength = 0;
 		int maxSpan = 0;
 		boolean findMaxLength = true;
@@ -190,88 +182,68 @@ public class Main {
 			System.exit(0);
 		}
 		
-		if(useCoNLLData){
-			trainInstances = SMSNPUtil.readCoNLLData(train_filename, true, false);
-			testInstances = SMSNPUtil.readCoNLLData(test_filename, false, false);
-		} else {
-			trainInstances = SMSNPUtil.readData(train_filename, true, false);
-			testInstances = SMSNPUtil.readData(test_filename, false, false);
-		}
-		
-		SpanLabel[] labels = SpanLabel.LABELS.values().toArray(new SpanLabel[SpanLabel.LABELS.size()]);
-		
 		PrintStream outstream = null;
 		if(logPath != null){
 			outstream = new PrintStream(logPath, "UTF-8");
 		}
-		
-		for(SMSNPInstance instance: trainInstances){
-			if(findMaxLength){
-				maxLength = Math.max(maxLength, instance.size());
-			}
-			if(findMaxSpan){
-				for(Span span: instance.output){
-					maxSpan = Math.max(maxSpan, span.end-span.start);
-				}
-			}
-		}
-		if(findMaxLength){
-			for(SMSNPInstance instance: testInstances){
-				maxLength = Math.max(maxLength, instance.size());
-			}
-		}
-		
-		NetworkConfig.TRAIN_MODE_IS_GENERATIVE = false;
-		NetworkConfig._CACHE_FEATURES_DURING_TRAINING = true;
-		
-		int size = trainInstances.length;
-		
-		print("Read.."+size+" instances.", outstream, System.err);
-		
+
 		FeatureManager fm = null;
 		NetworkCompiler compiler = null;
-		switch(algo){
-		case LINEAR_CRF:
-			for(SMSNPInstance instance: trainInstances){
-				instance.getInputTokenized(tokenizerMethod, false, true);
-				instance.getOutputTokenized(tokenizerMethod, false, false);
-			}
-			for(SMSNPInstance instance: testInstances){
-				instance.getInputTokenized(tokenizerMethod, false, true);
-				instance.getOutputTokenized(tokenizerMethod, false, false);
-			}
-			WordLabel[] wordLabels = WordLabel.LABELS.values().toArray(new WordLabel[WordLabel.LABELS.size()]);
-			fm = new LinearCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, disabledFeatures);
-			compiler = new LinearCRFNetworkCompiler(wordLabels, tokenizerMethod);
-			break;
-		case SEMI_CRF:
-			fm = new SemiCRFFeatureManager(new GlobalNetworkParam(), disabledFeatures);
-			compiler = new SemiCRFNetworkCompiler(labels, maxLength, maxSpan);
-			break;
-		case WEAK_SEMI_CRF:
-			fm = new WeakSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, disabledFeatures);
-			compiler = new WeakSemiCRFNetworkCompiler(labels, maxLength, maxSpan);
-			break;
-		default:
-			throw new UnsupportedOperationException("Unrecognized algorithm: "+algo);
-		}
-		
-		NetworkModel model = NetworkConfig.TRAIN_MODE_IS_GENERATIVE ? GenerativeNetworkModel.create(fm, compiler) : DiscriminativeNetworkModel.create(fm, compiler);
-		
-		if(serializeModel){
-			if(!new File(modelPath).exists()){
-				print("Reading object...", outstream, System.out);
-				long startTime = System.currentTimeMillis();
-				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(modelPath));
-				model = (NetworkModel)ois.readObject();
-				ois.close();
-				Field _fm = NetworkModel.class.getDeclaredField("_fm");
-				_fm.setAccessible(true);
-				fm = (FeatureManager)_fm.get(model);
-				long endTime = System.currentTimeMillis();
-				print(String.format("Done in %.3fs\n", (endTime-startTime)/1000.0), outstream, System.out);
+		NetworkModel model = null;
+		if(train_filename != null){
+			if(useCoNLLData){
+				trainInstances = SMSNPUtil.readCoNLLData(train_filename, true, false);
 			} else {
-				model.train(trainInstances, maxNumIterations);
+				trainInstances = SMSNPUtil.readData(train_filename, true, false);
+			}
+			
+			SpanLabel[] labels = SpanLabel.LABELS.values().toArray(new SpanLabel[SpanLabel.LABELS.size()]);
+			
+			
+			for(SMSNPInstance instance: trainInstances){
+				if(findMaxLength){
+					maxLength = Math.max(maxLength, instance.size());
+				}
+				if(findMaxSpan){
+					for(Span span: instance.output){
+						maxSpan = Math.max(maxSpan, span.end-span.start);
+					}
+				}
+			}
+			
+			NetworkConfig.TRAIN_MODE_IS_GENERATIVE = false;
+			NetworkConfig._CACHE_FEATURES_DURING_TRAINING = true;
+			
+			int size = trainInstances.length;
+			
+			print("Read.."+size+" instances.", outstream, System.err);
+			
+			switch(algo){
+			case LINEAR_CRF:
+				for(SMSNPInstance instance: trainInstances){
+					instance.getInputTokenized(tokenizerMethod, false, true);
+					instance.getOutputTokenized(tokenizerMethod, false, false);
+				}
+				WordLabel[] wordLabels = WordLabel.LABELS.values().toArray(new WordLabel[WordLabel.LABELS.size()]);
+				fm = new LinearCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, disabledFeatures);
+				compiler = new LinearCRFNetworkCompiler(wordLabels, tokenizerMethod);
+				break;
+			case SEMI_CRF:
+				fm = new SemiCRFFeatureManager(new GlobalNetworkParam(), disabledFeatures);
+				compiler = new SemiCRFNetworkCompiler(labels, maxLength, maxSpan);
+				break;
+			case WEAK_SEMI_CRF:
+				fm = new WeakSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, disabledFeatures);
+				compiler = new WeakSemiCRFNetworkCompiler(labels, maxLength, maxSpan);
+				break;
+			default:
+				throw new UnsupportedOperationException("Unrecognized algorithm: "+algo);
+			}
+			
+			model = NetworkConfig.TRAIN_MODE_IS_GENERATIVE ? GenerativeNetworkModel.create(fm, compiler) : DiscriminativeNetworkModel.create(fm, compiler);
+
+			model.train(trainInstances, maxNumIterations);
+			if(serializeModel){
 				print("Writing object...", outstream, System.out);
 				long startTime = System.currentTimeMillis();
 				ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(modelPath));
@@ -281,7 +253,16 @@ public class Main {
 				print(String.format("Done in %.3fs\n", (endTime-startTime)/1000.0), outstream, System.out);
 			}
 		} else {
-			model.train(trainInstances, maxNumIterations);
+			print("Reading object...", outstream, System.out);
+			long startTime = System.currentTimeMillis();
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(modelPath));
+			model = (NetworkModel)ois.readObject();
+			ois.close();
+			Field _fm = NetworkModel.class.getDeclaredField("_fm");
+			_fm.setAccessible(true);
+			fm = (FeatureManager)_fm.get(model);
+			long endTime = System.currentTimeMillis();
+			print(String.format("Done in %.3fs\n", (endTime-startTime)/1000.0), outstream, System.out);
 		}
 		if(writeModelText){
 			PrintStream modelTextWriter = new PrintStream(modelPath+".txt");
@@ -336,24 +317,35 @@ public class Main {
 			modelTextWriter.close();
 		}
 		
-		Instance[] predictions = model.decode(testInstances);
-		List<SMSNPInstance> predictionsList = new ArrayList<SMSNPInstance>();
-		for(Instance instance: predictions){
-			predictionsList.add((SMSNPInstance)instance);
-		}
-		predictionsList.sort(Comparator.comparing(Instance::getInstanceId));
-		PrintStream result = new PrintStream(modelPath.replace(".model", ".result"));
-		if(algo == Algorithm.LINEAR_CRF){
-			for(SMSNPInstance instance: predictionsList){
-				result.println(instance.toCoNLLString(tokenizerMethod, false));
+		if(test_filename != null){
+			if(useCoNLLData){
+				testInstances = SMSNPUtil.readCoNLLData(test_filename, false, false);
+			} else {
+				testInstances = SMSNPUtil.readData(test_filename, false, false);
 			}
-		} else {
-			for(SMSNPInstance instance: predictionsList){
-				result.println(instance.toString());
+			for(SMSNPInstance instance: testInstances){
+				instance.getInputTokenized(tokenizerMethod, false, true);
+				instance.getOutputTokenized(tokenizerMethod, false, false);
 			}
+			Instance[] predictions = model.decode(testInstances);
+			List<SMSNPInstance> predictionsList = new ArrayList<SMSNPInstance>();
+			for(Instance instance: predictions){
+				predictionsList.add((SMSNPInstance)instance);
+			}
+			predictionsList.sort(Comparator.comparing(Instance::getInstanceId));
+			PrintStream result = new PrintStream(modelPath.replace(".model", ".result"));
+			if(algo == Algorithm.LINEAR_CRF){
+				for(SMSNPInstance instance: predictionsList){
+					result.println(instance.toCoNLLString(tokenizerMethod, false));
+				}
+			} else {
+				for(SMSNPInstance instance: predictionsList){
+					result.println(instance.toString());
+				}
+			}
+			result.close();
+			SMSNPEvaluator.evaluate(predictions, outstream, 10);
 		}
-		result.close();
-		SMSNPEvaluator.evaluate(predictions, outstream, 10);
 	}
 	
 	private static List<String> sorted(Set<String> coll){
@@ -371,11 +363,10 @@ public class Main {
 				+ "-writeModelText\n"
 				+ "\t(with -serializeTo)Write the model in text version for debugging purpose\n"
 				+ "-trainPath <trainPath>\n"
-				+ "\tTake training file from <trainPath>\n"
+				+ "\tTake training file from <trainPath>. If not specified, no training is performed\n"
+				+ "\tWill attempt to load the model if test is specified\n"
 				+ "-testPath <testPath>\n"
-				+ "\tTake test file from <testPath>\n"
-				+ "-noTest\n"
-				+ "\tNo testing will be performed\n"
+				+ "\tTake test file from <testPath>. If not specified, no test is performed\n"
 				+ "-inCONLLFormat\n"
 				+ "\tWhether the input file is in CoNLL format. Default to false\n"
 				+ "-maxLength <n>\n"
