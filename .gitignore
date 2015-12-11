@@ -7,3 +7,5 @@ experiments/*.model
 experiments/*.result
 data/
 logs/
+*.tar.gz
+dependency-reduced-pom.xml

@@ -1,6 +1,6 @@
 package com.statnlp.experiment.smsnp;
 
-import static com.statnlp.experiment.smsnp.SMSNPIOUtil.print;
+import static com.statnlp.experiment.smsnp.SMSNPUtil.print;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -16,22 +16,24 @@ public class SMSNPEvaluator {
 			System.err.println("Please provide the result file (four lines per instance: input, gold, prediction, empty line) as first argument");
 			System.exit(0);
 		}
-		SMSNPInstance[] instances = SMSNPIOUtil.readData(args[0], true, true);
-		evaluate(instances, null);
+		SMSNPInstance[] instances = SMSNPUtil.readData(args[0], true, true);
+		evaluate(instances, null, 10);
 	}
 	
-	public static void evaluate(Instance[] predictions, PrintStream outstream){
+	public static void evaluate(Instance[] predictions, PrintStream outstream, int printLimit){
 		int corr = 0;
 		int totalGold = 0;
 		int totalPred = 0;
+		int count = 0;
+		PrintStream[] outstreams = new PrintStream[]{outstream, System.out};
 		for(Instance inst: predictions){
 			SMSNPInstance instance = (SMSNPInstance)inst;
-			print("Input:", outstream, System.out);
-			print(instance.input, outstream, System.out);
-			print("Gold:", outstream, System.out);
-			print(instance.output.toString(), outstream, System.out);
-			print("Prediction:", outstream, System.out);
-			print(instance.prediction.toString(), outstream, System.out);
+			print("Input:", outstreams);
+			print(instance.input, outstreams);
+			print("Gold:", outstreams);
+			print(instance.output.toString(), outstreams);
+			print("Prediction:", outstreams);
+			print(instance.prediction.toString(), outstreams);
 			List<Span> goldSpans = instance.output;
 			List<Span> predSpans = instance.prediction;
 			int curTotalGold = goldSpans.size();
@@ -46,13 +48,21 @@ public class SMSNPEvaluator {
 			if(curTotalPred == 0) precision = 0.0;
 			if(curTotalGold == 0) recall = 0.0;
 			if(curTotalPred == 0 || curTotalGold == 0) f1 = 0.0;
-			print(String.format("Correct: %1$3d, Predicted: %2$3d, Gold: %3$3d ", curCorr, curTotalPred, curTotalGold), outstream, System.out);
-			print(String.format("Overall P: %#5.2f%%, R: %#5.2f%%, F: %#5.2f%%", precision, recall, f1), outstream, System.out);
-			print("", outstream, System.out);
-			printScore(new Instance[]{instance}, outstream, System.out);
-			print("", outstream, System.out);
+			print(String.format("Correct: %1$3d, Predicted: %2$3d, Gold: %3$3d ", curCorr, curTotalPred, curTotalGold), outstreams);
+			print(String.format("Overall P: %#5.2f%%, R: %#5.2f%%, F: %#5.2f%%", precision, recall, f1), outstreams);
+			print("", outstreams);
+			printScore(new Instance[]{instance}, outstreams);
+			print("", outstreams);
+			count += 1;
+			if(count > printLimit){
+				outstreams = new PrintStream[]{outstream};
+			}
 		}
-		print("", outstream, System.out);
+		if(printLimit > 0){
+			print("", outstream, System.out);
+		} else {
+			print("", outstreams);
+		}
 		print("### Overall score ###", outstream, System.out);
 		print(String.format("Correct: %1$3d, Predicted: %2$3d, Gold: %3$3d ", corr, totalPred, totalGold), outstream, System.out);
 		double precision = 100.0*corr/totalPred;

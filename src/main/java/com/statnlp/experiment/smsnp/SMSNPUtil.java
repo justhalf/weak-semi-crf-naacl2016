@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class SMSNPIOUtil {
+import com.statnlp.experiment.smsnp.SMSNPTokenizer.TokenizerMethod;
+
+public class SMSNPUtil {
 	
 	public static boolean COMBINE_OUTSIDE_CHARS = true;
 	public static boolean USE_SINGLE_OUTSIDE_TAG = false;
@@ -190,11 +192,12 @@ public class SMSNPIOUtil {
 		int end = 0;
 		Label prevLabel = null;
 		List<Span> wordSpans = new ArrayList<Span>();
-		List<Label> predLabels = new ArrayList<Label>();
+		List<String> predLabels = new ArrayList<String>();
 		while(reader.ready()){
 			if(input == null){
 				input = "";
 				output = new ArrayList<Span>();
+				wordSpans.clear();
 				if(withPrediction){
 					predLabels.clear();
 				}
@@ -202,7 +205,11 @@ public class SMSNPIOUtil {
 				end = 0;
 				prevLabel = null;
 			}
-			String line = reader.readLine().trim();
+			String line = reader.readLine();
+			if(line == null){
+				break;
+			}
+			line = line.trim();
 			if(line.length() == 0){
 				input = input.trim();
 				end = input.length();
@@ -222,11 +229,11 @@ public class SMSNPIOUtil {
 				result.add(instance);
 				input = null;
 			} else {
-				String[] tokens = line.split(" ");
+				String[] tokens = line.split("[ \t]");
 				String word = tokens[0];
 				String form = tokens[1];
 				if(withPrediction){
-					predLabels.add(Label.get(tokens[2]));
+					predLabels.add(tokens[2]);
 				}
 				Label label = null;
 				end = input.length();
@@ -286,10 +293,53 @@ public class SMSNPIOUtil {
 		}
 	}
 	
-	private static List<Span> labelsToSpans(List<Label> labels, List<Span> wordSpans){
+	public static List<Span> labelsToSpans(List<String> labels, String input, TokenizerMethod tokenizerMethod){
+		List<Span> wordSpans = new ArrayList<Span>();
+		String[] words = SMSNPTokenizer.tokenize(input, tokenizerMethod);
+		int prevEnd = 0;
+		for(int i=0; i<words.length; i++){
+			String curWord = words[i];
+			int start = input.indexOf(curWord, prevEnd);
+			int end = start + curWord.length();
+			wordSpans.add(new Span(start, end, null));
+			prevEnd = end;
+		}
+		return labelsToSpans(labels, wordSpans);
+	}
+	
+	public static List<Span> labelsToSpans(List<String> labels, List<Span> wordSpans){
 		List<Span> result = new ArrayList<Span>();
+		int startIdx = 0;
+		int endIdx = 0;
 		for(int i=0; i<labels.size(); i++){
-			// TODO
+			Label label = null;
+			String form = labels.get(i);
+			Span curSpan = wordSpans.get(i);
+			if(form.startsWith("B")){
+				startIdx = curSpan.start;
+				endIdx = curSpan.end;
+				label = Label.get(form.substring(form.indexOf("-")+1));
+			} else if (form.startsWith("I")){
+				endIdx = curSpan.end;
+				label = Label.get(form.substring(form.indexOf("-")+1));
+			} else if (form.startsWith("O")){
+				startIdx = curSpan.start;
+				endIdx = curSpan.end;
+				if(USE_SINGLE_OUTSIDE_TAG && form.indexOf("-") >= 0){
+					label = Label.get(form.substring(0, form.indexOf("-")));
+				} else {
+					label = Label.get(form);
+				}
+			}
+			if(i+1 >= labels.size() || !labels.get(i+1).startsWith("I")){
+				if(i > 0){
+					int prevEnd = wordSpans.get(i-1).end;
+					if(prevEnd < startIdx){
+						result.add(new Span(prevEnd, startIdx, Label.get("O")));
+					}
+				}
+				createSpan(result, startIdx, endIdx, label);
+			}
 		}
 		return result;
 	}

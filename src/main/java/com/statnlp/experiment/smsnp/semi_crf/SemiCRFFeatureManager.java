@@ -1,6 +1,8 @@
-package com.statnlp.experiment.smsnp;
+package com.statnlp.experiment.smsnp.semi_crf;
 
-import com.statnlp.experiment.smsnp.SemiCRFNetworkCompiler.NodeType;
+import com.statnlp.experiment.smsnp.SMSNPInstance;
+import com.statnlp.experiment.smsnp.SMSNPNetwork;
+import com.statnlp.experiment.smsnp.semi_crf.SemiCRFNetworkCompiler.NodeType;
 import com.statnlp.hybridnetworks.FeatureArray;
 import com.statnlp.hybridnetworks.FeatureManager;
 import com.statnlp.hybridnetworks.GlobalNetworkParam;
@@ -32,13 +34,42 @@ public class SemiCRFFeatureManager extends FeatureManager {
 		NEXT_WORD,
 		
 		BIGRAM,
+		;
+		
+		private boolean isEnabled;
+		private FeatureType(){
+			isEnabled = true;
+		}
+		
+		private FeatureType(boolean isEnabled){
+			this.isEnabled = isEnabled;
+		}
+		
+		public void enable(){
+			isEnabled = true;
+		}
+		
+		public void disable(){
+			isEnabled = false;
+		}
+		
+		public boolean enabled(){
+			return isEnabled;
+		}
+		
+		public boolean disabled(){
+			return !isEnabled;
+		}
 	}
 	
 	public int unigramWindowSize = 5;
 	public int substringWindowSize = 5;
 
-	public SemiCRFFeatureManager(GlobalNetworkParam param_g) {
+	public SemiCRFFeatureManager(GlobalNetworkParam param_g, String[] disabledFeatures) {
 		super(param_g);
+		for(String disabledFeature: disabledFeatures){
+			FeatureType.valueOf(disabledFeature.toUpperCase()).disable();
+		}
 	}
 	
 	@Override

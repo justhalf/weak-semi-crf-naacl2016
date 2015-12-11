@@ -1,4 +1,4 @@
-package com.statnlp.experiment.smsnp;
+package com.statnlp.experiment.smsnp.weak_semi_crf;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,6 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 import com.statnlp.commons.types.Instance;
+import com.statnlp.experiment.smsnp.Label;
+import com.statnlp.experiment.smsnp.SMSNPInstance;
+import com.statnlp.experiment.smsnp.SMSNPNetwork;
+import com.statnlp.experiment.smsnp.Span;
 import com.statnlp.hybridnetworks.LocalNetworkParam;
 import com.statnlp.hybridnetworks.Network;
 import com.statnlp.hybridnetworks.NetworkCompiler;
