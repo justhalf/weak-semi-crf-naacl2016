@@ -102,7 +102,7 @@ public class LinearCRFFeatureManager extends FeatureManager{
 		int tag_id = arr[1]-1;
 		int nodeType = arr[4];
 		
-		if(nodeType == NODE_TYPES.LEAF.ordinal() || (nodeType == NODE_TYPES.ROOT.ordinal() && pos < size)){
+		if(nodeType == NODE_TYPES.LEAF.ordinal() || (nodeType == NODE_TYPES.ROOT.ordinal() && pos < size-1)){
 			return FeatureArray.EMPTY;
 		}
 		

@@ -148,19 +148,19 @@ public class WeakSemiCRFNetworkCompiler extends NetworkCompiler {
 	}
 	
 	private long toNode_begin(int pos, int labelId){
-		return toNode(pos, labelId, NodeType.BEGIN);
+		return toNode(pos, labelId+1, NodeType.BEGIN);
 	}
 	
 	private long toNode_end(int pos, int labelId){
-		return toNode(pos, labelId, NodeType.END);
+		return toNode(pos, labelId+1, NodeType.END);
 	}
 	
 	private long toNode_root(int pos){
-		return toNode(pos, labels.length, NodeType.ROOT);
+		return toNode(pos, labels.length+1, NodeType.ROOT);
 	}
 	
 	private long toNode(int pos, int labelId, NodeType type){
-		return NetworkIDMapper.toHybridNodeID(new int[]{pos, type.ordinal(), labelId});
+		return NetworkIDMapper.toHybridNodeID(new int[]{pos+1, type.ordinal(), labelId});
 	}
 
 	@Override
@@ -172,17 +172,17 @@ public class WeakSemiCRFNetworkCompiler extends NetworkCompiler {
 		while(node_k > 0){
 			int[] children_k = network.getMaxPath(node_k);
 			int[] child_arr = network.getNodeArray(children_k[0]);
-			int end = child_arr[0];
+			int end = child_arr[0]-1;
 			NodeType nodeType = NodeType.values()[child_arr[1]];
 			if(nodeType == NodeType.LEAF){
 				break;
 			} else {
 				assert nodeType == NodeType.END;
 			}
-			int labelId = child_arr[2];
+			int labelId = child_arr[2]-1;
 			children_k = network.getMaxPath(children_k[0]);
 			child_arr = network.getNodeArray(children_k[0]);
-			int start = child_arr[0];
+			int start = child_arr[0]-1;
 			prediction.add(new Span(start, end+1, SpanLabel.get(labelId)));
 			node_k = children_k[0];
 		}

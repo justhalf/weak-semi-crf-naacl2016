@@ -1,5 +1,8 @@
 package com.statnlp.experiment.smsnp;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,9 +55,9 @@ public class SMSNPTokenizer implements Serializable {
 			}
 			if(result.size() > 0){
 				String prevToken = result.get(result.size()-1);
-				if(prevToken.endsWith("<") && token.matches("(DECIMAL|EMAIL|URL|TIME|name|#)")){
+				if(prevToken.endsWith("<") && token.matches("(EMAIL|URL|IP|TIME|DATE|DECIMAL|name|#)")){
 					result.set(result.size()-1, prevToken+token);
-				} else if (prevToken.matches(".*(DECIMAL|EMAIL|URL|TIME|name|#)$") && token.startsWith(">")){
+				} else if (prevToken.matches(".*(EMAIL|URL|IP|TIME|DATE|DECIMAL|name|#)$") && token.startsWith(">")){
 					result.set(result.size()-1, prevToken+token);
 				} else if (prevToken.endsWith("'") && token.matches("([dDsSmMtT]|ll|LL|re|RE|ve|VE).*") && lastEnd == input.indexOf(token, lastEnd)){
 					result.set(result.size()-1, prevToken+token);
@@ -88,23 +91,47 @@ public class SMSNPTokenizer implements Serializable {
 		return result.toArray(new String[result.size()]);
 	}
 	
-	public static void main(String[] args){
-		String[] inputs = new String[]{
-				"Think will reach about<DECIMAL> .",
-				"Yea they went there from promenade. Usb3 nowhere near <#> times la.<DECIMAL> in was abt <DECIMAL> times.",
-				"Woot sob sob sob sorry my angel T.T... all my fault ~~~~ haha with uthen energetic le lol...",
-				"Chou baobei. Gooooooood morning!:*:* hugs u tightly in ur dream.hee",
-				"Lol i mean wah, 又是我做坏人.",
-				"I'm so sad le:-(",
-				"You can't do this to me =(",
-				"YOU'RE THE BEST, MAN!",
-				"'This is bad', he said.",
-				"Ahhhh my msn spoilt again, . =(",
-				"I am not sure about night menu. . . I know only about noon menu",
-				};
-		for(String input: inputs){
-			System.out.printf("SMSNP\n%s:\n%s\n", input, Arrays.asList(tokenize_smsnp(input)));
-			System.out.printf("Whitespace\n%s:\n%s\n", input, Arrays.asList(tokenize_whitespace(input)));
+	public static void main(String[] args) throws IOException{
+		boolean convertAllData = true;
+		if(convertAllData){
+			convertAllData();
+		} else {
+			String[] inputs = new String[]{
+					"Think will reach about<DECIMAL> .",
+					"Yea they went there from promenade. Usb3 nowhere near <#> times la.<DECIMAL> in was abt <DECIMAL> times.",
+					"Woot sob sob sob sorry my angel T.T... all my fault ~~~~ haha with uthen energetic le lol...",
+					"Chou baobei. Gooooooood morning!:*:* hugs u tightly in ur dream.hee",
+					"Lol i mean wah, 又是我做坏人.",
+					"I'm so sad le:-(",
+					"You can't do this to me =(",
+					"YOU'RE THE BEST, MAN!",
+					"'This is bad', he said.",
+					"Ahhhh my msn spoilt again, . =(",
+					"I am not sure about night menu. . . I know only about noon menu",
+					};
+			for(String input: inputs){
+				System.out.printf("SMSNP\n%s:\n%s\n", input, Arrays.asList(tokenize_smsnp(input)));
+				System.out.printf("Whitespace\n%s:\n%s\n", input, Arrays.asList(tokenize_whitespace(input)));
+			}
+		}
+	}
+	
+	protected static void convertAllData() throws IOException{
+		PrintStream outstream = null;
+		for(boolean useGoldTokenization: new boolean[]{true, false}){
+			for(TokenizerMethod tokenizerMethod: TokenizerMethod.values()){
+				for(String fileType: new String[]{"dev", "test", "train"}){
+					String filename = "data/SMSNP."+fileType;
+					SMSNPInstance[] instances = SMSNPUtil.readData(filename, false, false);
+					File outputFile = new File("data/SMSNP.conll."+tokenizerMethod.toString().toLowerCase()+"."+fileType);
+					System.out.println("Converting test file into CoNLL format using tokenizer "+tokenizerMethod+" (useGold:"+useGoldTokenization+")...");
+					outstream = new PrintStream(outputFile);
+					for(SMSNPInstance instance: instances){
+						outstream.println(instance.toCoNLLString(tokenizerMethod, useGoldTokenization));
+					}
+					outstream.close();
+				}
+			}
 		}
 	}
 }

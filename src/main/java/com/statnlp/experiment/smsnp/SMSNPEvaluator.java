@@ -27,13 +27,16 @@ public class SMSNPEvaluator {
 		int count = 0;
 		PrintStream[] outstreams = new PrintStream[]{outstream, System.out};
 		for(Instance inst: predictions){
+			if(count >= printLimit){
+				outstreams = new PrintStream[]{outstream};
+			}
 			SMSNPInstance instance = (SMSNPInstance)inst;
-			print("Input:", outstreams);
-			print(instance.input, outstreams);
-			print("Gold:", outstreams);
-			print(instance.output.toString(), outstreams);
-			print("Prediction:", outstreams);
-			print(instance.prediction.toString(), outstreams);
+			print("Input:", true, outstreams);
+			print(instance.input, true, outstreams);
+			print("Gold:", true, outstreams);
+			print(instance.output.toString(), true, outstreams);
+			print("Prediction:", true, outstreams);
+			print(instance.prediction.toString(), true, outstreams);
 			List<Span> goldSpans = instance.output;
 			List<Span> predSpans = instance.prediction;
 			int curTotalGold = goldSpans.size();
@@ -48,31 +51,28 @@ public class SMSNPEvaluator {
 			if(curTotalPred == 0) precision = 0.0;
 			if(curTotalGold == 0) recall = 0.0;
 			if(curTotalPred == 0 || curTotalGold == 0) f1 = 0.0;
-			print(String.format("Correct: %1$3d, Predicted: %2$3d, Gold: %3$3d ", curCorr, curTotalPred, curTotalGold), outstreams);
-			print(String.format("Overall P: %#5.2f%%, R: %#5.2f%%, F: %#5.2f%%", precision, recall, f1), outstreams);
-			print("", outstreams);
+			print(String.format("Correct: %1$3d, Predicted: %2$3d, Gold: %3$3d ", curCorr, curTotalPred, curTotalGold), true, outstreams);
+			print(String.format("Overall P: %#5.2f%%, R: %#5.2f%%, F: %#5.2f%%", precision, recall, f1), true, outstreams);
+			print("", true, outstreams);
 			printScore(new Instance[]{instance}, outstreams);
-			print("", outstreams);
+			print("", true, outstreams);
 			count += 1;
-			if(count > printLimit){
-				outstreams = new PrintStream[]{outstream};
-			}
 		}
 		if(printLimit > 0){
-			print("", outstream, System.out);
+			print("", true, outstream, System.out);
 		} else {
-			print("", outstreams);
+			print("", true, outstreams);
 		}
-		print("### Overall score ###", outstream, System.out);
-		print(String.format("Correct: %1$3d, Predicted: %2$3d, Gold: %3$3d ", corr, totalPred, totalGold), outstream, System.out);
+		print("### Overall score ###", true, outstream, System.out);
+		print(String.format("Correct: %1$3d, Predicted: %2$3d, Gold: %3$3d ", corr, totalPred, totalGold), true, outstream, System.out);
 		double precision = 100.0*corr/totalPred;
 		double recall = 100.0*corr/totalGold;
 		double f1 = 2/((1/precision)+(1/recall));
 		if(totalPred == 0) precision = 0.0;
 		if(totalGold == 0) recall = 0.0;
 		if(totalPred == 0 || totalGold == 0) f1 = 0.0;
-		print(String.format("Overall P: %#5.2f%%, R: %#5.2f%%, F: %#5.2f%%", precision, recall, f1), outstream, System.out);
-		print("", outstream, System.out);
+		print(String.format("Overall P: %#5.2f%%, R: %#5.2f%%, F: %#5.2f%%", precision, recall, f1), true, outstream, System.out);
+		print("", true, outstream, System.out);
 		printScore(predictions, outstream, System.out);
 	}
 	
@@ -104,9 +104,9 @@ public class SMSNPEvaluator {
 			double recall = (totalGold[i] == 0) ? 0.0 : 1.0*corrects[i]/totalGold[i];
 			double f1 = (precision == 0.0 || recall == 0.0) ? 0.0 : 2/((1/precision)+(1/recall));
 			avgF1 += f1;
-			print(String.format("%6s: #Corr:%2$3d, #Pred:%3$3d, #Gold:%4$3d, Pr=%5$#5.2f%% Rc=%6$#5.2f%% F1=%7$#5.2f%%", SpanLabel.get(i).form, corrects[i], totalPred[i], totalGold[i], precision*100, recall*100, f1*100), outstream);
+			print(String.format("%6s: #Corr:%2$3d, #Pred:%3$3d, #Gold:%4$3d, Pr=%5$#5.2f%% Rc=%6$#5.2f%% F1=%7$#5.2f%%", SpanLabel.get(i).form, corrects[i], totalPred[i], totalGold[i], precision*100, recall*100, f1*100), true, outstream);
 		}
-		print(String.format("Macro average F1: %.2f%%", 100*avgF1/size), outstream);
+		print(String.format("Macro average F1: %.2f%%", 100*avgF1/size), true, outstream);
 	}
 	
 	private static List<Span> duplicate(List<Span> list){

@@ -41,16 +41,17 @@ public class CRFPPMain {
 	public static void main(String[] args) throws IOException, InterruptedException{
 		String timestamp = Calendar.getInstance().getTime().toString();
 		String trainFilename = null;
-//		String devFilename = "data/SMSNP.dev";
 		String testFilename = null;
 		String modelFilename = timestamp+"-crfpp.model";
 		String resultFilename = timestamp+"-crfpp.result";
 		String templateFilename = timestamp+"-crfpp.template";
+		String logPath = null;
 		TokenizerMethod tokenizerMethod = TokenizerMethod.REGEX;
 		double regParam = 4.0;
 		boolean useGoldTokenization = false;
 		boolean createTemplate = true;
 		boolean writeModelText = false;
+		int numExamplesPrinted = 10;
 		
 		int argIndex = 0;
 		while(argIndex < args.length){
@@ -80,6 +81,10 @@ public class CRFPPMain {
 				createTemplate = false;
 				argIndex += 2;
 				break;
+			case "logPath":
+				logPath = args[argIndex+1];
+				argIndex += 2;
+				break;
 			case "tokenizer":
 				tokenizerMethod = TokenizerMethod.valueOf(args[argIndex+1].toUpperCase());
 				argIndex += 2;
@@ -92,6 +97,10 @@ public class CRFPPMain {
 				useGoldTokenization = true;
 				argIndex += 1;
 				break;
+			case "numExamplesPrinted":
+				numExamplesPrinted = Integer.parseInt(args[argIndex+1]);
+				argIndex += 2;
+				break;
 			case "h":
 			case "help":
 				printHelp();
@@ -101,45 +110,30 @@ public class CRFPPMain {
 			}
 		}
 		
+		PrintStream logstream = null;
+		if(logPath != null){
+			logstream = new PrintStream(logPath, "UTF-8");
+		}
+		
 		if(createTemplate){
 			createTemplate(templateFilename);
 		}
 		
-		SMSNPInstance[] trainInstances = SMSNPUtil.readData(trainFilename, true, false);
-//		SMSNPInstance[] devInstances = SMSNPUtil.readData(devFilename, false, false);
-		SMSNPInstance[] testInstances = SMSNPUtil.readData(testFilename, false, false);
-
-		File tempTrain = File.createTempFile("crfpp-", ".tmp", new File("experiments"));
-//		File tempDev = File.createTempFile("crfpp-", ".tmp", new File("experiments"));
-		File tempTest = File.createTempFile("crfpp-", ".tmp", new File("experiments"));
-		tempTrain.deleteOnExit();
-//		tempDev.deleteOnExit();
-		tempTest.deleteOnExit();
-//		tempTrain = new File("data/SMSNP.conll.regex.train");
-//		tempDev = new File("data/SMSNP.conll.regex.dev");
-//		tempTest = new File("data/SMSNP.conll.regex.test");
-		long start = System.currentTimeMillis();
-		System.out.print("Converting input files into CoNLL format using tokenizer "+tokenizerMethod+" (useGold:"+useGoldTokenization+")...");
-		PrintStream outstream = new PrintStream(tempTrain);
-		for(SMSNPInstance instance: trainInstances){
-			outstream.println(instance.toCoNLLString(tokenizerMethod, useGoldTokenization));
-		}
-		outstream.close();
-//		outstream = new PrintStream(tempDev);
-//		for(SMSNPInstance instance: devInstances){
-//			outstream.println(instance.toCoNLLString(tokenizerMethod, useGoldTokenization));
-//		}
-//		outstream.close();
-		outstream = new PrintStream(tempTest);
-		for(SMSNPInstance instance: testInstances){
-			outstream.println(instance.toCoNLLString(tokenizerMethod, useGoldTokenization));
-		}
-		outstream.close();
-		long end = System.currentTimeMillis();
-		System.out.printf("Done in %.3fs\n", (end-start)/1000.0);
-		
 		ProcessBuilder processBuilder;
+		PrintStream outstream = null;
 		if(trainFilename != null){
+			SMSNPInstance[] trainInstances = SMSNPUtil.readData(trainFilename, true, false);
+			File tempTrain = File.createTempFile("crfpp-", ".tmp", new File("experiments"));
+			tempTrain.deleteOnExit();
+			long start = System.currentTimeMillis();
+			System.out.print("Converting training file into CoNLL format using tokenizer "+tokenizerMethod+" (useGold:"+useGoldTokenization+")...");
+			outstream = new PrintStream(tempTrain);
+			for(SMSNPInstance instance: trainInstances){
+				outstream.println(instance.toCoNLLString(tokenizerMethod, useGoldTokenization));
+			}
+			outstream.close();
+			long end = System.currentTimeMillis();
+			System.out.printf("Done in %.3fs\n", (end-start)/1000.0);
 			 processBuilder = new ProcessBuilder("/usr/local/bin/crf_learn", "-c", regParam+"", templateFilename, tempTrain.getAbsolutePath(), modelFilename);
 			if(writeModelText){
 				processBuilder.command().add(1, "-t");
@@ -166,6 +160,18 @@ public class CRFPPMain {
 		}
 		
 		if(testFilename != null){
+			SMSNPInstance[] testInstances = SMSNPUtil.readData(testFilename, false, false);
+			File tempTest = File.createTempFile("crfpp-", ".tmp", new File("experiments"));
+			tempTest.deleteOnExit();
+			long start = System.currentTimeMillis();
+			System.out.print("Converting test file into CoNLL format using tokenizer "+tokenizerMethod+" (useGold:"+useGoldTokenization+")...");
+			outstream = new PrintStream(tempTest);
+			for(SMSNPInstance instance: testInstances){
+				outstream.println(instance.toCoNLLString(tokenizerMethod, useGoldTokenization));
+			}
+			outstream.close();
+			long end = System.currentTimeMillis();
+			System.out.printf("Done in %.3fs\n", (end-start)/1000.0);
 			processBuilder = new ProcessBuilder("/usr/local/bin/crf_test", "-m", modelFilename, tempTest.getAbsolutePath());
 			processBuilder.redirectErrorStream(true);
 			final Process testProcess = processBuilder.start();
@@ -220,7 +226,7 @@ public class CRFPPMain {
 				predInstance.wordSpans = testInstance.wordSpans;
 				predInstance.setPredictionTokenized(predInstance.predictionTokenized);
 			}
-			SMSNPEvaluator.evaluate(predictionInstances, null, 10);
+			SMSNPEvaluator.evaluate(predictionInstances, logstream, numExamplesPrinted);
 		}
 	}
 	
@@ -244,6 +250,8 @@ public class CRFPPMain {
 				+ "\tThe tokenizer method to be used: whitespace or regex. Default to regex\n"
 				+ "-useGoldTokenization\n"
 				+ "\tWhether to use gold standard while doing the tokenization\n"
+				+ "-numExamplesPrinted\n"
+				+ "\tSpecify the number of examples printed during evaluation. Default to 10\n"
 				);
 	}
 }

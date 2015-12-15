@@ -18,13 +18,17 @@ public class SMSNPUtil {
 	public static boolean COMBINE_OUTSIDE_CHARS = true;
 	public static boolean USE_SINGLE_OUTSIDE_TAG = true;
 	
-	public static void print(String message, PrintStream... outstream){
+	public static void print(String message, boolean printEndline, PrintStream... outstream){
 		if(outstream.length == 0){
 			outstream = new PrintStream[]{System.out};
 		}
 		for(PrintStream stream: outstream){
 			if(stream != null){
-				stream.println(message);
+				if(printEndline){
+					stream.println(message);
+				} else {
+					stream.print(message);
+				}
 			}
 		}
 	}

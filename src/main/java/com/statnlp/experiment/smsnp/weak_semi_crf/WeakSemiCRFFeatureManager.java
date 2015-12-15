@@ -97,19 +97,23 @@ public class WeakSemiCRFFeatureManager extends FeatureManager {
 		SMSNPNetwork network = (SMSNPNetwork)net;
 		SMSNPInstance instance = (SMSNPInstance)network.getInstance();
 		
-		int[] parent_arr = network.getNodeArray(parent_k);
-		int parentPos = parent_arr[0];
-		NodeType parentType = NodeType.values()[parent_arr[1]];
-		int parentLabelId = parent_arr[2];
+		String input = instance.input;
+		char[] inputArr = input.toCharArray();
+		int length = input.length();
 		
-		if(parentType == NodeType.LEAF){
+		int[] parent_arr = network.getNodeArray(parent_k);
+		int parentPos = parent_arr[0]-1;
+		NodeType parentType = NodeType.values()[parent_arr[1]];
+		int parentLabelId = parent_arr[2]-1;
+		
+		if(parentType == NodeType.LEAF || (parentType == NodeType.ROOT && parentPos < length-1)){
 			return FeatureArray.EMPTY;
 		}
 		
 		int[] child_arr = network.getNodeArray(children_k[0]);
-		int childPos = child_arr[0];
+		int childPos = child_arr[0]-1;
 		NodeType childType = NodeType.values()[child_arr[1]];
-		int childLabelId = child_arr[2];
+		int childLabelId = child_arr[2]-1;
 
 		GlobalNetworkParam param_g = this._param_g;
 		
@@ -126,16 +130,8 @@ public class WeakSemiCRFFeatureManager extends FeatureManager {
 			commonFeatures.add(bigramFeature);
 		}
 		
-		if(parentType == NodeType.ROOT || childType == NodeType.LEAF){
-			return new FeatureArray(listToArray(commonFeatures));
-		}
-		
-		String input = instance.input;
-		char[] inputArr = input.toCharArray();
-		int length = input.length();
-		
-		int startBoundary = (childType == NodeType.BEGIN) ? childPos : childPos+1;
-		int endBoundary = (parentType == NodeType.END) ? parentPos : parentPos-1;
+		int startBoundary = (parentType != NodeType.BEGIN) ? childPos : childPos+1;
+		int endBoundary = (childType != NodeType.END) ? parentPos : parentPos-1;
 		int prevWordStart = input.lastIndexOf(' ', startBoundary-2)+1;
 		int prevWordEnd = (startBoundary > 0 && inputArr[startBoundary-1] == ' ') ? startBoundary-1 : startBoundary;
 		int nextWordEnd = input.indexOf(' ', endBoundary+2);
@@ -144,25 +140,25 @@ public class WeakSemiCRFFeatureManager extends FeatureManager {
 		}
 		int nextWordStart = (endBoundary < length-1 && inputArr[endBoundary+1] == ' ') ? endBoundary+2 : endBoundary+1;
 		
-		if(FeatureType.PREV_WORD.enabled()){
+		if(childType != NodeType.LEAF && FeatureType.PREV_WORD.enabled()){
 			int prevWordFeature = param_g.toFeature(FeatureType.PREV_WORD.name(), parentLabelId+"", input.substring(prevWordStart, prevWordEnd));
 			commonFeatures.add(prevWordFeature);
 		}
-		if(FeatureType.NEXT_WORD.enabled()){
+		if(parentType != NodeType.ROOT && FeatureType.NEXT_WORD.enabled()){
 			int nextWordFeature = param_g.toFeature(FeatureType.NEXT_WORD.name(), parentLabelId+"", input.substring(nextWordStart, nextWordEnd));
 			commonFeatures.add(nextWordFeature);
 		}
-		if(FeatureType.PREV_WORD_SHAPE.enabled()){
+		if(childType != NodeType.LEAF && FeatureType.PREV_WORD_SHAPE.enabled()){
 			int prevWordShapeFeature = param_g.toFeature(FeatureType.PREV_WORD_SHAPE.name(), parentLabelId+"", wordShape(input.substring(nextWordStart, nextWordEnd)));
 			commonFeatures.add(prevWordShapeFeature);
 		}
-		if(FeatureType.NEXT_WORD_SHAPE.enabled()){
+		if(parentType != NodeType.ROOT && FeatureType.NEXT_WORD_SHAPE.enabled()){
 			int nextWordShapeFeature = param_g.toFeature(FeatureType.NEXT_WORD_SHAPE.name(), parentLabelId+"", wordShape(input.substring(nextWordStart, nextWordEnd)));
 			commonFeatures.add(nextWordShapeFeature);
 		}
 
 		if(FeatureType.START_BOUNDARY_WORD.enabled()){
-			if(startBoundary > 0 && inputArr[startBoundary] != ' ' && inputArr[startBoundary-1] != ' '){
+			if(startBoundary > length-1 || (startBoundary > 0 && inputArr[startBoundary] != ' ' && inputArr[startBoundary-1] != ' ')){
 				int startWordBoundaryEnd = input.indexOf(' ', childPos);
 				if(startWordBoundaryEnd == -1){
 					startWordBoundaryEnd = nextWordStart-1;
@@ -173,11 +169,12 @@ public class WeakSemiCRFFeatureManager extends FeatureManager {
 		}
 		
 		if(FeatureType.END_BOUNDARY_WORD.enabled()){
-			if(endBoundary < length-1 && inputArr[endBoundary] != ' ' && inputArr[endBoundary+1] != ' '){
+			if(endBoundary < 0 || (endBoundary < length-1 && inputArr[endBoundary] != ' ' && inputArr[endBoundary+1] != ' ')){
 				int endWordBoundaryStart = input.lastIndexOf(' ', parentPos);
 				if(endWordBoundaryStart == -1){
-					endWordBoundaryStart = prevWordEnd+1;
+					endWordBoundaryStart = prevWordEnd;
 				}
+				endWordBoundaryStart += 1;
 				int endBoundaryWordFeature = param_g.toFeature(FeatureType.END_BOUNDARY_WORD.name(), parentLabelId+"", input.substring(endWordBoundaryStart, nextWordEnd));
 				commonFeatures.add(endBoundaryWordFeature);
 			}
@@ -239,7 +236,7 @@ public class WeakSemiCRFFeatureManager extends FeatureManager {
 		}
 		
 		// End to Begin features (transition features)
-		if(parentType == NodeType.BEGIN){
+		if(parentType == NodeType.BEGIN || childType == NodeType.END){
 			List<Integer> transitionFeatures = new ArrayList<Integer>();
 			
 			if(FeatureType.OUTSIDE_UNIGRAM.enabled()){
@@ -274,13 +271,22 @@ public class WeakSemiCRFFeatureManager extends FeatureManager {
 				}
 			}
 			
-			if(FeatureType.DIST_TO_END.enabled()){
-				int distToEndFeature = param_g.toFeature(FeatureType.DIST_TO_END.name(), parentLabelId+"", (length-parentPos+1)+"");
+			// Are these features really needed?
+			if(parentType != NodeType.ROOT && FeatureType.DIST_TO_END.enabled()){
+				int dist = length-parentPos;
+				if(dist >= 3){
+					dist = 3;
+				}
+				int distToEndFeature = param_g.toFeature(FeatureType.DIST_TO_END.name(), parentLabelId+"", dist+"");
 				transitionFeatures.add(distToEndFeature);
 			}
 			
-			if(FeatureType.DIST_TO_BEGIN.enabled()){
-				int distToBeginFeature = param_g.toFeature(FeatureType.DIST_TO_BEGIN.name(), parentLabelId+"", (childPos+1)+"");
+			if(childType != NodeType.LEAF && FeatureType.DIST_TO_BEGIN.enabled()){
+				int dist = childPos+1;
+				if(dist >= 3){
+					dist = 3;
+				}
+				int distToBeginFeature = param_g.toFeature(FeatureType.DIST_TO_BEGIN.name(), parentLabelId+"", dist+"");
 				transitionFeatures.add(distToBeginFeature);
 			}
 			

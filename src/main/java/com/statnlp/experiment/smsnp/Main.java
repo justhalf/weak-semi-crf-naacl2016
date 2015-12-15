@@ -41,6 +41,7 @@ public class Main {
 		LINEAR_CRF,
 		SEMI_CRF,
 		WEAK_SEMI_CRF,
+		TOKENIZED_GOLD,
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException, NoSuchFieldException, SecurityException, InterruptedException, IllegalArgumentException, IllegalAccessException{
@@ -50,10 +51,12 @@ public class Main {
 		String modelPath = timestamp+".model";
 		String logPath = timestamp+".log";
 		boolean useCoNLLData = false;
+		boolean useGoldTokenization = false;
 		Algorithm algo = null;
 		
 		String train_filename = null;
 		String test_filename = null;
+		String result_filename = null;
 		SMSNPInstance[] trainInstances = null;
 		SMSNPInstance[] testInstances = null;
 		
@@ -73,6 +76,8 @@ public class Main {
 		
 		TokenizerMethod tokenizerMethod = TokenizerMethod.REGEX;
 		
+		int numExamplesPrinted = 10;
+		
 		int argIndex = 0;
 		while(argIndex < args.length){
 			String arg = args[argIndex];
@@ -83,8 +88,8 @@ public class Main {
 					modelPath = args[argIndex+1];
 					argIndex += 2;
 					break;
-				case "noSerialize":
-					serializeModel = false;
+				case "writeModelText":
+					writeModelText = true;
 					argIndex += 1;
 					break;
 				case "inCONLLFormat":
@@ -99,9 +104,9 @@ public class Main {
 					test_filename = args[argIndex+1];
 					argIndex += 2;
 					break;
-				case "noTest":
-					test_filename = null;
-					argIndex += 1;
+				case "resultPath":
+					result_filename = args[argIndex+1];
+					argIndex += 2;
 					break;
 				case "maxLength":
 					maxLength = Integer.parseInt(args[argIndex+1]);
@@ -121,42 +126,6 @@ public class Main {
 					NetworkConfig.L2_REGULARIZATION_CONSTANT = Double.parseDouble(args[argIndex+1]);
 					argIndex += 2;
 					break;
-				case "objtol":
-					NetworkConfig.objtol = Double.parseDouble(args[argIndex+1]);
-					argIndex += 2;
-					break;
-				case "maxIter":
-					maxNumIterations = Integer.parseInt(args[argIndex+1]);
-					argIndex += 2;
-					break;
-				case "logFile":
-					logPath = args[argIndex+1];
-					argIndex += 2;
-					break;
-				case "useSemiCRF":
-					algo = Algorithm.SEMI_CRF;
-					argIndex += 1;
-					break;
-				case "useWeakSemiCRF":
-					algo = Algorithm.WEAK_SEMI_CRF;
-					argIndex += 1;
-					break;
-				case "useLinearCRF":
-					algo = Algorithm.LINEAR_CRF;
-					argIndex += 1;
-					break;
-				case "tokenizerMethod":
-					tokenizerMethod = TokenizerMethod.valueOf(args[argIndex+1].toUpperCase());
-					argIndex += 2;
-					break;
-				case "disableFeatures":
-					disabledFeatures = args[argIndex+1].split(",");
-					argIndex += 2;
-					break;
-				case "writeModelText":
-					writeModelText = true;
-					argIndex += 1;
-					break;
 				case "weightInit":
 					weightInit = args[argIndex+1];
 					if(weightInit.equals("random")){
@@ -167,6 +136,38 @@ public class Main {
 					}
 					argIndex += 2;
 					break;
+				case "objtol":
+					NetworkConfig.objtol = Double.parseDouble(args[argIndex+1]);
+					argIndex += 2;
+					break;
+				case "maxIter":
+					maxNumIterations = Integer.parseInt(args[argIndex+1]);
+					argIndex += 2;
+					break;
+				case "logPath":
+					logPath = args[argIndex+1];
+					argIndex += 2;
+					break;
+				case "algo":
+					algo = Algorithm.valueOf(args[argIndex+1].toUpperCase());
+					argIndex += 2;
+					break;
+				case "tokenizer":
+					tokenizerMethod = TokenizerMethod.valueOf(args[argIndex+1].toUpperCase());
+					argIndex += 2;
+					break;
+				case "useGoldTokenization":
+					useGoldTokenization = true;
+					argIndex += 1;
+					break;
+				case "disableFeatures":
+					disabledFeatures = args[argIndex+1].split(",");
+					argIndex += 2;
+					break;
+				case "numExamplesPrinted":
+					numExamplesPrinted = Integer.parseInt(args[argIndex+1]);
+					argIndex += 2;
+					break;
 				case "h":
 				case "help":
 					printHelp();
@@ -174,10 +175,12 @@ public class Main {
 				default:
 					throw new IllegalArgumentException("Unrecognized argument: "+arg);
 				}
+			} else {
+				throw new IllegalArgumentException("Error while parsing: "+arg);
 			}
 		}
 		if(algo == null){
-			System.out.println("Please specify the algorithm: semiCRF, weakSemiCRF, or linearCRF");
+			System.out.println("Please specify the algorithm: LINEAR_CRF, WEAK_SEMI_CRF, or SEMI_CRF");
 			printHelp();
 			System.exit(0);
 		}
@@ -190,131 +193,138 @@ public class Main {
 		FeatureManager fm = null;
 		NetworkCompiler compiler = null;
 		NetworkModel model = null;
-		if(train_filename != null){
-			if(useCoNLLData){
-				trainInstances = SMSNPUtil.readCoNLLData(train_filename, true, false);
-			} else {
-				trainInstances = SMSNPUtil.readData(train_filename, true, false);
-			}
-			
-			SpanLabel[] labels = SpanLabel.LABELS.values().toArray(new SpanLabel[SpanLabel.LABELS.size()]);
-			
-			
-			for(SMSNPInstance instance: trainInstances){
-				if(findMaxLength){
-					maxLength = Math.max(maxLength, instance.size());
+		if(algo != Algorithm.TOKENIZED_GOLD){
+			if(train_filename != null){
+				if(useCoNLLData){
+					trainInstances = SMSNPUtil.readCoNLLData(train_filename, true, false);
+				} else {
+					trainInstances = SMSNPUtil.readData(train_filename, true, false);
 				}
-				if(findMaxSpan){
-					for(Span span: instance.output){
-						maxSpan = Math.max(maxSpan, span.end-span.start);
-					}
-				}
-			}
-			
-			NetworkConfig.TRAIN_MODE_IS_GENERATIVE = false;
-			NetworkConfig._CACHE_FEATURES_DURING_TRAINING = true;
-			
-			int size = trainInstances.length;
-			
-			print("Read.."+size+" instances.", outstream, System.err);
-			
-			switch(algo){
-			case LINEAR_CRF:
+				
+				SpanLabel[] labels = SpanLabel.LABELS.values().toArray(new SpanLabel[SpanLabel.LABELS.size()]);
+				
+				
 				for(SMSNPInstance instance: trainInstances){
-					instance.getInputTokenized(tokenizerMethod, false, true);
-					instance.getOutputTokenized(tokenizerMethod, false, false);
-				}
-				WordLabel[] wordLabels = WordLabel.LABELS.values().toArray(new WordLabel[WordLabel.LABELS.size()]);
-				fm = new LinearCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, disabledFeatures);
-				compiler = new LinearCRFNetworkCompiler(wordLabels, tokenizerMethod);
-				break;
-			case SEMI_CRF:
-				fm = new SemiCRFFeatureManager(new GlobalNetworkParam(), disabledFeatures);
-				compiler = new SemiCRFNetworkCompiler(labels, maxLength, maxSpan);
-				break;
-			case WEAK_SEMI_CRF:
-				fm = new WeakSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, disabledFeatures);
-				compiler = new WeakSemiCRFNetworkCompiler(labels, maxLength, maxSpan);
-				break;
-			default:
-				throw new UnsupportedOperationException("Unrecognized algorithm: "+algo);
-			}
-			
-			model = NetworkConfig.TRAIN_MODE_IS_GENERATIVE ? GenerativeNetworkModel.create(fm, compiler) : DiscriminativeNetworkModel.create(fm, compiler);
-
-			model.train(trainInstances, maxNumIterations);
-			if(serializeModel){
-				print("Writing object...", outstream, System.out);
-				long startTime = System.currentTimeMillis();
-				ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(modelPath));
-				oos.writeObject(model);
-				oos.close();
-				long endTime = System.currentTimeMillis();
-				print(String.format("Done in %.3fs\n", (endTime-startTime)/1000.0), outstream, System.out);
-			}
-		} else {
-			print("Reading object...", outstream, System.out);
-			long startTime = System.currentTimeMillis();
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(modelPath));
-			model = (NetworkModel)ois.readObject();
-			ois.close();
-			Field _fm = NetworkModel.class.getDeclaredField("_fm");
-			_fm.setAccessible(true);
-			fm = (FeatureManager)_fm.get(model);
-			long endTime = System.currentTimeMillis();
-			print(String.format("Done in %.3fs\n", (endTime-startTime)/1000.0), outstream, System.out);
-		}
-		if(writeModelText){
-			PrintStream modelTextWriter = new PrintStream(modelPath+".txt");
-			modelTextWriter.println("Algorithm: "+algo);
-			modelTextWriter.println("Serialize?: "+serializeModel);
-			modelTextWriter.println("Model path: "+modelPath);
-			modelTextWriter.println("In CoNLL?: "+useCoNLLData);
-			modelTextWriter.println("Train path: "+train_filename);
-			modelTextWriter.println("Test path: "+test_filename);
-			modelTextWriter.println("Max length: "+maxLength);
-			modelTextWriter.println("Max span: "+maxSpan);
-			modelTextWriter.println("#Threads: "+NetworkConfig._numThreads);
-			modelTextWriter.println("L2 param: "+NetworkConfig.L2_REGULARIZATION_CONSTANT);
-			modelTextWriter.println("Weight init: "+weightInit);
-			modelTextWriter.println("objtol: "+NetworkConfig.objtol);
-			modelTextWriter.println("Max iter: "+maxNumIterations);
-			modelTextWriter.println("Tokenizer: "+tokenizerMethod);
-			modelTextWriter.println("Disabled features: "+Arrays.asList(disabledFeatures));
-			modelTextWriter.println();
-			modelTextWriter.println("Labels:");
-			List<?> labelsUsed = new ArrayList<Object>();
-			switch(algo){
-			case LINEAR_CRF:
-				labelsUsed = Arrays.asList(((LinearCRFNetworkCompiler)compiler)._labels);
-				break;
-			case SEMI_CRF:
-				labelsUsed = Arrays.asList(((SemiCRFNetworkCompiler)compiler).labels);
-				break;
-			case WEAK_SEMI_CRF:
-				labelsUsed = Arrays.asList(((WeakSemiCRFNetworkCompiler)compiler).labels);
-				break;
-			}
-			for(Object obj: labelsUsed){
-				modelTextWriter.println(obj);
-			}
-			GlobalNetworkParam paramG = fm.getParam_G();
-			modelTextWriter.println("Num features: "+paramG.countFeatures());
-			modelTextWriter.println("Features:");
-			HashMap<String, HashMap<String, HashMap<String, Integer>>> featureIntMap = paramG.getFeatureIntMap();
-			for(String featureType: sorted(featureIntMap.keySet())){
-				modelTextWriter.println(featureType);
-				HashMap<String, HashMap<String, Integer>> outputInputMap = featureIntMap.get(featureType);
-				for(String output: sorted(outputInputMap.keySet())){
-					modelTextWriter.println("\t"+output);
-					HashMap<String, Integer> inputMap = outputInputMap.get(output);
-					for(String input: sorted(inputMap.keySet())){
-						int featureId = inputMap.get(input);
-						modelTextWriter.println("\t\t"+input+" "+featureId+" "+fm.getParam_G().getWeight(featureId));
+					if(findMaxLength){
+						maxLength = Math.max(maxLength, instance.size());
+					}
+					if(findMaxSpan){
+						for(Span span: instance.output){
+							maxSpan = Math.max(maxSpan, span.end-span.start);
+						}
 					}
 				}
+				
+				NetworkConfig.TRAIN_MODE_IS_GENERATIVE = false;
+				NetworkConfig._CACHE_FEATURES_DURING_TRAINING = true;
+				
+				int size = trainInstances.length;
+				
+				print("Read.."+size+" instances.", true, outstream, System.err);
+				
+				switch(algo){
+				case LINEAR_CRF:
+					for(SMSNPInstance instance: trainInstances){
+						instance.getInputTokenized(tokenizerMethod, useGoldTokenization, true);
+						instance.getOutputTokenized(tokenizerMethod, useGoldTokenization, false);
+					}
+					WordLabel[] wordLabels = WordLabel.LABELS.values().toArray(new WordLabel[WordLabel.LABELS.size()]);
+					fm = new LinearCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, disabledFeatures);
+					compiler = new LinearCRFNetworkCompiler(wordLabels, tokenizerMethod);
+					break;
+				case SEMI_CRF:
+					fm = new SemiCRFFeatureManager(new GlobalNetworkParam(), disabledFeatures);
+					compiler = new SemiCRFNetworkCompiler(labels, maxLength, maxSpan);
+					break;
+				case WEAK_SEMI_CRF:
+					fm = new WeakSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, disabledFeatures);
+					compiler = new WeakSemiCRFNetworkCompiler(labels, maxLength, maxSpan);
+					break;
+				case TOKENIZED_GOLD:
+					break;
+				}
+				
+				model = NetworkConfig.TRAIN_MODE_IS_GENERATIVE ? GenerativeNetworkModel.create(fm, compiler) : DiscriminativeNetworkModel.create(fm, compiler);
+	
+				model.train(trainInstances, maxNumIterations);
+				if(serializeModel){
+					print("Writing object...", false, outstream, System.out);
+					long startTime = System.currentTimeMillis();
+					ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(modelPath));
+					oos.writeObject(model);
+					oos.close();
+					long endTime = System.currentTimeMillis();
+					print(String.format("Done in %.3fs", (endTime-startTime)/1000.0), true, outstream, System.out);
+				}
+			} else {
+				print("Reading object...", false, outstream, System.out);
+				long startTime = System.currentTimeMillis();
+				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(modelPath));
+				model = (NetworkModel)ois.readObject();
+				ois.close();
+				Field _fm = NetworkModel.class.getDeclaredField("_fm");
+				_fm.setAccessible(true);
+				fm = (FeatureManager)_fm.get(model);
+				Field _compiler = NetworkModel.class.getDeclaredField("_compiler");
+				_compiler.setAccessible(true);
+				compiler = (NetworkCompiler)_compiler.get(model);
+				long endTime = System.currentTimeMillis();
+				print(String.format("Done in %.3fs", (endTime-startTime)/1000.0), true, outstream, System.out);
 			}
-			modelTextWriter.close();
+			if(writeModelText){
+				PrintStream modelTextWriter = new PrintStream(modelPath+".txt");
+				modelTextWriter.println("Algorithm: "+algo);
+				modelTextWriter.println("Serialize?: "+serializeModel);
+				modelTextWriter.println("Model path: "+modelPath);
+				modelTextWriter.println("In CoNLL?: "+useCoNLLData);
+				modelTextWriter.println("Train path: "+train_filename);
+				modelTextWriter.println("Test path: "+test_filename);
+				modelTextWriter.println("Max length: "+maxLength);
+				modelTextWriter.println("Max span: "+maxSpan);
+				modelTextWriter.println("#Threads: "+NetworkConfig._numThreads);
+				modelTextWriter.println("L2 param: "+NetworkConfig.L2_REGULARIZATION_CONSTANT);
+				modelTextWriter.println("Weight init: "+weightInit);
+				modelTextWriter.println("objtol: "+NetworkConfig.objtol);
+				modelTextWriter.println("Max iter: "+maxNumIterations);
+				modelTextWriter.println("Tokenizer: "+tokenizerMethod);
+				modelTextWriter.println("Disabled features: "+Arrays.asList(disabledFeatures));
+				modelTextWriter.println();
+				modelTextWriter.println("Labels:");
+				List<?> labelsUsed = new ArrayList<Object>();
+				switch(algo){
+				case LINEAR_CRF:
+					labelsUsed = Arrays.asList(((LinearCRFNetworkCompiler)compiler)._labels);
+					break;
+				case SEMI_CRF:
+					labelsUsed = Arrays.asList(((SemiCRFNetworkCompiler)compiler).labels);
+					break;
+				case WEAK_SEMI_CRF:
+					labelsUsed = Arrays.asList(((WeakSemiCRFNetworkCompiler)compiler).labels);
+					break;
+				case TOKENIZED_GOLD:
+					break;
+				}
+				for(Object obj: labelsUsed){
+					modelTextWriter.println(obj);
+				}
+				GlobalNetworkParam paramG = fm.getParam_G();
+				modelTextWriter.println("Num features: "+paramG.countFeatures());
+				modelTextWriter.println("Features:");
+				HashMap<String, HashMap<String, HashMap<String, Integer>>> featureIntMap = paramG.getFeatureIntMap();
+				for(String featureType: sorted(featureIntMap.keySet())){
+					modelTextWriter.println(featureType);
+					HashMap<String, HashMap<String, Integer>> outputInputMap = featureIntMap.get(featureType);
+					for(String output: sorted(outputInputMap.keySet())){
+						modelTextWriter.println("\t"+output);
+						HashMap<String, Integer> inputMap = outputInputMap.get(output);
+						for(String input: sorted(inputMap.keySet())){
+							int featureId = inputMap.get(input);
+							modelTextWriter.println("\t\t"+input+" "+featureId+" "+fm.getParam_G().getWeight(featureId));
+						}
+					}
+				}
+				modelTextWriter.close();
+			}
 		}
 		
 		if(test_filename != null){
@@ -324,27 +334,38 @@ public class Main {
 				testInstances = SMSNPUtil.readData(test_filename, false, false);
 			}
 			for(SMSNPInstance instance: testInstances){
-				instance.getInputTokenized(tokenizerMethod, false, true);
-				instance.getOutputTokenized(tokenizerMethod, false, false);
+				instance.getInputTokenized(tokenizerMethod, useGoldTokenization, true);
+				instance.getOutputTokenized(tokenizerMethod, useGoldTokenization, false);
 			}
-			Instance[] predictions = model.decode(testInstances);
-			List<SMSNPInstance> predictionsList = new ArrayList<SMSNPInstance>();
-			for(Instance instance: predictions){
-				predictionsList.add((SMSNPInstance)instance);
-			}
-			predictionsList.sort(Comparator.comparing(Instance::getInstanceId));
-			PrintStream result = new PrintStream(modelPath.replace(".model", ".result"));
-			if(algo == Algorithm.LINEAR_CRF){
-				for(SMSNPInstance instance: predictionsList){
-					result.println(instance.toCoNLLString(tokenizerMethod, false));
+			Instance[] predictions = null;
+			if(algo != Algorithm.TOKENIZED_GOLD){
+				predictions = model.decode(testInstances);
+				List<SMSNPInstance> predictionsList = new ArrayList<SMSNPInstance>();
+				for(Instance instance: predictions){
+					predictionsList.add((SMSNPInstance)instance);
 				}
+				predictionsList.sort(Comparator.comparing(Instance::getInstanceId));
+				if(result_filename == null){
+					result_filename = test_filename+".result";
+				}
+				PrintStream result = new PrintStream(result_filename);
+				if(algo == Algorithm.LINEAR_CRF){
+					for(SMSNPInstance instance: predictionsList){
+						result.println(instance.toCoNLLString(tokenizerMethod, false));
+					}
+				} else {
+					for(SMSNPInstance instance: predictionsList){
+						result.println(instance.toString());
+					}
+				}
+				result.close();
 			} else {
-				for(SMSNPInstance instance: predictionsList){
-					result.println(instance.toString());
+				for(SMSNPInstance instance: testInstances){
+					instance.setPredictionTokenized(instance.getOutputTokenized());
 				}
+				predictions = testInstances;
 			}
-			result.close();
-			SMSNPEvaluator.evaluate(predictions, outstream, 10);
+			SMSNPEvaluator.evaluate(predictions, outstream, numExamplesPrinted);
 		}
 	}
 	
@@ -358,15 +379,15 @@ public class Main {
 		System.out.println("Options:\n"
 				+ "-modelPath <modelPath>\n"
 				+ "\tSerialize model to <modelPath>\n"
-				+ "-noSerialize\n"
-				+ "\tDo not serialize model\n"
 				+ "-writeModelText\n"
-				+ "\t(with -serializeTo)Write the model in text version for debugging purpose\n"
+				+ "\tWrite the model in text version for debugging purpose\n"
 				+ "-trainPath <trainPath>\n"
 				+ "\tTake training file from <trainPath>. If not specified, no training is performed\n"
 				+ "\tWill attempt to load the model if test is specified\n"
 				+ "-testPath <testPath>\n"
 				+ "\tTake test file from <testPath>. If not specified, no test is performed\n"
+				+ "-resultPath <testPath>\n"
+				+ "\tPrint result from testing to <resultPath>. If not specified, it is based on the test name\n"
 				+ "-inCONLLFormat\n"
 				+ "\tWhether the input file is in CoNLL format. Default to false\n"
 				+ "-maxLength <n>\n"
@@ -378,9 +399,9 @@ public class Main {
 				+ "\tSet the number of threads to <n>. Default to 4\n"
 				+ "-l2 <value>\n"
 				+ "\tSet the L2 regularization parameter weight to <value>. Default to 0.01\n"
-				+ "-weightInit <\"random\" or double_value>\n"
+				+ "-weightInit <\"random\" or value>\n"
 				+ "\tWeight initialization. If \"random\", the weights will be randomly assigned values between\n"
-				+ "\t-0.05 to 0.05 (uniform distribution). Otherwise, it will be set to the double value provided.\n"
+				+ "\t-0.05 to 0.05 (uniform distribution). Otherwise, it will be set to the value provided.\n"
 				+ "\tDefault to random\n"
 				+ "-objtol <value>\n"
 				+ "\tStop when the improvement of objective function is less than <value>. Default to 0.01\n"
@@ -388,19 +409,24 @@ public class Main {
 				+ "\tless than 0.01% for 3 consecutive iterations\n"
 				+ "-maxIter <n>\n"
 				+ "\tSet the maximum number of iterations to <n>. Default to 5000\n"
-				+ "-logFile <logPath>\n"
+				+ "-logPath <logPath>\n"
 				+ "\tPrint output and evaluation result to file at <logPath>.\n"
 				+ "\tNote that the output will still be printed to STDOUT\n"
-				+ "-useSemiCRF\n"
-				+ "\tUse the semi-CRF\n"
-				+ "-useWeakSemiCRF\n"
-				+ "\tUse the weak version of semi-CRF\n"
-				+ "-useLinearCRF\n"
-				+ "\tUse linear-chain CRF\n"
+				+ "-algo\n"
+				+ "\tThe algorithm to be used:\n"
+				+ "\t-LINEAR_CRF: Use linear-chain CRF\n"
+				+ "\t-WEAK_SEMI_CRF: Use the weak version of semi-CRF\n"
+				+ "\t-SEMI_CRF: Use the semi-CRF\n"
+				+ "\t-TOKENIZED_GOLD: Use the gold span as the prediction, but after going through tokenization\n"
+				+ "\t                 To check the best performance when only tokenized data is available\n"
 				+ "-tokenizer\n"
 				+ "\tThe tokenizer method to be used: whitespace or regex. Default to regex\n"
+				+ "-useGoldTokenization\n"
+				+ "\tTokenize the files using the gold information, if available\n"
 				+ "-disableFeatures\n"
 				+ "\tThe features to be disabled. The available features depend on the algorithm used.\n"
+				+ "-numExamplesPrinted\n"
+				+ "\tSpecify the number of examples printed during evaluation. Default to 10\n"
 				);
 	}
 
