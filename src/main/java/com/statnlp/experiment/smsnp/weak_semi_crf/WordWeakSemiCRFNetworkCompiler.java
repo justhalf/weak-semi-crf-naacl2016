@@ -2,43 +2,41 @@ package com.statnlp.experiment.smsnp.weak_semi_crf;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import com.statnlp.commons.types.Instance;
-import com.statnlp.experiment.smsnp.SpanLabel;
 import com.statnlp.experiment.smsnp.SMSNPInstance;
 import com.statnlp.experiment.smsnp.SMSNPNetwork;
-import com.statnlp.experiment.smsnp.Span;
+import com.statnlp.experiment.smsnp.WordLabel;
 import com.statnlp.hybridnetworks.LocalNetworkParam;
 import com.statnlp.hybridnetworks.Network;
 import com.statnlp.hybridnetworks.NetworkCompiler;
 import com.statnlp.hybridnetworks.NetworkException;
 import com.statnlp.hybridnetworks.NetworkIDMapper;
 
-public class WeakSemiCRFNetworkCompiler extends NetworkCompiler {
+public class WordWeakSemiCRFNetworkCompiler extends NetworkCompiler {
 	
 	private final static boolean DEBUG = false;
 	
 	private static final long serialVersionUID = 6585870230920484539L;
-	public SpanLabel[] labels;
-	public int maxLength = 500;
-	public int maxSegmentLength = 20;
-	public long[] allNodes;
-	public int[][][] allChildren;
+	public WordLabel[] labels;
+	public int maxLength = 20;
+	public int maxSegmentLength = 1;
+	public transient long[] allNodes;
+	public transient int[][][] allChildren;
 	
 	public enum NodeType {
 		LEAF,
+		ROOT,
 		BEGIN,
 		END,
-		ROOT,
 	}
 	
 	static {
 		NetworkIDMapper.setCapacity(new int[]{10000, 10, 100});
 	}
 
-	public WeakSemiCRFNetworkCompiler(SpanLabel[] labels, int maxLength, int maxSegmentLength) {
+	public WordWeakSemiCRFNetworkCompiler(WordLabel[] labels, int maxLength, int maxSegmentLength) {
 		this.labels = labels;
 		this.maxLength = Math.max(maxLength, this.maxLength);
 		this.maxSegmentLength = Math.max(maxSegmentLength, this.maxSegmentLength);
@@ -64,26 +62,38 @@ public class WeakSemiCRFNetworkCompiler extends NetworkCompiler {
 	private SMSNPNetwork compileLabeled(int networkId, SMSNPInstance instance, LocalNetworkParam param){
 		SMSNPNetwork network = new SMSNPNetwork(networkId, instance, param);
 		
-		int size = instance.size();
-		List<Span> output = instance.getOutput();
-		Collections.sort(output);
+		List<WordLabel> output = instance.getOutputTokenized();
+		int size = output.size();
 		
 		long leaf = toNode_leaf();
 		network.addNode(leaf);
 		long prevNode = leaf;
-		for(Span span: output){
-			int labelId = span.label.id;
-			long begin = toNode_begin(span.start, labelId);
-			long end = toNode_end(span.end-1, labelId);
-			network.addNode(begin);
-			network.addNode(end);
-			network.addEdge(begin, new long[]{prevNode});
-			network.addEdge(end, new long[]{begin});
-			prevNode = end;
+		int prevLabelId = -1;
+		int lastPos = 0;
+		for(int pos=0; pos<size; pos++){
+			WordLabel label = output.get(pos);
+			int labelId = label.id;
+			if(prevLabelId == -1 || prevLabelId != labelId || pos-lastPos >= maxSegmentLength || WordLabel.get(prevLabelId).form.startsWith("O")){
+				if(prevLabelId != -1){
+					long end = toNode_end(pos-1, prevLabelId);
+					network.addNode(end);
+					network.addEdge(end, new long[]{prevNode});
+					prevNode = end;
+				}
+				long begin = toNode_begin(pos, labelId);
+				network.addNode(begin);
+				network.addEdge(begin, new long[]{prevNode});
+				prevNode = begin;
+				prevLabelId = labelId;
+				lastPos = pos;
+			}
 		}
-		long root = toNode_root(size-1);
+		long root = toNode_root(size);
 		network.addNode(root);
-		network.addEdge(root, new long[]{prevNode});
+		long end = toNode_end(size-1, prevLabelId);
+		network.addNode(end);
+		network.addEdge(end, new long[]{prevNode});
+		network.addEdge(root, new long[]{end});
 		
 		network.finalizeNetwork();
 		
@@ -96,8 +106,11 @@ public class WeakSemiCRFNetworkCompiler extends NetworkCompiler {
 	}
 	
 	private SMSNPNetwork compileUnlabeled(int networkId, SMSNPInstance instance, LocalNetworkParam param){
-		int size = instance.size();
-		long root = toNode_root(size-1);
+		if(allNodes == null){
+			buildUnlabeled();
+		}
+		int size = instance.getInputTokenized().length;
+		long root = toNode_root(size);
 		int root_k = Arrays.binarySearch(allNodes, root);
 		int numNodes = root_k + 1;
 		return new SMSNPNetwork(networkId, instance, allNodes, allChildren, param, numNodes);
@@ -112,7 +125,8 @@ public class WeakSemiCRFNetworkCompiler extends NetworkCompiler {
 		List<Long> currNodes = new ArrayList<Long>();
 		prevNodes.add(leaf);
 		for(int pos=0; pos<maxLength; pos++){
-			for(int labelId=0; labelId<labels.length; labelId++){
+			for(int labelIdx=0; labelIdx<labels.length; labelIdx++){
+				int labelId = labels[labelIdx].id;
 				long beginNode = toNode_begin(pos, labelId);
 				long endNode = toNode_end(pos, labelId);
 				
@@ -130,7 +144,7 @@ public class WeakSemiCRFNetworkCompiler extends NetworkCompiler {
 					network.addEdge(beginNode, new long[]{prevNode});
 				}
 			}
-			long root = toNode_root(pos);
+			long root = toNode_root(pos+1);
 			network.addNode(root);
 			for(long currNode: currNodes){
 				network.addEdge(root, new long[]{currNode});	
@@ -147,27 +161,27 @@ public class WeakSemiCRFNetworkCompiler extends NetworkCompiler {
 		return toNode(0, 0, NodeType.LEAF);
 	}
 	
+	private long toNode_root(int pos){
+		return toNode(pos+1, 0, NodeType.ROOT);
+	}
+	
 	private long toNode_begin(int pos, int labelId){
-		return toNode(pos, labelId+1, NodeType.BEGIN);
+		return toNode(pos+1, labelId+1, NodeType.BEGIN);
 	}
 	
 	private long toNode_end(int pos, int labelId){
-		return toNode(pos, labelId+1, NodeType.END);
-	}
-	
-	private long toNode_root(int pos){
-		return toNode(pos, labels.length+1, NodeType.ROOT);
+		return toNode(pos+1, labelId+1, NodeType.END);
 	}
 	
 	private long toNode(int pos, int labelId, NodeType type){
-		return NetworkIDMapper.toHybridNodeID(new int[]{pos+1, type.ordinal(), labelId});
+		return NetworkIDMapper.toHybridNodeID(new int[]{pos, type.ordinal(), labelId});
 	}
 
 	@Override
 	public SMSNPInstance decompile(Network net) {
 		SMSNPNetwork network = (SMSNPNetwork)net;
 		SMSNPInstance result = (SMSNPInstance)network.getInstance().duplicate();
-		List<Span> prediction = new ArrayList<Span>();
+		List<WordLabel> predictionTokenized = new ArrayList<WordLabel>();
 		int node_k = network.countNodes()-1;
 		while(node_k > 0){
 			int[] children_k = network.getMaxPath(node_k);
@@ -183,11 +197,12 @@ public class WeakSemiCRFNetworkCompiler extends NetworkCompiler {
 			children_k = network.getMaxPath(children_k[0]);
 			child_arr = network.getNodeArray(children_k[0]);
 			int start = child_arr[0]-1;
-			prediction.add(new Span(start, end+1, SpanLabel.get(labelId)));
+			for(int pos=start; pos<=end; pos++){
+				predictionTokenized.add(0, WordLabel.get(labelId));
+			}
 			node_k = children_k[0];
 		}
-		Collections.sort(prediction);
-		result.setPrediction(prediction);
+		result.setPredictionTokenized(predictionTokenized);
 		return result;
 	}
 

@@ -133,11 +133,8 @@ public class SMSNPInstance extends BaseInstance<SMSNPInstance, String, List<Span
 		return getInput().length();
 	}
 	
-	public String toCoNLLString(TokenizerMethod tokenizerMethod, boolean useGoldTokenization){
-		String[] inputTokenized = getInputTokenized(tokenizerMethod, useGoldTokenization, true);
-		List<WordLabel> outputTokenized = getOutputTokenized(tokenizerMethod, useGoldTokenization, true);
-		List<WordLabel> predictionTokenized = this.predictionTokenized;
-		return SMSNPUtil.toCoNLLString(inputTokenized, outputTokenized, predictionTokenized);
+	public String toCoNLLString(String[]... additionalFeatures){
+		return SMSNPUtil.toCoNLLString(inputTokenized, outputTokenized, predictionTokenized, additionalFeatures);
 	}
 
 	public String toString(){

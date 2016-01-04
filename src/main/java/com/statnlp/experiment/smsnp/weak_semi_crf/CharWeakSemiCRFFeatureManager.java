@@ -1,9 +1,14 @@
 package com.statnlp.experiment.smsnp.weak_semi_crf;
 
+import static com.statnlp.experiment.smsnp.SMSNPUtil.listToArray;
+import static com.statnlp.experiment.smsnp.SMSNPUtil.setupFeatures;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.statnlp.example.semi_crf.SemiCRFNetworkCompiler.NodeType;
+import com.statnlp.experiment.smsnp.IFeatureType;
 import com.statnlp.experiment.smsnp.SMSNPInstance;
 import com.statnlp.experiment.smsnp.SMSNPNetwork;
 import com.statnlp.experiment.smsnp.SMSNPTokenizer;
@@ -13,21 +18,23 @@ import com.statnlp.hybridnetworks.FeatureManager;
 import com.statnlp.hybridnetworks.GlobalNetworkParam;
 import com.statnlp.hybridnetworks.Network;
 
-public class WeakSemiCRFFeatureManager extends FeatureManager {
+import edu.stanford.nlp.util.StringUtils;
+
+public class CharWeakSemiCRFFeatureManager extends FeatureManager {
 	
 	private static final long serialVersionUID = 6510131496948610905L;
 	
-	public static enum FeatureType{
+	public static enum FeatureType implements IFeatureType{
 		CHEAT(false),
 		
 		// Begin to End features (on segment)
 		SEGMENT, // The string inside the segment
 		SEGMENT_LENGTH, // The segment length
-		NUM_WORDS, // Number of words
+		NUM_WORDS(true), // Number of words
 		
 		INSIDE_UNIGRAM, // The characters inside the segment, the window size can be varied
 		INSIDE_SUBSTRING, // The substrings found with the same start or the same end as the segment
-		WORDS, // Words inside the segment, indexed from the segment start and from segment end
+		WORDS(true), // Words inside the segment, indexed from the segment start and from segment end
 		WORD_SHAPES, // The shape of the words inside the segment
 		
 		// End to Begin features (on transition)
@@ -36,22 +43,22 @@ public class WeakSemiCRFFeatureManager extends FeatureManager {
 		DIST_TO_BEGIN, // Distance to beginning of input
 		OUTSIDE_UNIGRAM, // The character window to the left and right of transition boundary
 		OUTSIDE_SUBSTRING, // The substring window to the left and right of transition boundary
+		BIGRAM(true),
 		
 		// Any
 		
-		PREV_WORD, // The word ending at start boundary
+		PREV_WORD(true), // The word ending at start boundary
 		PREV_WORD_SHAPE, // The shape of the previous word
-		START_BOUNDARY_WORD, // If the previous character is not space, get the word crossing the begin boundary
+		START_BOUNDARY_WORD(true), // If the previous character is not space, get the word crossing the begin boundary
 		END_BOUNDARY_WORD, // If the next character is not space, get the word crossing the end boundary
 		NEXT_WORD, // The word starting at the end boundary
 		NEXT_WORD_SHAPE, // The shape of the next word
-		
-		BIGRAM,
 		;
 		
 		private boolean isEnabled;
+		
 		private FeatureType(){
-			isEnabled = true;
+			this(false);
 		}
 		
 		private FeatureType(boolean isEnabled){
@@ -74,21 +81,101 @@ public class WeakSemiCRFFeatureManager extends FeatureManager {
 			return !isEnabled;
 		}
 	}
+
+	private static enum Argument{
+		UNIGRAM_WINDOW_SIZE(1,
+				"The window size for unigram character features",
+				"unigram_window_size",
+				"n"),
+		SUBSTRING_WINDOW_SIZE(1,
+				"The window size for substring character features",
+				"substring_window_size",
+				"n"),
+		HELP(0,
+				"Print this help message",
+				"h,help"),
+		;
+		
+		final private int numArgs;
+		final private String[] argNames;
+		final private String[] names;
+		final private String help;
+		private Argument(int numArgs, String help, String names, String... argNames){
+			this.numArgs = numArgs;
+			this.argNames = argNames;
+			this.names = names.split(",");
+			this.help = help;
+		}
+		
+		/**
+		 * Return the Argument which has the specified name
+		 * @param name
+		 * @return
+		 */
+		public static Argument argWithName(String name){
+			for(Argument argument: Argument.values()){
+				for(String argName: argument.names){
+					if(argName.equals(name)){
+						return argument;
+					}
+				}
+			}
+			throw new IllegalArgumentException("Unrecognized argument: "+name);
+		}
+		
+		/**
+		 * Print help message
+		 */
+		private static void printHelp(){
+			StringBuilder result = new StringBuilder();
+			result.append("Options:\n");
+			for(Argument argument: Argument.values()){
+				result.append("-"+StringUtils.join(argument.names, " -"));
+				result.append(" "+StringUtils.join(argument.argNames, " "));
+				result.append("\n");
+				if(argument.help != null && argument.help.length() > 0){
+					result.append("\t"+argument.help.replaceAll("\n","\n\t")+"\n");
+				}
+			}
+			System.out.println(result.toString());
+		}
+	}
 	
 	public int unigramWindowSize = 3;
 	public int substringWindowSize = 3;
 	
 	public TokenizerMethod tokenizerMethod;
+	public Map<String, String> brownMap;
 	
-	public WeakSemiCRFFeatureManager(GlobalNetworkParam param_g, String[] disabledFeatures){
-		this(param_g, TokenizerMethod.WHITESPACE, disabledFeatures);
+	public CharWeakSemiCRFFeatureManager(GlobalNetworkParam param_g, String[] features){
+		this(param_g, TokenizerMethod.WHITESPACE, null, features);
 	}
 
-	public WeakSemiCRFFeatureManager(GlobalNetworkParam param_g, TokenizerMethod tokenizerMethod, String[] disabledFeatures) {
+	public CharWeakSemiCRFFeatureManager(GlobalNetworkParam param_g, TokenizerMethod tokenizerMethod, Map<String, String> brownMap, String[] features, String... args) {
 		super(param_g);
 		this.tokenizerMethod = tokenizerMethod;
-		for(String disabledFeature: disabledFeatures){
-			FeatureType.valueOf(disabledFeature.toUpperCase()).disable();
+		this.brownMap = brownMap;
+		setupFeatures(FeatureType.class, features);
+		int argIndex = 0;
+		while(argIndex < args.length){
+			String arg = args[argIndex];
+			if(arg.length() > 0 && arg.charAt(0) == '-'){
+				Argument argument = Argument.argWithName(args[argIndex].substring(1));
+				switch(argument){
+				case UNIGRAM_WINDOW_SIZE:
+					unigramWindowSize = Integer.parseInt(args[argIndex+1]);
+					break;
+				case SUBSTRING_WINDOW_SIZE:
+					substringWindowSize = Integer.parseInt(args[argIndex+1]);
+					break;
+				case HELP:
+					Argument.printHelp();
+					System.exit(0);
+				}
+				argIndex += argument.numArgs+1;
+			} else {
+				throw new IllegalArgumentException("Error while parsing: "+arg);
+			}
 		}
 	}
 	
@@ -124,11 +211,6 @@ public class WeakSemiCRFFeatureManager extends FeatureManager {
 		}
 		
 		List<Integer> commonFeatures = new ArrayList<Integer>();
-		
-		if(FeatureType.BIGRAM.enabled()){
-			int bigramFeature = param_g.toFeature(FeatureType.BIGRAM.name(), childLabelId+"-"+parentLabelId, "");
-			commonFeatures.add(bigramFeature);
-		}
 		
 		int startBoundary = (parentType != NodeType.BEGIN) ? childPos : childPos+1;
 		int endBoundary = (childType != NodeType.END) ? parentPos : parentPos-1;
@@ -239,6 +321,11 @@ public class WeakSemiCRFFeatureManager extends FeatureManager {
 		if(parentType == NodeType.BEGIN || childType == NodeType.END){
 			List<Integer> transitionFeatures = new ArrayList<Integer>();
 			
+			if(FeatureType.BIGRAM.enabled()){
+				int bigramFeature = param_g.toFeature(FeatureType.BIGRAM.name(), childLabelId+"-"+parentLabelId, "");
+				transitionFeatures.add(bigramFeature);
+			}
+			
 			if(FeatureType.OUTSIDE_UNIGRAM.enabled()){
 				for(int i=0; i<unigramWindowSize; i++){
 					String curInput = "";
@@ -328,14 +415,6 @@ public class WeakSemiCRFFeatureManager extends FeatureManager {
 		} else {
 			return character;
 		}
-	}
-	
-	private static int[] listToArray(List<Integer> list){
-		int[] result = new int[list.size()];
-		for(int i=0; i<list.size(); i++){
-			result[i] = list.get(i);
-		}
-		return result;
 	}
 	
 	public static void main(String[] args){

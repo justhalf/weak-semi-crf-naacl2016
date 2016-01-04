@@ -40,11 +40,11 @@ public class LinearCRFNetworkCompiler extends NetworkCompiler{
 	public static final boolean DEBUG = false;
 	
 	public WordLabel[] _labels;
-	public enum NODE_TYPES {LEAF, NODE, ROOT};
+	public enum NodeType {LEAF, NODE, ROOT};
 	private static int MAX_LENGTH = 500;
 	
-	private long[] _allNodes;
-	private int[][][] _allChildren;
+	private transient long[] _allNodes;
+	private transient int[][][] _allChildren;
 	
 	private TokenizerMethod tokenizerMethod;
 	
@@ -104,6 +104,9 @@ public class LinearCRFNetworkCompiler extends NetworkCompiler{
 	}
 
 	private SMSNPNetwork compile_unlabeled(int networkId, SMSNPInstance inst, LocalNetworkParam param){
+		if(_allNodes == null){
+			compile_unlabled_generic();
+		}
 		int size = inst.getInputTokenized(tokenizerMethod, false, false).length;
 		long root = this.toNode_root(size);
 		
@@ -153,17 +156,17 @@ public class LinearCRFNetworkCompiler extends NetworkCompiler{
 	}
 	
 	private long toNode_leaf(){
-		int[] arr = new int[]{0, 0, 0, 0, NODE_TYPES.LEAF.ordinal()};
+		int[] arr = new int[]{0, 0, 0, 0, NodeType.LEAF.ordinal()};
 		return NetworkIDMapper.toHybridNodeID(arr);
 	}
 	
 	private long toNode(int pos, int tag_id){
-		int[] arr = new int[]{pos+1, tag_id+1, 0, 0, NODE_TYPES.NODE.ordinal()};
+		int[] arr = new int[]{pos+1, tag_id+1, 0, 0, NodeType.NODE.ordinal()};
 		return NetworkIDMapper.toHybridNodeID(arr);
 	}
 	
 	private long toNode_root(int size){
-		int[] arr = new int[]{size, this._labels.length+1, 0, 0, NODE_TYPES.ROOT.ordinal()};
+		int[] arr = new int[]{size, this._labels.length+1, 0, 0, NodeType.ROOT.ordinal()};
 		return NetworkIDMapper.toHybridNodeID(arr);
 	}
 

@@ -2,6 +2,7 @@ package com.statnlp.experiment.smsnp;
 
 import static com.statnlp.experiment.smsnp.SMSNPUtil.print;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,16 +18,22 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import com.statnlp.commons.types.Instance;
 import com.statnlp.experiment.smsnp.SMSNPTokenizer.TokenizerMethod;
 import com.statnlp.experiment.smsnp.linear_crf.LinearCRFFeatureManager;
 import com.statnlp.experiment.smsnp.linear_crf.LinearCRFNetworkCompiler;
-import com.statnlp.experiment.smsnp.semi_crf.SemiCRFFeatureManager;
-import com.statnlp.experiment.smsnp.semi_crf.SemiCRFNetworkCompiler;
-import com.statnlp.experiment.smsnp.weak_semi_crf.WeakSemiCRFFeatureManager;
-import com.statnlp.experiment.smsnp.weak_semi_crf.WeakSemiCRFNetworkCompiler;
+import com.statnlp.experiment.smsnp.semi_crf.CharSemiCRFFeatureManager;
+import com.statnlp.experiment.smsnp.semi_crf.CharSemiCRFNetworkCompiler;
+import com.statnlp.experiment.smsnp.semi_crf.WordSemiCRFFeatureManager;
+import com.statnlp.experiment.smsnp.semi_crf.WordSemiCRFNetworkCompiler;
+import com.statnlp.experiment.smsnp.weak_semi_crf.CharWeakSemiCRFFeatureManager;
+import com.statnlp.experiment.smsnp.weak_semi_crf.CharWeakSemiCRFNetworkCompiler;
+import com.statnlp.experiment.smsnp.weak_semi_crf.WordWeakSemiCRFFeatureManager;
+import com.statnlp.experiment.smsnp.weak_semi_crf.WordWeakSemiCRFNetworkCompiler;
 import com.statnlp.hybridnetworks.DiscriminativeNetworkModel;
 import com.statnlp.hybridnetworks.FeatureManager;
 import com.statnlp.hybridnetworks.GenerativeNetworkModel;
@@ -38,10 +45,30 @@ import com.statnlp.hybridnetworks.NetworkModel;
 public class Main {
 	
 	public enum Algorithm {
-		LINEAR_CRF,
-		SEMI_CRF,
-		WEAK_SEMI_CRF,
-		TOKENIZED_GOLD,
+		LINEAR_CRF(true),
+		CHAR_SEMI_CRF(false),
+		CHAR_WEAK_SEMI_CRF(false),
+		WORD_SEMI_CRF(true),
+		WORD_WEAK_SEMI_CRF(true),
+		TOKENIZED_GOLD(true),
+		;
+		
+		private boolean requireTokenized = false;
+		
+		private Algorithm(boolean requireTokenized){
+			this.requireTokenized = requireTokenized;
+		}
+		
+		public boolean requireTokenized(){
+			return requireTokenized;
+		}
+		
+		public static String helpString(){
+			return "Please specify the algorithm from the following choices:\n"
+					+ "\t-LINEAR_CRF\n"
+					+ "\t-{CHAR,WORD}_WEAK_SEMI_CRF\n"
+					+ "\t-{CHAR,WORD}_SEMI_CRF";
+		}
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException, NoSuchFieldException, SecurityException, InterruptedException, IllegalArgumentException, IllegalAccessException{
@@ -50,6 +77,7 @@ public class Main {
 		String timestamp = Calendar.getInstance().getTime().toString();
 		String modelPath = timestamp+".model";
 		String logPath = timestamp+".log";
+		String brownPath = null;
 		boolean useCoNLLData = false;
 		boolean useGoldTokenization = false;
 		Algorithm algo = null;
@@ -59,11 +87,12 @@ public class Main {
 		String result_filename = null;
 		SMSNPInstance[] trainInstances = null;
 		SMSNPInstance[] testInstances = null;
+		Map<String, String> brownMap = null;
 		
 		int maxLength = 0;
-		int maxSpan = 0;
+		int maxSegmentLength = 0;
 		boolean findMaxLength = true;
-		boolean findMaxSpan = true;
+		boolean findMaxSegmentLength = true;
 		boolean writeModelText = false;
 		NetworkConfig._numThreads = 4;
 		NetworkConfig.L2_REGULARIZATION_CONSTANT = 0.125;
@@ -72,13 +101,14 @@ public class Main {
 		
 		int maxNumIterations = 5000;
 		
-		String[] disabledFeatures = new String[0];
+		String[] features = new String[0];
 		
 		TokenizerMethod tokenizerMethod = TokenizerMethod.REGEX;
 		
 		int numExamplesPrinted = 10;
 		
 		int argIndex = 0;
+		String[] moreArgs = new String[0];
 		while(argIndex < args.length){
 			String arg = args[argIndex];
 			if(arg.charAt(0) == '-'){
@@ -113,9 +143,9 @@ public class Main {
 					findMaxLength = false;
 					argIndex += 2;
 					break;
-				case "maxSpan":
-					maxSpan = Integer.parseInt(args[argIndex+1]);
-					findMaxSpan = false;
+				case "maxSegmentLength":
+					maxSegmentLength = Integer.parseInt(args[argIndex+1]);
+					findMaxSegmentLength = false;
 					argIndex += 2;
 					break;
 				case "nThreads":
@@ -148,8 +178,16 @@ public class Main {
 					logPath = args[argIndex+1];
 					argIndex += 2;
 					break;
+				case "brownPath":
+					brownPath = args[argIndex+1];
+					argIndex += 2;
+					break;
 				case "algo":
-					algo = Algorithm.valueOf(args[argIndex+1].toUpperCase());
+					try{
+						algo = Algorithm.valueOf(args[argIndex+1].toUpperCase());
+					} catch (IllegalArgumentException e){
+						throw new IllegalArgumentException("\n"+Algorithm.helpString());
+					}
 					argIndex += 2;
 					break;
 				case "tokenizer":
@@ -160,8 +198,8 @@ public class Main {
 					useGoldTokenization = true;
 					argIndex += 1;
 					break;
-				case "disableFeatures":
-					disabledFeatures = args[argIndex+1].split(",");
+				case "features":
+					features = args[argIndex+1].split(",");
 					argIndex += 2;
 					break;
 				case "numExamplesPrinted":
@@ -172,6 +210,10 @@ public class Main {
 				case "help":
 					printHelp();
 					System.exit(0);
+				case "-":
+					moreArgs = Arrays.copyOfRange(args, argIndex+1, args.length);
+					argIndex = args.length;
+					break;
 				default:
 					throw new IllegalArgumentException("Unrecognized argument: "+arg);
 				}
@@ -180,9 +222,18 @@ public class Main {
 			}
 		}
 		if(algo == null){
-			System.out.println("Please specify the algorithm: LINEAR_CRF, WEAK_SEMI_CRF, or SEMI_CRF");
+			System.out.println(Algorithm.helpString());
 			printHelp();
 			System.exit(0);
+		}
+		if(brownPath != null){
+			brownMap = new HashMap<String, String>();
+			Scanner input = new Scanner(new File(brownPath));
+			while(input.hasNextLine()){
+				String[] tokens = input.nextLine().split("\t");
+				brownMap.put(tokens[1], tokens[0]);
+			}
+			input.close();
 		}
 		
 		PrintStream outstream = null;
@@ -195,25 +246,107 @@ public class Main {
 		NetworkModel model = null;
 		if(algo != Algorithm.TOKENIZED_GOLD){
 			if(train_filename != null){
+				List<SMSNPInstance> trainInstancesList;
 				if(useCoNLLData){
-					trainInstances = SMSNPUtil.readCoNLLData(train_filename, true, false);
+					trainInstancesList = Arrays.asList(SMSNPUtil.readCoNLLData(train_filename, true, false));
 				} else {
-					trainInstances = SMSNPUtil.readData(train_filename, true, false);
+					trainInstancesList = Arrays.asList(SMSNPUtil.readData(train_filename, true, false));
 				}
 				
 				SpanLabel[] labels = SpanLabel.LABELS.values().toArray(new SpanLabel[SpanLabel.LABELS.size()]);
-				
-				
-				for(SMSNPInstance instance: trainInstances){
-					if(findMaxLength){
-						maxLength = Math.max(maxLength, instance.size());
+
+				int totalSegments = 0;
+				int totalIgnored = 0;
+				for(int instanceIdx = trainInstancesList.size()-1; instanceIdx >= 0; instanceIdx--){
+					SMSNPInstance instance = trainInstancesList.get(instanceIdx);
+					int size = -1;
+					if(algo.requireTokenized()){
+						instance.getInputTokenized(tokenizerMethod, useGoldTokenization, true);
+						instance.getOutputTokenized(tokenizerMethod, useGoldTokenization, false);
+						size = instance.getInputTokenized().length;
+					} else {
+						size = instance.size();
 					}
-					if(findMaxSpan){
-						for(Span span: instance.output){
-							maxSpan = Math.max(maxSpan, span.end-span.start);
+					if(findMaxLength){
+						maxLength = Math.max(maxLength, size);
+					} else if(size > maxLength){
+						System.err.println(String.format("Ignoring instance (ID=%d, length=%d) because it is longer than max length %d", instance.getInstanceId(), size, maxLength));
+						trainInstancesList.remove(instanceIdx);
+						continue;
+					}
+					List<Span> output = instance.output;
+					if(findMaxSegmentLength){ // Max span length is not set, set as the longest span
+						if(algo.requireTokenized()){
+							List<WordLabel> outputTokenized = instance.getOutputTokenized();
+							int start = 0;
+							for(int pos=0; pos<outputTokenized.size(); pos++){
+								WordLabel label = outputTokenized.get(pos);
+								if(pos == outputTokenized.size()-1 || label.form.startsWith("O") || outputTokenized.get(pos+1).id != label.id){
+									maxSegmentLength = Math.max(maxSegmentLength, pos-start+1);
+									start = pos+1;
+								}
+							}
+						} else {
+							for(Span span: output){
+								maxSegmentLength = Math.max(maxSegmentLength, span.end-span.start);
+							}
+						}
+					} else { // Max span length is set, ignore those spans longer than that
+						if(maxSegmentLength > 1){ // Unless span length is 1, in which case reduce to linear CRF, do not ignore spans
+							if(algo.requireTokenized()){
+								List<WordLabel> outputTokenized = instance.getOutputTokenized();
+								int start = 0;
+								for(int pos=0; pos<outputTokenized.size(); pos++){
+									WordLabel label = outputTokenized.get(pos);
+									if(pos == outputTokenized.size()-1 || label.form.startsWith("O") || outputTokenized.get(pos+1).id != label.id){
+										if(pos-start+1 > maxSegmentLength){
+											totalIgnored += 1;
+											for(int i=start; i<=pos; i++){
+												outputTokenized.set(i, WordLabel.get("O"));
+											}
+										}
+										start = pos+1;
+										totalSegments += 1;
+									}
+								}
+							} else {
+								int localIgnored = 0;
+								int localTotal = 0;
+								for(int spanIdx=output.size()-1; spanIdx>=0; spanIdx--){
+									Span span = output.get(spanIdx);
+									localTotal += 1;
+									if(span.end-span.start > maxSegmentLength){
+										localIgnored += 1;
+										// Tokenize the span to make each token a single O span, hopefully making it shorter
+										List<Span> wordSpans = SMSNPUtil.getWordSpans(instance.input.substring(span.start, span.end), tokenizerMethod, null);
+										output.remove(spanIdx);
+										for(int wordSpanIdx=wordSpans.size()-1; wordSpanIdx>=0; wordSpanIdx--){
+											Span wordSpan = wordSpans.get(wordSpanIdx);
+											if(wordSpan.end-wordSpan.start > maxSegmentLength){
+												// One of the tokens is still too long, ignore the instance altogether
+												System.err.println(String.format("Ignoring instance (ID=%d) because one of its spans (%s) is longer than max span length %d", instance.getInstanceId(), instance.input.substring(wordSpan.start+span.start, wordSpan.end+span.start), maxSegmentLength));
+												trainInstancesList.remove(instanceIdx);
+												localIgnored = 0;
+												localTotal = 0;
+												spanIdx = -1;
+												wordSpanIdx = -1;
+												continue;
+											}
+											output.add(spanIdx, new Span(wordSpan.start, wordSpan.end, SpanLabel.get("O")));
+										}
+									}
+								}
+								totalIgnored += localIgnored;
+								totalSegments += localTotal;
+							}
 						}
 					}
 				}
+				if(totalIgnored > 0){
+					System.err.println(String.format("Ignored %d/%d spans", totalIgnored, totalSegments));
+				}
+				
+				trainInstances = trainInstancesList.toArray(new SMSNPInstance[trainInstancesList.size()]);
 				
 				NetworkConfig.TRAIN_MODE_IS_GENERATIVE = false;
 				NetworkConfig._CACHE_FEATURES_DURING_TRAINING = true;
@@ -222,31 +355,39 @@ public class Main {
 				
 				print("Read.."+size+" instances.", true, outstream, System.err);
 				
+				WordLabel[] wordLabels = WordLabel.LABELS.values().toArray(new WordLabel[WordLabel.LABELS.size()]);
 				switch(algo){
 				case LINEAR_CRF:
-					for(SMSNPInstance instance: trainInstances){
-						instance.getInputTokenized(tokenizerMethod, useGoldTokenization, true);
-						instance.getOutputTokenized(tokenizerMethod, useGoldTokenization, false);
-					}
-					WordLabel[] wordLabels = WordLabel.LABELS.values().toArray(new WordLabel[WordLabel.LABELS.size()]);
-					fm = new LinearCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, disabledFeatures);
+					fm = new LinearCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, brownMap, features, moreArgs);
 					compiler = new LinearCRFNetworkCompiler(wordLabels, tokenizerMethod);
 					break;
-				case SEMI_CRF:
-					fm = new SemiCRFFeatureManager(new GlobalNetworkParam(), disabledFeatures);
-					compiler = new SemiCRFNetworkCompiler(labels, maxLength, maxSpan);
+				case CHAR_SEMI_CRF:
+					fm = new CharSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, brownMap, features, moreArgs);
+					compiler = new CharSemiCRFNetworkCompiler(labels, maxLength, maxSegmentLength);
 					break;
-				case WEAK_SEMI_CRF:
-					fm = new WeakSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, disabledFeatures);
-					compiler = new WeakSemiCRFNetworkCompiler(labels, maxLength, maxSpan);
+				case CHAR_WEAK_SEMI_CRF:
+					fm = new CharWeakSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, brownMap, features, moreArgs);
+					compiler = new CharWeakSemiCRFNetworkCompiler(labels, maxLength, maxSegmentLength);
 					break;
-				case TOKENIZED_GOLD:
+				case WORD_SEMI_CRF:
+					fm = new WordSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, brownMap, features, moreArgs);
+					compiler = new WordSemiCRFNetworkCompiler(wordLabels, maxLength, maxSegmentLength);
+					break;
+				case WORD_WEAK_SEMI_CRF:
+					fm = new WordWeakSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, brownMap, features, moreArgs);
+					compiler = new WordWeakSemiCRFNetworkCompiler(wordLabels, maxLength, maxSegmentLength);
+					break;
+				case TOKENIZED_GOLD: // Won't happen since we are inside `if (algo != Algorithm.TOKENIZED_GOLD)` block
 					break;
 				}
 				
 				model = NetworkConfig.TRAIN_MODE_IS_GENERATIVE ? GenerativeNetworkModel.create(fm, compiler) : DiscriminativeNetworkModel.create(fm, compiler);
 	
+				/* ******************* *
+				 * Main training phase *
+				 * ******************* */
 				model.train(trainInstances, maxNumIterations);
+				
 				if(serializeModel){
 					print("Writing object...", false, outstream, System.out);
 					long startTime = System.currentTimeMillis();
@@ -268,6 +409,7 @@ public class Main {
 				Field _compiler = NetworkModel.class.getDeclaredField("_compiler");
 				_compiler.setAccessible(true);
 				compiler = (NetworkCompiler)_compiler.get(model);
+
 				long endTime = System.currentTimeMillis();
 				print(String.format("Done in %.3fs", (endTime-startTime)/1000.0), true, outstream, System.out);
 			}
@@ -280,14 +422,14 @@ public class Main {
 				modelTextWriter.println("Train path: "+train_filename);
 				modelTextWriter.println("Test path: "+test_filename);
 				modelTextWriter.println("Max length: "+maxLength);
-				modelTextWriter.println("Max span: "+maxSpan);
+				modelTextWriter.println("Max span: "+maxSegmentLength);
 				modelTextWriter.println("#Threads: "+NetworkConfig._numThreads);
 				modelTextWriter.println("L2 param: "+NetworkConfig.L2_REGULARIZATION_CONSTANT);
 				modelTextWriter.println("Weight init: "+weightInit);
 				modelTextWriter.println("objtol: "+NetworkConfig.objtol);
 				modelTextWriter.println("Max iter: "+maxNumIterations);
 				modelTextWriter.println("Tokenizer: "+tokenizerMethod);
-				modelTextWriter.println("Disabled features: "+Arrays.asList(disabledFeatures));
+				modelTextWriter.println("Features: "+Arrays.asList(features));
 				modelTextWriter.println();
 				modelTextWriter.println("Labels:");
 				List<?> labelsUsed = new ArrayList<Object>();
@@ -295,11 +437,17 @@ public class Main {
 				case LINEAR_CRF:
 					labelsUsed = Arrays.asList(((LinearCRFNetworkCompiler)compiler)._labels);
 					break;
-				case SEMI_CRF:
-					labelsUsed = Arrays.asList(((SemiCRFNetworkCompiler)compiler).labels);
+				case CHAR_SEMI_CRF:
+					labelsUsed = Arrays.asList(((CharSemiCRFNetworkCompiler)compiler).labels);
 					break;
-				case WEAK_SEMI_CRF:
-					labelsUsed = Arrays.asList(((WeakSemiCRFNetworkCompiler)compiler).labels);
+				case CHAR_WEAK_SEMI_CRF:
+					labelsUsed = Arrays.asList(((CharWeakSemiCRFNetworkCompiler)compiler).labels);
+					break;
+				case WORD_SEMI_CRF:
+					labelsUsed = Arrays.asList(((WordSemiCRFNetworkCompiler)compiler).labels);
+					break;
+				case WORD_WEAK_SEMI_CRF:
+					labelsUsed = Arrays.asList(((WordWeakSemiCRFNetworkCompiler)compiler).labels);
 					break;
 				case TOKENIZED_GOLD:
 					break;
@@ -333,9 +481,11 @@ public class Main {
 			} else {
 				testInstances = SMSNPUtil.readData(test_filename, false, false);
 			}
-			for(SMSNPInstance instance: testInstances){
-				instance.getInputTokenized(tokenizerMethod, useGoldTokenization, true);
-				instance.getOutputTokenized(tokenizerMethod, useGoldTokenization, false);
+			if(algo.requireTokenized()){
+				for(SMSNPInstance instance: testInstances){
+					instance.getInputTokenized(tokenizerMethod, useGoldTokenization, true);
+					instance.getOutputTokenized(tokenizerMethod, useGoldTokenization, false);
+				}
 			}
 			Instance[] predictions = null;
 			if(algo != Algorithm.TOKENIZED_GOLD){
@@ -349,9 +499,9 @@ public class Main {
 					result_filename = test_filename+".result";
 				}
 				PrintStream result = new PrintStream(result_filename);
-				if(algo == Algorithm.LINEAR_CRF){
+				if(algo.requireTokenized()){
 					for(SMSNPInstance instance: predictionsList){
-						result.println(instance.toCoNLLString(tokenizerMethod, false));
+						result.println(instance.toCoNLLString());
 					}
 				} else {
 					for(SMSNPInstance instance: predictionsList){
@@ -392,9 +542,9 @@ public class Main {
 				+ "\tWhether the input file is in CoNLL format. Default to false\n"
 				+ "-maxLength <n>\n"
 				+ "\tSet the maximum input length that will be supported to <n>.\n"
-				+ "\tDefault to maximum length in training and test set\n"
-				+ "-maxSpan <n>\n"
-				+ "\tSet hte maximum span length to <n>. Default to maximum in training set\n"
+				+ "\tDefault to maximum length in training set\n"
+				+ "-maxSegmentLength <n>\n"
+				+ "\tSet the maximum segment length to <n>. Default to maximum in training set\n"
 				+ "-nThreads <n>\n"
 				+ "\tSet the number of threads to <n>. Default to 4\n"
 				+ "-l2 <value>\n"
@@ -415,19 +565,20 @@ public class Main {
 				+ "-algo\n"
 				+ "\tThe algorithm to be used:\n"
 				+ "\t-LINEAR_CRF: Use linear-chain CRF\n"
-				+ "\t-WEAK_SEMI_CRF: Use the weak version of semi-CRF\n"
-				+ "\t-SEMI_CRF: Use the semi-CRF\n"
+				+ "\t-{CHAR,WORD}_WEAK_SEMI_CRF: Use the weak version of semi-CRF\n"
+				+ "\t-{CHAR,WORD}_SEMI_CRF: Use the semi-CRF\n"
 				+ "\t-TOKENIZED_GOLD: Use the gold span as the prediction, but after going through tokenization\n"
 				+ "\t                 To check the best performance when only tokenized data is available\n"
 				+ "-tokenizer\n"
 				+ "\tThe tokenizer method to be used: whitespace or regex. Default to regex\n"
 				+ "-useGoldTokenization\n"
 				+ "\tTokenize the files using the gold information, if available\n"
-				+ "-disableFeatures\n"
-				+ "\tThe features to be disabled. The available features depend on the algorithm used.\n"
+				+ "-features\n"
+				+ "\tThe features to be used. The available features depend on the algorithm used.\n"
 				+ "-numExamplesPrinted\n"
 				+ "\tSpecify the number of examples printed during evaluation. Default to 10\n"
 				);
 	}
 
 }
+

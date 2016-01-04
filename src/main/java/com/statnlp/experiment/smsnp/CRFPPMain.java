@@ -8,18 +8,22 @@ import java.io.PrintStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import com.statnlp.experiment.smsnp.SMSNPTokenizer.TokenizerMethod;
 
 public class CRFPPMain {
 	
-	private static void createTemplate(String template_filename) throws FileNotFoundException, UnsupportedEncodingException{
+	private static void createTemplate(String template_filename, boolean useBrown) throws FileNotFoundException, UnsupportedEncodingException{
 		File templateFile = new File(template_filename);
 		templateFile.deleteOnExit();
 		PrintStream outstream = new PrintStream(templateFile, "UTF-8");
-		String[] templates = new String[]{
+		String[] basicFeatures = new String[]{
 				"# Unigram",
 //				"U00:%x[-2,0]",
 				"U01:%x[-1,0]",
@@ -28,10 +32,20 @@ public class CRFPPMain {
 //				"U04:%x[2,0]",
 //				"U05:%x[-1,0]/%x[0,0]",
 //				"U06:%x[0,0]/%x[1,0]",
-//				"",
-//				"# Bigram",
+				"",
+				"# Bigram",
 				"B",
 				};
+		List<String> templates = new ArrayList<String>(Arrays.asList(basicFeatures));
+		if(useBrown){
+			String[] brownFeatures = new String[]{
+					"",
+					"# Brown cluster",
+					"U90:%x[-1,1]",
+					"U91:%x[0,1]",
+			};
+			templates.addAll(Arrays.asList(brownFeatures));
+		}
 		for(String template: templates){
 			outstream.println(template);
 		}
@@ -43,6 +57,7 @@ public class CRFPPMain {
 		String trainFilename = null;
 		String testFilename = null;
 		String modelFilename = timestamp+"-crfpp.model";
+		String brownFilename = null;
 		String resultFilename = timestamp+"-crfpp.result";
 		String templateFilename = timestamp+"-crfpp.template";
 		String logPath = null;
@@ -52,6 +67,7 @@ public class CRFPPMain {
 		boolean createTemplate = true;
 		boolean writeModelText = false;
 		int numExamplesPrinted = 10;
+		Map<String, String> brownMap = null;
 		
 		int argIndex = 0;
 		while(argIndex < args.length){
@@ -74,6 +90,10 @@ public class CRFPPMain {
 				break;
 			case "resultPath":
 				resultFilename = args[argIndex+1];
+				argIndex += 2;
+				break;
+			case "brownPath":
+				brownFilename = args[argIndex+1];
 				argIndex += 2;
 				break;
 			case "templatePath":
@@ -116,7 +136,17 @@ public class CRFPPMain {
 		}
 		
 		if(createTemplate){
-			createTemplate(templateFilename);
+			createTemplate(templateFilename, brownFilename != null);
+		}
+		
+		if(brownFilename != null){
+			brownMap = new HashMap<String, String>();
+			Scanner input = new Scanner(new File(brownFilename));
+			while(input.hasNextLine()){
+				String[] tokens = input.nextLine().split("\t");
+				brownMap.put(tokens[1], tokens[0]);
+			}
+			input.close();
 		}
 		
 		ProcessBuilder processBuilder;
@@ -129,7 +159,14 @@ public class CRFPPMain {
 			System.out.print("Converting training file into CoNLL format using tokenizer "+tokenizerMethod+" (useGold:"+useGoldTokenization+")...");
 			outstream = new PrintStream(tempTrain);
 			for(SMSNPInstance instance: trainInstances){
-				outstream.println(instance.toCoNLLString(tokenizerMethod, useGoldTokenization));
+				String[] inputTokenized = instance.getInputTokenized(tokenizerMethod, useGoldTokenization, true);
+				instance.getOutputTokenized(tokenizerMethod, useGoldTokenization, true);
+				if(brownFilename != null){
+					String[] brownClusters = getBrownClusters(inputTokenized, brownMap);
+					outstream.println(instance.toCoNLLString(brownClusters));	
+				} else {
+					outstream.println(instance.toCoNLLString());
+				}
 			}
 			outstream.close();
 			long end = System.currentTimeMillis();
@@ -167,7 +204,14 @@ public class CRFPPMain {
 			System.out.print("Converting test file into CoNLL format using tokenizer "+tokenizerMethod+" (useGold:"+useGoldTokenization+")...");
 			outstream = new PrintStream(tempTest);
 			for(SMSNPInstance instance: testInstances){
-				outstream.println(instance.toCoNLLString(tokenizerMethod, useGoldTokenization));
+				String[] inputTokenized = instance.getInputTokenized(tokenizerMethod, useGoldTokenization, true);
+				instance.getOutputTokenized(tokenizerMethod, useGoldTokenization, true);
+				if(brownFilename != null){
+					String[] brownClusters = getBrownClusters(inputTokenized, brownMap);
+					outstream.println(instance.toCoNLLString(brownClusters));	
+				} else {
+					outstream.println(instance.toCoNLLString());
+				}
 			}
 			outstream.close();
 			long end = System.currentTimeMillis();
@@ -228,6 +272,17 @@ public class CRFPPMain {
 			}
 			SMSNPEvaluator.evaluate(predictionInstances, logstream, numExamplesPrinted);
 		}
+	}
+	
+	private static String[] getBrownClusters(String[] inputTokenized, Map<String, String> brownMap){
+		String[] brownClusters = new String[inputTokenized.length];
+		for(int i=0; i<inputTokenized.length; i++){
+			brownClusters[i] = brownMap.get(inputTokenized[i]);
+			if(brownClusters[i] == null){
+				brownClusters[i] = "X";
+			}
+		}
+		return brownClusters;
 	}
 	
 	private static void printHelp(){

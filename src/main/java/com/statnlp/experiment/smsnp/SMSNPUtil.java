@@ -5,13 +5,19 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.statnlp.experiment.smsnp.SMSNPTokenizer.TokenizerMethod;
+
+import edu.stanford.nlp.util.StringUtils;
 
 public class SMSNPUtil {
 	
@@ -229,7 +235,12 @@ public class SMSNPUtil {
 				String[] tokens = line.split("[ \t]");
 				inputTokens.add(tokens[0]);
 				if(isLabeled){
-					String labelForm = tokens[1];
+					String labelForm = null;
+					if(withPrediction){
+						labelForm = tokens[tokens.length-2];	
+					} else {
+						labelForm = tokens[tokens.length-1];
+					}
 					if(USE_SINGLE_OUTSIDE_TAG){
 						if(labelForm.startsWith("O")){
 							labelForm = "O";
@@ -238,12 +249,7 @@ public class SMSNPUtil {
 					outputTokens.add(WordLabel.get(labelForm));
 				}
 				if(withPrediction){
-					String labelForm = null;
-					if(isLabeled){
-						labelForm = tokens[2];
-					} else {
-						labelForm = tokens[1];
-					}
+					String labelForm = tokens[tokens.length-1];
 					if(USE_SINGLE_OUTSIDE_TAG){
 						if(labelForm.startsWith("O")){
 							labelForm = "O";
@@ -263,14 +269,18 @@ public class SMSNPUtil {
 	 * @param predictionTokenized
 	 * @return
 	 */
-	public static String toCoNLLString(String[] inputTokenized, List<WordLabel> outputTokenized, List<WordLabel> predictionTokenized){
+	public static String toCoNLLString(String[] inputTokenized, List<WordLabel> outputTokenized, List<WordLabel> predictionTokenized, String[]... additionalFeatures){
 		StringBuilder builder = new StringBuilder();
 		for(int i=0; i<inputTokenized.length; i++){
-			if(predictionTokenized != null){
-				builder.append(String.format("%s %s %s\n", inputTokenized[i], outputTokenized.get(i).form, predictionTokenized.get(i).form));
-			} else {
-				builder.append(String.format("%s %s\n", inputTokenized[i], outputTokenized.get(i).form));
+			builder.append(inputTokenized[i]);
+			for(int additionalFeatureIndex=0; additionalFeatureIndex<additionalFeatures.length; additionalFeatureIndex++){
+				builder.append(" "+additionalFeatures[additionalFeatureIndex][i]);
 			}
+			builder.append(" "+outputTokenized.get(i).form);
+			if(predictionTokenized != null){
+				builder.append(" "+predictionTokenized.get(i).form);
+			}
+			builder.append("\n");
 		}
 		return builder.toString();
 	}
@@ -695,6 +705,268 @@ public class SMSNPUtil {
 			}
 		}
 		return result;
+	}
+	
+	public static void setupFeatures(Class<? extends IFeatureType> featureTypeClass, String[] features){
+		try {
+			Method valueOf = featureTypeClass.getMethod("valueOf", String.class);
+			IFeatureType[] featureTypes = (IFeatureType[])featureTypeClass.getMethod("values").invoke(null);
+			if(features != null && features.length > 0){
+				for(IFeatureType feature: featureTypes){
+					feature.disable();
+				}
+				for(String feature: features){
+					((IFeatureType)valueOf.invoke(null, feature.toUpperCase())).enable();
+				}
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static int[] listToArray(List<Integer> list){
+		int[] result = new int[list.size()];
+		for(int i=0; i<list.size(); i++){
+			result[i] = list.get(i);
+		}
+		return result;
+	}
+
+	private static enum Argument{
+		GET_STATS(0,
+				"Print statistics on the input dataset specified by -input",
+				"getStats"),
+		INCLUDE_PERCENTILE(1,
+				"The list of percentiles to be included in the statistics",
+				"includePercentile",
+				"<comma-separated values>"),
+		LABELS(1,
+				"The list of labels to be included in calculation",
+				"labels",
+				"<comma-separated labels>"),
+		INPUT(1,
+				"Input file",
+				"input",
+				"inputFile"),
+		IN_CONLL(0,
+				"Whether the input file is in CoNLL format",
+				"inCoNLL"),
+		TOKENIZER(1,
+				"The tokenizer to be used to tokenize. Default to regex",
+				"tokenizer",
+				"[regex|whitespace]"),
+		INPUT_HAS_PREDICTION(0,
+				"Whether the input file contains the prediction",
+				"inputHasPrediction"),
+		HELP(0,
+				"Print this help message",
+				"h,help"),
+		;
+		
+		final private int numArgs;
+		final private String[] argNames;
+		final private String[] names;
+		final private String help;
+		private Argument(int numArgs, String help, String names, String... argNames){
+			this.numArgs = numArgs;
+			this.argNames = argNames;
+			this.names = names.split(",");
+			this.help = help;
+		}
+		
+		/**
+		 * Return the Argument which has the specified name
+		 * @param name
+		 * @return
+		 */
+		public static Argument argWithName(String name){
+			for(Argument argument: Argument.values()){
+				for(String argName: argument.names){
+					if(argName.equals(name)){
+						return argument;
+					}
+				}
+			}
+			throw new IllegalArgumentException("Unrecognized argument: "+name);
+		}
+		
+		/**
+		 * Print help message
+		 */
+		private static void printHelp(){
+			StringBuilder result = new StringBuilder();
+			result.append("Options:\n");
+			for(Argument argument: Argument.values()){
+				result.append("-"+StringUtils.join(argument.names, " -"));
+				result.append(" "+StringUtils.join(argument.argNames, " "));
+				result.append("\n");
+				if(argument.help != null && argument.help.length() > 0){
+					result.append("\t"+argument.help.replaceAll("\n","\n\t")+"\n");
+				}
+			}
+			System.out.println(result.toString());
+		}
+	}
+	
+	public static void main(String[] args) throws Exception{
+		boolean getStats = false;
+		String inputPath = null;
+		boolean inCoNLL = false;
+		boolean hasPrediction = false;
+		TokenizerMethod tokenizerMethod = TokenizerMethod.REGEX;
+		double[] includePercentiles = new double[0];
+		Set<String> labels = null;
+		
+		int argIndex = 0;
+		while(argIndex < args.length){
+			String arg = args[argIndex];
+			if(arg.length() > 0 && arg.charAt(0) == '-'){
+				Argument argument = Argument.argWithName(args[argIndex].substring(1));
+				switch(argument){
+				case GET_STATS:
+					getStats = true;
+					break;
+				case INPUT:
+					inputPath = args[argIndex+1];
+					break;
+				case IN_CONLL:
+					inCoNLL = true;
+					break;
+				case LABELS:
+					labels = new HashSet<String>(Arrays.asList(args[argIndex+1].split(",")));
+					break;
+				case INCLUDE_PERCENTILE:
+					String[] tokens = args[argIndex+1].split(",");
+					includePercentiles = new double[tokens.length];
+					for(int i=0; i<tokens.length; i++){
+						includePercentiles[i] = Double.parseDouble(tokens[i]);
+					}
+					break;
+				case INPUT_HAS_PREDICTION:
+					hasPrediction = true;
+				case TOKENIZER:
+					tokenizerMethod = TokenizerMethod.valueOf(args[argIndex+1].toUpperCase());
+					break;
+				case HELP:
+					Argument.printHelp();
+					System.exit(0);
+				}
+				argIndex += argument.numArgs+1;
+			} else {
+				throw new IllegalArgumentException("Error while parsing: "+arg);
+			}
+		}
+		if(!getStats){
+			Argument.printHelp();
+			System.exit(0);
+		}
+		if(inputPath == null){
+			System.err.println("-getStats is specified but no -input file specified");
+			System.exit(0);
+		}
+		SMSNPInstance[] instances = null;
+		if(inCoNLL){
+			instances = readCoNLLData(inputPath, true, hasPrediction);
+		} else {
+			instances = readData(inputPath, true, hasPrediction);
+		}
+		List<Integer> numChars = new ArrayList<Integer>();
+		List<Integer> numTokens = new ArrayList<Integer>();
+		List<Integer> spanCharLengths = new ArrayList<Integer>();
+		List<Integer> spanTokenLengths = new ArrayList<Integer>();
+		Set<String> tokenLabels = new HashSet<String>();
+		Set<String> spanLabels = new HashSet<String>();
+		for(SMSNPInstance instance: instances){
+			numChars.add(instance.size());
+			instance.getInputTokenized(tokenizerMethod, false, false);
+			instance.getOutputTokenized(tokenizerMethod, false, false);
+			numTokens.add(instance.getInputTokenized().length);
+			for(Span span: instance.output){
+				if(labels == null || labels.contains(span.label.form)){
+					spanCharLengths.add(span.end-span.start);
+					spanLabels.add(span.label.form);
+				}
+			}
+			List<WordLabel> outputTokenized = instance.getOutputTokenized();
+			int start = 0;
+			for(int pos=0; pos<outputTokenized.size(); pos++){
+				WordLabel label = outputTokenized.get(pos);
+				if(pos == outputTokenized.size()-1 || label.form.startsWith("O") || outputTokenized.get(pos+1).id != label.id){
+					if(labels == null || labels.contains(label.form)){
+						spanTokenLengths.add(pos-start+1);
+						tokenLabels.add(label.form);
+					}
+					start = pos+1;
+				}
+			}
+		}
+		Collections.sort(numChars);
+		Collections.sort(numTokens);
+		Collections.sort(spanCharLengths);
+		Collections.sort(spanTokenLengths);
+		printStatistics(numChars, includePercentiles, "instance length (in char)");
+		printStatistics(numTokens, includePercentiles, "instance length (in tokens)");
+		printStatistics(spanCharLengths, includePercentiles, "span length (in char) "+spanLabels);
+		printStatistics(spanTokenLengths, includePercentiles, "span length (in tokens) "+tokenLabels);
+	}
+	
+	private static void printStatistics(List<Integer> nums, double[] includePercentiles, String name){
+		System.out.println("Statistics for "+name);
+		System.out.println(String.format("Total: %d", nums.size()));
+		Statistics stat = new Statistics(nums);
+		System.out.println(String.format("Max: %d", stat.max));
+		System.out.println(String.format("Min: %d", stat.min));
+		System.out.println(String.format("Mode: %d (%d)", stat.mode, stat.modeCount));
+		System.out.println(String.format("50%% percentile: %d", getPercentileAt(nums, 0.50)));
+		System.out.println(String.format("75%% percentile: %d", getPercentileAt(nums, 0.75)));
+		System.out.println(String.format("80%% percentile: %d", getPercentileAt(nums, 0.80)));
+		System.out.println(String.format("90%% percentile: %d", getPercentileAt(nums, 0.90)));
+		System.out.println(String.format("95%% percentile: %d", getPercentileAt(nums, 0.95)));
+		System.out.println(String.format("99%% percentile: %d", getPercentileAt(nums, 0.99)));
+		for(double percentile: includePercentiles){
+			System.out.println(String.format("%s%% percentile: %d", 100*percentile, getPercentileAt(nums, percentile)));
+		}
+	}
+	
+	private static int getPercentileAt(List<Integer> num, double percentile){
+		return num.get((int)Math.round(percentile*num.size()));
+	}
+	
+	private static class Statistics{
+		List<Integer> nums;
+		int max;
+		int min;
+		int mode;
+		int modeCount;
+		public Statistics(List<Integer> nums){
+			this.nums = nums;
+			getMode();
+			getMinMax();
+		}
+		
+		private void getMinMax(){
+			min = Integer.MAX_VALUE;
+			max = Integer.MIN_VALUE;
+			for(int num: nums){
+				min = Math.min(num, min);
+				max = Math.max(num, max);
+			}
+		}
+		
+		private void getMode(){
+			HashMap<Integer, Integer> counts = new HashMap<Integer, Integer>();
+			modeCount = 0;
+			mode = -1;
+			for(int num: nums){
+				int count = counts.getOrDefault(num, 0);
+				counts.put(num, count+1);
+				if(count+1 > modeCount){
+					modeCount = count+1;
+					mode = num;
+				}
+			}
+			
+		}
 	}
 
 }

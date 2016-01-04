@@ -2,47 +2,47 @@ package com.statnlp.experiment.smsnp.semi_crf;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import com.statnlp.commons.types.Instance;
-import com.statnlp.experiment.smsnp.SpanLabel;
 import com.statnlp.experiment.smsnp.SMSNPInstance;
 import com.statnlp.experiment.smsnp.SMSNPNetwork;
-import com.statnlp.experiment.smsnp.Span;
+import com.statnlp.experiment.smsnp.WordLabel;
 import com.statnlp.hybridnetworks.LocalNetworkParam;
 import com.statnlp.hybridnetworks.Network;
 import com.statnlp.hybridnetworks.NetworkCompiler;
 import com.statnlp.hybridnetworks.NetworkException;
 import com.statnlp.hybridnetworks.NetworkIDMapper;
 
-public class SemiCRFNetworkCompiler extends NetworkCompiler {
+import edu.stanford.nlp.util.StringUtils;
+
+public class WordSemiCRFNetworkCompiler extends NetworkCompiler {
 	
 	private final static boolean DEBUG = false;
 	
 	private static final long serialVersionUID = 6585870230920484539L;
-	public SpanLabel[] labels;
-	public int maxLength = 500;
-	public int maxSegmentLength = 20;
-	public long[] allNodes;
-	public int[][][] allChildren;
+	public WordLabel[] labels;
+	public int maxLength = 20;
+	public int maxSegmentLength = 1;
+	public transient long[] allNodes;
+	public transient int[][][] allChildren;
 	
 	public enum NodeType {
 		LEAF,
-		INNER,
 		ROOT,
+		INNER,
 	}
 	
 	static {
 		NetworkIDMapper.setCapacity(new int[]{10000, 10, 100});
 	}
 
-	public SemiCRFNetworkCompiler(SpanLabel[] labels, int maxLength, int maxSegmentLength) {
+	public WordSemiCRFNetworkCompiler(WordLabel[] labels, int maxLength, int maxSegmentLength) {
 		this.labels = labels;
 		this.maxLength = Math.max(maxLength, this.maxLength);
 		this.maxSegmentLength = Math.max(maxSegmentLength, this.maxSegmentLength);
 		System.out.println(String.format("Max size: %s, Max segment length: %s", maxLength, maxSegmentLength));
-		System.out.println(Arrays.asList(labels));
+		System.out.println("Labels: "+Arrays.asList(labels));
 		buildUnlabeled();
 	}
 
@@ -63,21 +63,33 @@ public class SemiCRFNetworkCompiler extends NetworkCompiler {
 	private SMSNPNetwork compileLabeled(int networkId, SMSNPInstance instance, LocalNetworkParam param){
 		SMSNPNetwork network = new SMSNPNetwork(networkId, instance, param);
 		
-		int size = instance.size();
-		List<Span> output = instance.getOutput();
-		Collections.sort(output);
+		List<WordLabel> output = instance.getOutputTokenized();
+		int size = output.size();
 		
 		long leaf = toNode_leaf();
 		network.addNode(leaf);
 		long prevNode = leaf;
-		for(Span span: output){
-			int labelId = span.label.id;
-			long node = toNode_inner(span.end-1, labelId);
-			network.addNode(node);
-			network.addEdge(node, new long[]{prevNode});
-			prevNode = node;
+		int prevPos = 0;
+		for(int pos=0; pos<size; pos++){
+			WordLabel label = output.get(pos);
+			int labelId = label.id;
+			WordLabel nextLabel = pos+1 < size ? output.get(pos+1) : null;
+			if(nextLabel == null || nextLabel.id != labelId || label.form.startsWith("O") || maxSegmentLength == 1){
+				if(pos-prevPos > maxSegmentLength){
+					throw new IndexOutOfBoundsException(String.format("\n"
+							+ "The segment %s of type %s is longer than max segment length %d",
+							StringUtils.join(Arrays.copyOfRange(instance.getInputTokenized(), prevPos+1, pos), " "),
+							label,
+							maxSegmentLength));
+				}
+				long node = toNode_inner(pos, labelId);
+				network.addNode(node);
+				network.addEdge(node, new long[]{prevNode});
+				prevNode = node;
+				prevPos = pos;
+			}
 		}
-		long root = toNode_root(size-1);
+		long root = toNode_root(size);
 		network.addNode(root);
 		network.addEdge(root, new long[]{prevNode});
 		
@@ -92,8 +104,11 @@ public class SemiCRFNetworkCompiler extends NetworkCompiler {
 	}
 	
 	private SMSNPNetwork compileUnlabeled(int networkId, SMSNPInstance instance, LocalNetworkParam param){
-		int size = instance.size();
-		long root = toNode_root(size-1);
+		if(allNodes == null){
+			buildUnlabeled();
+		}
+		int size = instance.getInputTokenized().length;
+		long root = toNode_root(size);
 		int root_k = Arrays.binarySearch(allNodes, root);
 		int numNodes = root_k + 1;
 		return new SMSNPNetwork(networkId, instance, allNodes, allChildren, param, numNodes);
@@ -104,32 +119,32 @@ public class SemiCRFNetworkCompiler extends NetworkCompiler {
 		
 		long leaf = toNode_leaf();
 		network.addNode(leaf);
-		List<Long> currNodes = new ArrayList<Long>();
-		for(int pos=0; pos<maxLength; pos++){
-			for(int labelId=0; labelId<labels.length; labelId++){
-				long node = toNode_inner(pos, labelId);
+		for(int pos=0; pos<maxLength; /* pos is incremented when we see root */){
+			for(int labelIdx=0; labelIdx <= labels.length; labelIdx++){
+				long node;
+				if(labelIdx < labels.length){
+					node = toNode_inner(pos, labels[labelIdx].id);
+				} else {
+					pos += 1;
+					node = toNode_root(pos);
+				}
 				
 				network.addNode(node);
 				
-				currNodes.add(node);
-				
-				for(int prevPos=pos-1; prevPos > pos-maxSegmentLength && prevPos >= -1; prevPos--){
+				for(int prevPos=pos-1; prevPos >= pos-maxSegmentLength && prevPos >= -1; prevPos--){
 					if(prevPos == -1){
 						network.addEdge(node, new long[]{leaf});
-						continue;
+					} else {
+						for(int prevLabelIdx=0; prevLabelIdx<labels.length; prevLabelIdx++){
+							long prevNode = toNode_inner(prevPos, labels[prevLabelIdx].id);
+							network.addEdge(node, new long[]{prevNode});
+						}
 					}
-					for(int prevLabelId=0; prevLabelId<labels.length; prevLabelId++){
-						long prevNode = toNode_inner(prevPos, prevLabelId);
-						network.addEdge(node, new long[]{prevNode});
+					if(labelIdx == labels.length){ // Is root, connect just to last layer, so break now
+						break;
 					}
 				}
 			}
-			long root = toNode_root(pos);
-			network.addNode(root);
-			for(long currNode: currNodes){
-				network.addEdge(root, new long[]{currNode});	
-			}
-			currNodes.clear();
 		}
 		network.finalizeNetwork();
 		allNodes = network.getAllNodes();
@@ -140,12 +155,12 @@ public class SemiCRFNetworkCompiler extends NetworkCompiler {
 		return toNode(0, 0, NodeType.LEAF);
 	}
 	
-	private long toNode_inner(int pos, int labelId){
-		return toNode(pos, labelId, NodeType.INNER);
+	private long toNode_root(int pos){
+		return toNode(pos+1, 0, NodeType.ROOT);
 	}
 	
-	private long toNode_root(int pos){
-		return toNode(pos, labels.length, NodeType.ROOT);
+	private long toNode_inner(int pos, int labelId){
+		return toNode(pos+1, labelId+1, NodeType.INNER);
 	}
 	
 	private long toNode(int pos, int labelId, NodeType type){
@@ -156,34 +171,23 @@ public class SemiCRFNetworkCompiler extends NetworkCompiler {
 	public SMSNPInstance decompile(Network net) {
 		SMSNPNetwork network = (SMSNPNetwork)net;
 		SMSNPInstance result = (SMSNPInstance)network.getInstance().duplicate();
-		List<Span> prediction = new ArrayList<Span>();
+		int size = result.getInputTokenized().length;
+		List<WordLabel> predictionTokenized = new ArrayList<WordLabel>();
 		int node_k = network.countNodes()-1;
-		NodeType parentNodeType = NodeType.ROOT;
 		int labelId = -1;
-		int curEnd = result.size();
+		int end = size;
 		while(node_k > 0){
 			int[] children_k = network.getMaxPath(node_k);
 			node_k = children_k[0];
 			int[] child_arr = network.getNodeArray(node_k);
-			int prevEnd = child_arr[0];
-			NodeType childNodeType = NodeType.values()[child_arr[1]];
-			if(childNodeType != NodeType.LEAF){
-				prevEnd += 1;
+			int start = child_arr[0]-1;
+			for(int pos=start+1; pos<end; pos++){
+				predictionTokenized.add(0, WordLabel.get(labelId));
 			}
-			if(parentNodeType != NodeType.ROOT){
-				prediction.add(new Span(prevEnd, curEnd, SpanLabel.get(labelId)));
-			}
-			
-			// Set variables for next iteration
-			if(childNodeType == NodeType.LEAF){
-				break;
-			}
-			curEnd = prevEnd;
-			labelId = child_arr[2];
-			parentNodeType = childNodeType;
+			labelId = child_arr[2]-1;
+			end = start+1;
 		}
-		Collections.sort(prediction);
-		result.setPrediction(prediction);
+		result.setPredictionTokenized(predictionTokenized);
 		return result;
 	}
 
