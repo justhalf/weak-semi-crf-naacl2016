@@ -1,0 +1,10 @@
+# Unigram
+U01:%x[-1,0]
+U02:%x[0,0]
+
+# Bigram
+B
+
+# Brown cluster
+U90:%x[-1,1]
+U91:%x[0,1]

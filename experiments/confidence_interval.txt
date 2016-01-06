@@ -1,0 +1,31 @@
+Character-based
+lcrf-0.125.test.result           Precision: 72.42(±0.31)% Recall: 70.51(±0.23)% F1: 71.45(±0.22)%
+lcrf.brown-0.5.test.result       Precision: 72.41(±0.31)% Recall: 72.18(±0.21)% F1: 72.29(±0.21)%
+lcrf.affix-1.0.test.result       Precision: 72.77(±0.33)% Recall: 72.27(±0.22)% F1: 72.52(±0.23)%
+lcrf.brown.affix-1.0.test.result Precision: 72.53(±0.33)% Recall: 72.83(±0.22)% F1: 72.68(±0.23)%
+
+semi-1.0.test.result             Precision: 73.64(±0.30)% Recall: 73.39(±0.19)% F1: 73.52(±0.20)%
+semi.shape-1.0.test.result       Precision: 74.15(±0.31)% Recall: 73.07(±0.20)% F1: 73.60(±0.20)%
+semi.brown-1.0.test.result       Precision: 73.37(±0.30)% Recall: 74.24(±0.19)% F1: 73.80(±0.20)%
+semi.brown.shape-2.0.test.result Precision: 73.71(±0.30)% Recall: 73.96(±0.19)% F1: 73.83(±0.20)%
+
+weak-1.0.test.result             Precision: 73.24(±0.30)% Recall: 73.10(±0.19)% F1: 73.17(±0.19)%
+weak.shape-1.0.test.result       Precision: 73.88(±0.31)% Recall: 72.98(±0.21)% F1: 73.42(±0.21)%
+weak.brown-2.0.test.result       Precision: 73.84(±0.31)% Recall: 74.05(±0.20)% F1: 73.95(±0.20)%
+weak.brown.shape-1.0.test.result Precision: 73.31(±0.31)% Recall: 73.74(±0.20)% F1: 73.52(±0.20)%
+
+Word-based
+lcrf-0.125.test.result           Precision: 74.08(±0.31)% Recall: 72.23(±0.22)% F1: 73.14(±0.21)%
+lcrf.brown.affix-1.0.test.result Precision: 74.58(±0.33)% Recall: 75.01(±0.22)% F1: 74.79(±0.22)%
+lcrf.affix-1.0.test.result       Precision: 74.77(±0.33)% Recall: 74.37(±0.21)% F1: 74.57(±0.22)%
+lcrf.brown-0.5.test.result       Precision: 74.15(±0.31)% Recall: 74.04(±0.21)% F1: 74.09(±0.21)%
+
+semi-1.0.test.result             Precision: 75.31(±0.30)% Recall: 75.17(±0.18)% F1: 75.24(±0.19)%
+semi.shape-1.0.test.result       Precision: 75.79(±0.31)% Recall: 74.81(±0.19)% F1: 75.29(±0.20)%
+semi.brown-1.0.test.result       Precision: 75.19(±0.30)% Recall: 76.20(±0.19)% F1: 75.69(±0.20)%
+semi.brown.shape-2.0.test.result Precision: 75.47(±0.30)% Recall: 75.85(±0.19)% F1: 75.65(±0.19)%
+
+weak-1.0.test.result             Precision: 74.83(±0.30)% Recall: 74.81(±0.17)% F1: 74.82(±0.18)%
+weak.shape-1.0.test.result       Precision: 75.55(±0.31)% Recall: 74.74(±0.19)% F1: 75.14(±0.20)%
+weak.brown-2.0.test.result       Precision: 75.60(±0.31)% Recall: 75.94(±0.19)% F1: 75.77(±0.20)%
+weak.brown.shape-1.0.test.result Precision: 75.25(±0.31)% Recall: 75.80(±0.19)% F1: 75.52(±0.20)%

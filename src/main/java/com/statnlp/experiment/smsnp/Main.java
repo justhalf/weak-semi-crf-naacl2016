@@ -186,7 +186,7 @@ public class Main {
 					try{
 						algo = Algorithm.valueOf(args[argIndex+1].toUpperCase());
 					} catch (IllegalArgumentException e){
-						throw new IllegalArgumentException("\n"+Algorithm.helpString());
+						throw new IllegalArgumentException("Unrecognized algorithm: "+args[argIndex+1]+"\n"+Algorithm.helpString());
 					}
 					argIndex += 2;
 					break;
