@@ -281,7 +281,7 @@ public class Main {
 							int start = 0;
 							for(int pos=0; pos<outputTokenized.size(); pos++){
 								WordLabel label = outputTokenized.get(pos);
-								if(pos == outputTokenized.size()-1 || label.form.startsWith("O") || outputTokenized.get(pos+1).id != label.id){
+								if(pos == outputTokenized.size()-1 || label.form.startsWith("O") || outputTokenized.get(pos+1).form.startsWith("B")){
 									maxSegmentLength = Math.max(maxSegmentLength, pos-start+1);
 									start = pos+1;
 								}
@@ -298,7 +298,7 @@ public class Main {
 								int start = 0;
 								for(int pos=0; pos<outputTokenized.size(); pos++){
 									WordLabel label = outputTokenized.get(pos);
-									if(pos == outputTokenized.size()-1 || label.form.startsWith("O") || outputTokenized.get(pos+1).id != label.id){
+									if(pos == outputTokenized.size()-1 || label.form.startsWith("O") || outputTokenized.get(pos+1).form.startsWith("B")){
 										if(pos-start+1 > maxSegmentLength){
 											totalIgnored += 1;
 											for(int i=start; i<=pos; i++){
@@ -309,7 +309,7 @@ public class Main {
 										totalSegments += 1;
 									}
 								}
-							} else {
+							} else { // Character-based
 								int localIgnored = 0;
 								int localTotal = 0;
 								for(int spanIdx=output.size()-1; spanIdx>=0; spanIdx--){
@@ -371,11 +371,11 @@ public class Main {
 					break;
 				case WORD_SEMI_CRF:
 					fm = new WordSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, brownMap, features, moreArgs);
-					compiler = new WordSemiCRFNetworkCompiler(wordLabels, maxLength, maxSegmentLength);
+					compiler = new WordSemiCRFNetworkCompiler(labels, maxLength, maxSegmentLength);
 					break;
 				case WORD_WEAK_SEMI_CRF:
 					fm = new WordWeakSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, brownMap, features, moreArgs);
-					compiler = new WordWeakSemiCRFNetworkCompiler(wordLabels, maxLength, maxSegmentLength);
+					compiler = new WordWeakSemiCRFNetworkCompiler(labels, maxLength, maxSegmentLength);
 					break;
 				case TOKENIZED_GOLD: // Won't happen since we are inside `if (algo != Algorithm.TOKENIZED_GOLD)` block
 					break;

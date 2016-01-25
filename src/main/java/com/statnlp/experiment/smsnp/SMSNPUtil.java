@@ -725,6 +725,11 @@ public class SMSNPUtil {
 	}
 
 	public static int[] listToArray(List<Integer> list){
+		for(int i=list.size()-1; i>=0; i--){
+			if(list.get(i) == -1){
+				list.remove(i);
+			}
+		}
 		int[] result = new int[list.size()];
 		for(int i=0; i<list.size(); i++){
 			result[i] = list.get(i);
@@ -891,7 +896,8 @@ public class SMSNPUtil {
 			int start = 0;
 			for(int pos=0; pos<outputTokenized.size(); pos++){
 				WordLabel label = outputTokenized.get(pos);
-				if(pos == outputTokenized.size()-1 || label.form.startsWith("O") || outputTokenized.get(pos+1).id != label.id){
+				String nextLabelForm = (pos == outputTokenized.size()-1) ? null : outputTokenized.get(pos+1).form;
+				if(nextLabelForm == null || nextLabelForm.startsWith("O") || nextLabelForm.startsWith("B")){
 					if(labels == null || labels.contains(label.form)){
 						spanTokenLengths.add(pos-start+1);
 						tokenLabels.add(label.form);

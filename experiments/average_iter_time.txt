@@ -1,3 +1,3 @@
 Linear CRF baseline Lambda=0.25:   458.884s / 350 iterations = 1.311s
-Weak Semi-CRF baseline Lambda=1.0: 533.942s / 240 iterations = 2.225s
-Semi-CRF baseline Lambda=1.0:      721.321s / 254 iterations = 2.840s
+Semi-CRF baseline Lambda=2.0:      341.952s / 165 iterations = 2.072s
+Weak Semi-CRF baseline Lambda=2.0: 307.823s / 170 iterations = 1.811s

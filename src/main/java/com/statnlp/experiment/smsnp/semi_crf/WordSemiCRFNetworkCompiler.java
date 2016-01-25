@@ -7,6 +7,7 @@ import java.util.List;
 import com.statnlp.commons.types.Instance;
 import com.statnlp.experiment.smsnp.SMSNPInstance;
 import com.statnlp.experiment.smsnp.SMSNPNetwork;
+import com.statnlp.experiment.smsnp.SpanLabel;
 import com.statnlp.experiment.smsnp.WordLabel;
 import com.statnlp.hybridnetworks.LocalNetworkParam;
 import com.statnlp.hybridnetworks.Network;
@@ -21,7 +22,7 @@ public class WordSemiCRFNetworkCompiler extends NetworkCompiler {
 	private final static boolean DEBUG = false;
 	
 	private static final long serialVersionUID = 6585870230920484539L;
-	public WordLabel[] labels;
+	public SpanLabel[] labels;
 	public int maxLength = 20;
 	public int maxSegmentLength = 1;
 	public transient long[] allNodes;
@@ -37,7 +38,7 @@ public class WordSemiCRFNetworkCompiler extends NetworkCompiler {
 		NetworkIDMapper.setCapacity(new int[]{10000, 10, 100});
 	}
 
-	public WordSemiCRFNetworkCompiler(WordLabel[] labels, int maxLength, int maxSegmentLength) {
+	public WordSemiCRFNetworkCompiler(SpanLabel[] labels, int maxLength, int maxSegmentLength) {
 		this.labels = labels;
 		this.maxLength = Math.max(maxLength, this.maxLength);
 		this.maxSegmentLength = Math.max(maxSegmentLength, this.maxSegmentLength);
@@ -60,6 +61,15 @@ public class WordSemiCRFNetworkCompiler extends NetworkCompiler {
 		}
 	}
 	
+	private SpanLabel wordLabelToSpanLabel(WordLabel label){
+		String form = label.form;
+		if(form.startsWith("O")){
+			return SpanLabel.get("O");
+		} else {
+			return SpanLabel.get(form.substring(form.indexOf("-")+1));
+		}
+	}
+	
 	private SMSNPNetwork compileLabeled(int networkId, SMSNPInstance instance, LocalNetworkParam param){
 		SMSNPNetwork network = new SMSNPNetwork(networkId, instance, param);
 		
@@ -72,9 +82,9 @@ public class WordSemiCRFNetworkCompiler extends NetworkCompiler {
 		int prevPos = 0;
 		for(int pos=0; pos<size; pos++){
 			WordLabel label = output.get(pos);
-			int labelId = label.id;
+			SpanLabel spanLabel = wordLabelToSpanLabel(label);
 			WordLabel nextLabel = pos+1 < size ? output.get(pos+1) : null;
-			if(nextLabel == null || nextLabel.id != labelId || label.form.startsWith("O") || maxSegmentLength == 1){
+			if(nextLabel == null || nextLabel.form.startsWith("B") || nextLabel.form.startsWith("O") || maxSegmentLength == 1){
 				if(pos-prevPos > maxSegmentLength){
 					throw new IndexOutOfBoundsException(String.format("\n"
 							+ "The segment %s of type %s is longer than max segment length %d",
@@ -82,7 +92,7 @@ public class WordSemiCRFNetworkCompiler extends NetworkCompiler {
 							label,
 							maxSegmentLength));
 				}
-				long node = toNode_inner(pos, labelId);
+				long node = toNode_inner(pos, spanLabel.id);
 				network.addNode(node);
 				network.addEdge(node, new long[]{prevNode});
 				prevNode = node;
@@ -181,8 +191,19 @@ public class WordSemiCRFNetworkCompiler extends NetworkCompiler {
 			node_k = children_k[0];
 			int[] child_arr = network.getNodeArray(node_k);
 			int start = child_arr[0]-1;
-			for(int pos=start+1; pos<end; pos++){
-				predictionTokenized.add(0, WordLabel.get(labelId));
+			for(int pos=end-1; pos>=start+1; pos--){
+				WordLabel wordLabel;
+				String form = SpanLabel.get(labelId).form;
+				if(form.startsWith("O")){
+					wordLabel = WordLabel.get("O");
+				} else {
+					if(pos > start+1){
+						wordLabel = WordLabel.get("I-"+form);
+					} else {
+						wordLabel = WordLabel.get("B-"+form);
+					}
+				}
+				predictionTokenized.add(0, wordLabel);
 			}
 			labelId = child_arr[2]-1;
 			end = start+1;
