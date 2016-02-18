@@ -107,6 +107,8 @@ public class Main {
 		
 		int numExamplesPrinted = 10;
 		
+		boolean fixModel = false;
+		
 		int argIndex = 0;
 		String[] moreArgs = new String[0];
 		while(argIndex < args.length){
@@ -205,6 +207,10 @@ public class Main {
 				case "numExamplesPrinted":
 					numExamplesPrinted = Integer.parseInt(args[argIndex+1]);
 					argIndex += 2;
+					break;
+				case "fixModel":
+					fixModel = true;
+					argIndex += 1;
 					break;
 				case "h":
 				case "help":
@@ -412,7 +418,34 @@ public class Main {
 
 				long endTime = System.currentTimeMillis();
 				print(String.format("Done in %.3fs", (endTime-startTime)/1000.0), true, outstream, System.out);
+				if (fixModel){
+					if(fm instanceof WordWeakSemiCRFFeatureManager){
+						((WordWeakSemiCRFFeatureManager)fm).prefixLength = 3;
+						((WordWeakSemiCRFFeatureManager)fm).suffixLength = 3;
+					} else if(fm instanceof WordSemiCRFFeatureManager){
+						((WordSemiCRFFeatureManager)fm).prefixLength = 3;
+						((WordSemiCRFFeatureManager)fm).suffixLength = 3;
+					}
+					print("Rewriting object...", false, outstream, System.out);
+					startTime = System.currentTimeMillis();
+					ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(modelPath));
+					oos.writeObject(model);
+					oos.close();
+					endTime = System.currentTimeMillis();
+					print(String.format("Done in %.3fs", (endTime-startTime)/1000.0), true, outstream, System.out);
+				}
 			}
+//			if(features != null && features.length > 0){
+//				Class<?>[] classes = fm.getClass().getDeclaredClasses();
+//				for(Class<?> theClass: classes){
+//					if(theClass.getName().endsWith("FeatureType")){
+//						@SuppressWarnings("unchecked")
+//						Class<? extends IFeatureType> featureTypeClass = (Class<? extends IFeatureType>)theClass;
+//						SMSNPUtil.setupFeatures(featureTypeClass, features);
+//						break;
+//					}
+//				}
+//			}
 			if(writeModelText){
 				PrintStream modelTextWriter = new PrintStream(modelPath+".txt");
 				modelTextWriter.println("Algorithm: "+algo);
