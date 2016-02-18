@@ -262,15 +262,15 @@ public class WordWeakSemiCRFFeatureManager extends FeatureManager {
 			if(FeatureType.SEGMENT_PREFIX.enabled()){
 				for(int i=0; i<prefixLength; i++){
 					String prefix = segment.substring(0, Math.min(segment.length(), i+1));
-					int segmentPrefixFeature = param_g.toFeature(FeatureType.SEGMENT_PREFIX+"-"+i, parentLabelId+"", prefix);
+					int segmentPrefixFeature = param_g.toFeature(FeatureType.SEGMENT_PREFIX.name()+"-"+i, parentLabelId+"", prefix);
 					segmentFeatures.add(segmentPrefixFeature);
 				}
 			}
 			
 			if(FeatureType.SEGMENT_SUFFIX.enabled()){
-				for(int i=0; i<prefixLength; i++){
+				for(int i=0; i<suffixLength; i++){
 					String suffix = segment.substring(Math.max(segment.length()-i-1, 0));
-					int segmentSuffixFeature = param_g.toFeature(FeatureType.SEGMENT_SUFFIX+"-"+i, parentLabelId+"", suffix);
+					int segmentSuffixFeature = param_g.toFeature(FeatureType.SEGMENT_SUFFIX.name()+"-"+i, parentLabelId+"", suffix);
 					segmentFeatures.add(segmentSuffixFeature);
 				}
 			}
@@ -390,8 +390,12 @@ public class WordWeakSemiCRFFeatureManager extends FeatureManager {
 		for(FeatureType featureType: FeatureType.values()){
 			featureType.isEnabled = ois.readBoolean();
 		}
-		prefixLength = ois.readInt();
-		suffixLength = ois.readInt();
+		try{
+			prefixLength = ois.readInt();
+			suffixLength = ois.readInt();
+		} catch (Exception e){
+			
+		}
 	}
 	
 	public static void main(String[] args){
