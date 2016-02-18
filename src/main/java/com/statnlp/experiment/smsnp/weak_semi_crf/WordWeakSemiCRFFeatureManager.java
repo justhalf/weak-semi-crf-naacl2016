@@ -26,6 +26,9 @@ import edu.stanford.nlp.util.StringUtils;
 public class WordWeakSemiCRFFeatureManager extends FeatureManager {
 	
 	private static final long serialVersionUID = 6510131496948610905L;
+
+	public int prefixLength = 3;
+	public int suffixLength = 3;
 	
 	public static enum FeatureType implements IFeatureType{
 		CHEAT(false),
@@ -33,6 +36,8 @@ public class WordWeakSemiCRFFeatureManager extends FeatureManager {
 		// Segment features
 		SEGMENT, // The string inside the segment
 		NUM_WORDS, // Number of words
+		SEGMENT_PREFIX, // The prefix of the segment
+		SEGMENT_SUFFIX, // The suffix of the segment
 		
 		FIRST_WORD(true), // The first word inside the segment
 		FIRST_WORD_SHAPE, // The shape for the first word
@@ -85,6 +90,14 @@ public class WordWeakSemiCRFFeatureManager extends FeatureManager {
 		HELP(0,
 				"Print this help message",
 				"h,help"),
+		PREFIX_LENGTH(1,
+				"The maximum prefix lengths for word prefix features",
+				"prefix_length",
+				"n"),
+		SUFFIX_LENGTH(1,
+				"The maximum suffix lengths for word suffix features",
+				"suffix_length",
+				"n"),
 		;
 		
 		final private int numArgs;
@@ -153,6 +166,12 @@ public class WordWeakSemiCRFFeatureManager extends FeatureManager {
 				case HELP:
 					Argument.printHelp();
 					System.exit(0);
+				case PREFIX_LENGTH:
+					prefixLength = Integer.parseInt(args[argIndex+1]);
+					break;
+				case SUFFIX_LENGTH:
+					suffixLength = Integer.parseInt(args[argIndex+1]);
+					break;
 				}
 				argIndex += argument.numArgs+1;
 			} else {
@@ -238,6 +257,22 @@ public class WordWeakSemiCRFFeatureManager extends FeatureManager {
 			if(FeatureType.SEGMENT.enabled()){
 				int segmentFeature = param_g.toFeature(FeatureType.SEGMENT.name(), parentLabelId+"", segment);
 				segmentFeatures.add(segmentFeature);
+			}
+			
+			if(FeatureType.SEGMENT_PREFIX.enabled()){
+				for(int i=0; i<prefixLength; i++){
+					String prefix = segment.substring(0, Math.min(segment.length(), i+1));
+					int segmentPrefixFeature = param_g.toFeature(FeatureType.SEGMENT_PREFIX+"-"+i, parentLabelId+"", prefix);
+					segmentFeatures.add(segmentPrefixFeature);
+				}
+			}
+			
+			if(FeatureType.SEGMENT_SUFFIX.enabled()){
+				for(int i=0; i<prefixLength; i++){
+					String suffix = segment.substring(Math.max(segment.length()-i-1, 0));
+					int segmentSuffixFeature = param_g.toFeature(FeatureType.SEGMENT_SUFFIX+"-"+i, parentLabelId+"", suffix);
+					segmentFeatures.add(segmentSuffixFeature);
+				}
 			}
 			
 			if(FeatureType.NUM_WORDS.enabled()){
@@ -344,6 +379,8 @@ public class WordWeakSemiCRFFeatureManager extends FeatureManager {
 		for(FeatureType featureType: FeatureType.values()){
 			oos.writeBoolean(featureType.isEnabled);
 		}
+		oos.writeInt(prefixLength);
+		oos.writeInt(suffixLength);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -353,6 +390,8 @@ public class WordWeakSemiCRFFeatureManager extends FeatureManager {
 		for(FeatureType featureType: FeatureType.values()){
 			featureType.isEnabled = ois.readBoolean();
 		}
+		prefixLength = ois.readInt();
+		suffixLength = ois.readInt();
 	}
 	
 	public static void main(String[] args){

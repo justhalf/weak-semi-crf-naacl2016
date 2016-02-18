@@ -61,6 +61,7 @@ public class LinearCRFFeatureManager extends FeatureManager{
 		PREFIX(true),
 		SUFFIX(true),
 		BROWN_CLUSTER(false),
+		WORD_SHAPE(false),
 		
 		TRANSITION(true),
 		;
@@ -229,6 +230,7 @@ public class LinearCRFFeatureManager extends FeatureManager{
 				wordWindowSize = 0;
 			}
 			int[] wordWindowFeatures = new int[wordWindowSize];
+			int[] wordShapeWindowFeatures = new int[wordWindowSize];
 			for(int i=0; i<wordWindowFeatures.length; i++){
 				String word = "***";
 				int relIdx = (i-wordHalfWindowSize);
@@ -238,9 +240,15 @@ public class LinearCRFFeatureManager extends FeatureManager{
 				}
 				if(wordOnlyLeftWindow && idx > pos) continue;
 				wordWindowFeatures[i] = param_g.toFeature(FeatureType.WORD+":"+relIdx, tag_id+"", word);
+				if(FeatureType.WORD_SHAPE.enabled()){
+					wordShapeWindowFeatures[i] = param_g.toFeature(FeatureType.WORD_SHAPE+":"+relIdx, tag_id+"", wordShape(word));
+				}
 			}
 			FeatureArray wordFeatures = new FeatureArray(wordWindowFeatures, features);
 			features = wordFeatures;
+			if(FeatureType.WORD_SHAPE.enabled()){
+				features = new FeatureArray(wordShapeWindowFeatures, features);
+			}
 		}
 		
 		if(FeatureType.BROWN_CLUSTER.enabled()){
@@ -272,7 +280,7 @@ public class LinearCRFFeatureManager extends FeatureManager{
 		if(FeatureType.PREFIX.enabled()){
 			String curWord = words[pos];
 			int[] prefixFeatures = new int[3];
-			for(int i=0; i<3; i++){
+			for(int i=0; i<prefixLength; i++){
 				String prefix = curWord.substring(0, Math.min(curWord.length(), i+1));
 				prefixFeatures[i] = param_g.toFeature(FeatureType.PREFIX+"", tag_id+"", prefix);
 			}
@@ -282,7 +290,7 @@ public class LinearCRFFeatureManager extends FeatureManager{
 		if(FeatureType.SUFFIX.enabled()){
 			String curWord = words[pos];
 			int[] suffixFeatures = new int[3];
-			for(int i=0; i<3; i++){
+			for(int i=0; i<suffixLength; i++){
 				String suffix = curWord.substring(Math.max(0, curWord.length()-i-1), curWord.length());
 				suffixFeatures[i] = param_g.toFeature(FeatureType.SUFFIX+"", tag_id+"", suffix);
 			}
@@ -300,6 +308,32 @@ public class LinearCRFFeatureManager extends FeatureManager{
 		}
 		
 		return features;
+	}
+	
+	private static String wordShape(String word){
+		if(word.length() == 0){
+			return word;
+		}
+		String result = "";
+		int length = word.length();
+		for(int i=0; i<length; i++){
+			result += characterShape(word.substring(i, i+1));
+		}
+		result = result.replaceAll("(.{1,2})\\1{3,}", "$1$1$1");
+		result = result.replaceAll("(.{3,})\\1{2,}", "$1$1");
+		return result;
+	}
+	
+	private static String characterShape(String character){
+		if(character.matches("[A-Z]")){
+			return "X";
+		} else if(character.matches("[a-z]")){
+			return "x";
+		} else if(character.matches("[0-9]")){
+			return "0";
+		} else {
+			return character;
+		}
 	}
 	
 	private String getBrownCluster(String word){

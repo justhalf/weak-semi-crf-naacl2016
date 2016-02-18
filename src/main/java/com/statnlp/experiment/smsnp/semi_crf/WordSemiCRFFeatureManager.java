@@ -26,6 +26,9 @@ import edu.stanford.nlp.util.StringUtils;
 public class WordSemiCRFFeatureManager extends FeatureManager {
 	
 	private static final long serialVersionUID = -4533287027022223693L;
+	
+	public int prefixLength = 3;
+	public int suffixLength = 3;
 
 	public static enum FeatureType implements IFeatureType{
 		CHEAT(false),
@@ -33,6 +36,8 @@ public class WordSemiCRFFeatureManager extends FeatureManager {
 		// Segment features
 		SEGMENT, // The string inside the segment
 		NUM_WORDS, // Number of words
+		SEGMENT_PREFIX, // The prefix of the segment
+		SEGMENT_SUFFIX, // The suffix of the segment
 		
 		FIRST_WORD(true), // The first word inside the segment
 		FIRST_WORD_CLUSTER, // The brown cluster for the first word
@@ -82,6 +87,14 @@ public class WordSemiCRFFeatureManager extends FeatureManager {
 		HELP(0,
 				"Print this help message",
 				"h,help"),
+		PREFIX_LENGTH(1,
+				"The maximum prefix lengths for word prefix features",
+				"prefix_length",
+				"n"),
+		SUFFIX_LENGTH(1,
+				"The maximum suffix lengths for word suffix features",
+				"suffix_length",
+				"n"),
 		;
 		
 		final private int numArgs;
@@ -150,6 +163,12 @@ public class WordSemiCRFFeatureManager extends FeatureManager {
 				case HELP:
 					Argument.printHelp();
 					System.exit(0);
+				case PREFIX_LENGTH:
+					prefixLength = Integer.parseInt(args[argIndex+1]);
+					break;
+				case SUFFIX_LENGTH:
+					suffixLength = Integer.parseInt(args[argIndex+1]);
+					break;
 				}
 				argIndex += argument.numArgs+1;
 			} else {
@@ -162,8 +181,6 @@ public class WordSemiCRFFeatureManager extends FeatureManager {
 	protected FeatureArray extract_helper(Network net, int parent_k, int[] children_k) {
 		SMSNPNetwork network = (SMSNPNetwork)net;
 		SMSNPInstance instance = (SMSNPInstance)network.getInstance();
-		
-		int instanceID = instance.getInstanceId();
 		
 		String[] inputTokenized = instance.getInputTokenized();
 		int length = inputTokenized.length;
@@ -186,7 +203,7 @@ public class WordSemiCRFFeatureManager extends FeatureManager {
 		
 		if(FeatureType.CHEAT.enabled()){
 			int instanceId = Math.abs(instance.getInstanceId());
-			int cheatFeature = param_g.toFeature(instanceID, FeatureType.CHEAT.name(), "", instanceId+" "+parentPos+" "+childPos+" "+parentLabelId+" "+childLabelId);
+			int cheatFeature = param_g.toFeature(FeatureType.CHEAT.name(), "", instanceId+" "+parentPos+" "+childPos+" "+parentLabelId+" "+childLabelId);
 			return new FeatureArray(new int[]{cheatFeature});
 		}
 		
@@ -204,27 +221,27 @@ public class WordSemiCRFFeatureManager extends FeatureManager {
 		String nextWord = numWordsAfter > 0 ? wordsAfter[0] : "";
 		
 		if(FeatureType.PREV_WORD.enabled()){
-			int prevWordFeature = param_g.toFeature(instanceID, FeatureType.PREV_WORD.name(), parentLabelId+"", normalizeWord(prevWord));
+			int prevWordFeature = param_g.toFeature(FeatureType.PREV_WORD.name(), parentLabelId+"", normalizeWord(prevWord));
 			commonFeatures.add(prevWordFeature);
 		}
 		if(FeatureType.PREV_WORD_SHAPE.enabled()){
-			int prevWordShapeFeature = param_g.toFeature(instanceID, FeatureType.PREV_WORD_SHAPE.name(), parentLabelId+"", wordShape(prevWord));
+			int prevWordShapeFeature = param_g.toFeature(FeatureType.PREV_WORD_SHAPE.name(), parentLabelId+"", wordShape(prevWord));
 			commonFeatures.add(prevWordShapeFeature);
 		}
 		if(FeatureType.PREV_WORD_CLUSTER.enabled()){
-			int prevWordClusterFeature = param_g.toFeature(instanceID, FeatureType.PREV_WORD_CLUSTER.name(), parentLabelId+"", getBrownCluster(prevWord));
+			int prevWordClusterFeature = param_g.toFeature(FeatureType.PREV_WORD_CLUSTER.name(), parentLabelId+"", getBrownCluster(prevWord));
 			commonFeatures.add(prevWordClusterFeature);
 		}
 		if(FeatureType.NEXT_WORD.enabled()){
-			int nextWordFeature = param_g.toFeature(instanceID, FeatureType.NEXT_WORD.name(), parentLabelId+"", normalizeWord(nextWord));
+			int nextWordFeature = param_g.toFeature(FeatureType.NEXT_WORD.name(), parentLabelId+"", normalizeWord(nextWord));
 			commonFeatures.add(nextWordFeature);
 		}
 		if(FeatureType.NEXT_WORD_SHAPE.enabled()){
-			int nextWordShapeFeature = param_g.toFeature(instanceID, FeatureType.NEXT_WORD_SHAPE.name(), parentLabelId+"", wordShape(nextWord));
+			int nextWordShapeFeature = param_g.toFeature(FeatureType.NEXT_WORD_SHAPE.name(), parentLabelId+"", wordShape(nextWord));
 			commonFeatures.add(nextWordShapeFeature);
 		}
 		if(FeatureType.NEXT_WORD_CLUSTER.enabled()){
-			int nextWordClusterFeature = param_g.toFeature(instanceID, FeatureType.NEXT_WORD_CLUSTER.name(), parentLabelId+"", getBrownCluster(nextWord));
+			int nextWordClusterFeature = param_g.toFeature(FeatureType.NEXT_WORD_CLUSTER.name(), parentLabelId+"", getBrownCluster(nextWord));
 			commonFeatures.add(nextWordClusterFeature);
 		}
 
@@ -235,49 +252,65 @@ public class WordSemiCRFFeatureManager extends FeatureManager {
 			List<Integer> segmentFeatures = new ArrayList<Integer>();
 	
 			if(FeatureType.SEGMENT.enabled()){
-				int segmentFeature = param_g.toFeature(instanceID, FeatureType.SEGMENT.name(), parentLabelId+"", segment);
+				int segmentFeature = param_g.toFeature(FeatureType.SEGMENT.name(), parentLabelId+"", segment);
 				segmentFeatures.add(segmentFeature);
 			}
 			
+			if(FeatureType.SEGMENT_PREFIX.enabled()){
+				for(int i=0; i<prefixLength; i++){
+					String prefix = segment.substring(0, Math.min(segment.length(), i+1));
+					int segmentPrefixFeature = param_g.toFeature(FeatureType.SEGMENT_PREFIX+"-"+i, parentLabelId+"", prefix);
+					segmentFeatures.add(segmentPrefixFeature);
+				}
+			}
+			
+			if(FeatureType.SEGMENT_SUFFIX.enabled()){
+				for(int i=0; i<prefixLength; i++){
+					String suffix = segment.substring(Math.max(segment.length()-i-1, 0));
+					int segmentSuffixFeature = param_g.toFeature(FeatureType.SEGMENT_SUFFIX+"-"+i, parentLabelId+"", suffix);
+					segmentFeatures.add(segmentSuffixFeature);
+				}
+			}
+			
 			if(FeatureType.NUM_WORDS.enabled()){
-				int numWordsFeature = param_g.toFeature(instanceID, FeatureType.NUM_WORDS.name(), parentLabelId+"", numWordsInside+"");
+				int numWordsFeature = param_g.toFeature(FeatureType.NUM_WORDS.name(), parentLabelId+"", numWordsInside+"");
 				segmentFeatures.add(numWordsFeature);
 			}
 			
 			if(FeatureType.FIRST_WORD.enabled()){
-				segmentFeatures.add(param_g.toFeature(instanceID, FeatureType.FIRST_WORD.name(), parentLabelId+"", numWordsInside > 0 ? normalizeWord(wordsInside[0]) : ""));
+				segmentFeatures.add(param_g.toFeature(FeatureType.FIRST_WORD.name(), parentLabelId+"", numWordsInside > 0 ? normalizeWord(wordsInside[0]) : ""));
 			}
 			
 			if(FeatureType.FIRST_WORD_CLUSTER.enabled()){
-				segmentFeatures.add(param_g.toFeature(instanceID, FeatureType.FIRST_WORD_CLUSTER.name(), parentLabelId+"", getBrownCluster(numWordsInside > 0 ? wordsInside[0] : "")));
+				segmentFeatures.add(param_g.toFeature(FeatureType.FIRST_WORD_CLUSTER.name(), parentLabelId+"", getBrownCluster(numWordsInside > 0 ? wordsInside[0] : "")));
 			}
 			
 			if(FeatureType.LAST_WORD.enabled()){
-				segmentFeatures.add(param_g.toFeature(instanceID, FeatureType.LAST_WORD.name(), parentLabelId+"", numWordsInside > 0 ? normalizeWord(wordsInside[numWordsInside-1]) : ""));
+				segmentFeatures.add(param_g.toFeature(FeatureType.LAST_WORD.name(), parentLabelId+"", numWordsInside > 0 ? normalizeWord(wordsInside[numWordsInside-1]) : ""));
 			}
 			
 			if(FeatureType.LAST_WORD_CLUSTER.enabled()){
-				segmentFeatures.add(param_g.toFeature(instanceID, FeatureType.LAST_WORD_CLUSTER.name(), parentLabelId+"", getBrownCluster(numWordsInside > 0 ? wordsInside[numWordsInside-1] : "")));
+				segmentFeatures.add(param_g.toFeature(FeatureType.LAST_WORD_CLUSTER.name(), parentLabelId+"", getBrownCluster(numWordsInside > 0 ? wordsInside[numWordsInside-1] : "")));
 			}
 	
 			if(FeatureType.WORDS.enabled()){
 				for(int i=0; i<wordsInside.length; i++){
-					segmentFeatures.add(param_g.toFeature(instanceID, FeatureType.WORDS.name()+":"+i, parentLabelId+"", normalizeWord(wordsInside[i])));
-					segmentFeatures.add(param_g.toFeature(instanceID, FeatureType.WORDS.name()+":-"+i, parentLabelId+"", normalizeWord(wordsInside[numWordsInside-i-1])));
+					segmentFeatures.add(param_g.toFeature(FeatureType.WORDS.name()+":"+i, parentLabelId+"", normalizeWord(wordsInside[i])));
+					segmentFeatures.add(param_g.toFeature(FeatureType.WORDS.name()+":-"+i, parentLabelId+"", normalizeWord(wordsInside[numWordsInside-i-1])));
 				}
 			}
 	
 			if(FeatureType.WORD_SHAPES.enabled()){
 				for(int i=0; i<wordsInside.length; i++){
-					segmentFeatures.add(param_g.toFeature(instanceID, FeatureType.WORD_SHAPES.name()+":"+i, parentLabelId+"", wordShape(wordsInside[i])));
-					segmentFeatures.add(param_g.toFeature(instanceID, FeatureType.WORD_SHAPES.name()+":-"+i, parentLabelId+"", wordShape(wordsInside[numWordsInside-i-1])));
+					segmentFeatures.add(param_g.toFeature(FeatureType.WORD_SHAPES.name()+":"+i, parentLabelId+"", wordShape(wordsInside[i])));
+					segmentFeatures.add(param_g.toFeature(FeatureType.WORD_SHAPES.name()+":-"+i, parentLabelId+"", wordShape(wordsInside[numWordsInside-i-1])));
 				}
 			}
 			
 			if(FeatureType.WORD_CLUSTERS.enabled()){
 				for(int i=0; i<wordsInside.length; i++){
-					segmentFeatures.add(param_g.toFeature(instanceID, FeatureType.WORD_CLUSTERS.name()+":"+i, parentLabelId+"", getBrownCluster(wordsInside[i])));
-					segmentFeatures.add(param_g.toFeature(instanceID, FeatureType.WORD_CLUSTERS.name()+":-"+i, parentLabelId+"", getBrownCluster(wordsInside[numWordsInside-i-1])));
+					segmentFeatures.add(param_g.toFeature(FeatureType.WORD_CLUSTERS.name()+":"+i, parentLabelId+"", getBrownCluster(wordsInside[i])));
+					segmentFeatures.add(param_g.toFeature(FeatureType.WORD_CLUSTERS.name()+":-"+i, parentLabelId+"", getBrownCluster(wordsInside[numWordsInside-i-1])));
 				}
 			}
 	
@@ -287,7 +320,7 @@ public class WordSemiCRFFeatureManager extends FeatureManager {
 		// Transition features
 		List<Integer> transitionFeatures = new ArrayList<Integer>();
 		if(FeatureType.BIGRAM.enabled()){
-			int bigramFeature = param_g.toFeature(instanceID, FeatureType.BIGRAM.name(), childLabelId+"-"+parentLabelId, "");
+			int bigramFeature = param_g.toFeature(FeatureType.BIGRAM.name(), childLabelId+"-"+parentLabelId, "");
 			transitionFeatures.add(bigramFeature);
 		}
 		features = new FeatureArray(SMSNPUtil.listToArray(transitionFeatures), features);
@@ -343,6 +376,8 @@ public class WordSemiCRFFeatureManager extends FeatureManager {
 		for(FeatureType featureType: FeatureType.values()){
 			oos.writeBoolean(featureType.isEnabled);
 		}
+		oos.writeInt(prefixLength);
+		oos.writeInt(suffixLength);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -352,6 +387,8 @@ public class WordSemiCRFFeatureManager extends FeatureManager {
 		for(FeatureType featureType: FeatureType.values()){
 			featureType.isEnabled = ois.readBoolean();
 		}
+		prefixLength = ois.readInt();
+		suffixLength = ois.readInt();
 	}
 
 }
