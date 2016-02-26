@@ -21,8 +21,8 @@ public class SMSNPEvaluator {
 		
 		public void add(Statistics s){
 			this.correct += s.correct;
-			this.totalPred = s.totalPred;
-			this.totalGold = s.totalGold;
+			this.totalPred += s.totalPred;
+			this.totalGold += s.totalGold;
 		}
 		
 		public double calculatePrecision(){
@@ -55,7 +55,7 @@ public class SMSNPEvaluator {
 			double recall = calculateRecall();
 			double f1 = calculateF1();
 			print(String.format("Correct: %1$3d, Predicted: %2$3d, Gold: %3$3d ", correct, totalPred, totalGold), true, outstreams);
-			print(String.format("Overall P: %#5.2f%%, R: %#5.2f%%, F: %#5.2f%%", precision, recall, f1), true, outstreams);
+			print(String.format("Overall P: %#5.2f%%, R: %#5.2f%%, F: %#5.2f%%", 100*precision, 100*recall, 100*f1), true, outstreams);
 		}
 	}
 	
@@ -218,6 +218,7 @@ public class SMSNPEvaluator {
 		} else {
 			print("", true, outstreams);
 		}
+		outstreams = new PrintStream[]{outstream, System.out};
 		print("### Overall score ###", true, outstream, System.out);
 		finalResult.printScore(outstreams);
 		print("", true, outstream, System.out);
