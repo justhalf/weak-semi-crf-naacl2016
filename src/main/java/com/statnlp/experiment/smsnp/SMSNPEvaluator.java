@@ -12,6 +12,18 @@ import java.util.Random;
 import com.statnlp.commons.types.Instance;
 import com.statnlp.experiment.smsnp.SMSNPTokenizer.TokenizerMethod;
 
+/**
+ * The class to do evaluation on NP-chunking.<br>
+ * The main function accepts two result formats:
+ * <ol>
+ * <li>Based on character offset</li>
+ * <li>Based on tokens (in CoNLL format)</li>
+ * </ol>
+ * This class can also do bootstrap resampling for significance test.
+ * Check the help in the main function for more information.
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class SMSNPEvaluator {
 	
 	private static class Statistics {

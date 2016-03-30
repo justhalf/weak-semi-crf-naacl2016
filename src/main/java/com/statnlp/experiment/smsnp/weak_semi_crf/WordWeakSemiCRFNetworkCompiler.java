@@ -15,6 +15,12 @@ import com.statnlp.hybridnetworks.NetworkCompiler;
 import com.statnlp.hybridnetworks.NetworkException;
 import com.statnlp.hybridnetworks.NetworkIDMapper;
 
+/**
+ * The class that defines the network/graph structure<br>
+ * This is based on StatNLP framework for CRF on acyclic graphs
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class WordWeakSemiCRFNetworkCompiler extends NetworkCompiler {
 	
 	private final static boolean DEBUG = false;

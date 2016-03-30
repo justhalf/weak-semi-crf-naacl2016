@@ -4,6 +4,12 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The class representing a label for a word/token<br>
+ * This class stores singleton objects, which can be retrieved by its ID or name.
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class WordLabel implements Comparable<WordLabel>, Serializable{
 	
 	private static final long serialVersionUID = 3941855494601533166L;

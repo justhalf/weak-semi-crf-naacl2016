@@ -17,6 +17,12 @@ import java.util.Scanner;
 
 import com.statnlp.experiment.smsnp.SMSNPTokenizer.TokenizerMethod;
 
+/**
+ * The main class to run CRF++ with the same pipeline as other models<br>
+ * This was used mainly to compare our implementation of LinearCRF with the one in CRF++
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class CRFPPMain {
 	
 	private static void createTemplate(String template_filename, boolean useBrown) throws FileNotFoundException, UnsupportedEncodingException{

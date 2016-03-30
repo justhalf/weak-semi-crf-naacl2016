@@ -42,6 +42,13 @@ import com.statnlp.hybridnetworks.NetworkCompiler;
 import com.statnlp.hybridnetworks.NetworkConfig;
 import com.statnlp.hybridnetworks.NetworkModel;
 
+/**
+ * The main class of all the experiments.
+ * This is the default class to be run when the JAR file is executed.<br>
+ * The main function accepts lots of parameters, see the help for more information.
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class Main {
 	
 	public enum Algorithm {

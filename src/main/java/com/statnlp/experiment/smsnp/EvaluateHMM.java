@@ -8,6 +8,12 @@ import java.util.ArrayList;
 
 import com.statnlp.experiment.smsnp.SMSNPTokenizer.TokenizerMethod;
 
+/**
+ * The code that was used to evaluate results from a HMM system<br>
+ * This was discontinued and was not included as baseline
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class EvaluateHMM {
 	
 	public static void main(String[] args) throws IOException, InterruptedException{

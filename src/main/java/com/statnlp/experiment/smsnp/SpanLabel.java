@@ -4,6 +4,12 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The class representing a label for a span, which is a sequence of words/tokens.<br>
+ * This class stores singleton objects, which can be retrieved by its ID or name.
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class SpanLabel implements Comparable<SpanLabel>, Serializable{
 	
 	private static final long serialVersionUID = -2821034438335023157L;

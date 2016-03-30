@@ -7,6 +7,14 @@ import java.util.List;
 import com.statnlp.example.base.BaseInstance;
 import com.statnlp.experiment.smsnp.SMSNPTokenizer.TokenizerMethod;
 
+/**
+ * The data structure to represent SMS messages with their annotations as is<br>
+ * An instance represents the real-world view of the problem.<br>
+ * Compare with {@link SMSNPNetwork}, which is the model view of the problem<br>
+ * This is based on StatNLP framework for CRF on acyclic graphs
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class SMSNPInstance extends BaseInstance<SMSNPInstance, String, List<Span>> {
 	
 	private static final long serialVersionUID = -5338701879189642344L;

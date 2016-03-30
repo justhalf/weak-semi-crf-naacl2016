@@ -19,6 +19,12 @@ import com.statnlp.experiment.smsnp.SMSNPTokenizer.TokenizerMethod;
 
 import edu.stanford.nlp.util.StringUtils;
 
+/**
+ * The utility class that contains many useful static methods.<br>
+ * This class also has a main function which is used to gather statistics about the input file
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class SMSNPUtil {
 	
 	public static boolean COMBINE_OUTSIDE_CHARS = true;

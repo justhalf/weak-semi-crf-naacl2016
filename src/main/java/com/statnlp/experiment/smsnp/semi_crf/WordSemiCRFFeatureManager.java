@@ -23,6 +23,12 @@ import com.statnlp.hybridnetworks.Network;
 
 import edu.stanford.nlp.util.StringUtils;
 
+/**
+ * The class that defines the features to be extracted<br>
+ * This is based on StatNLP framework for CRF on acyclic graphs
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class WordSemiCRFFeatureManager extends FeatureManager {
 	
 	private static final long serialVersionUID = -4533287027022223693L;
@@ -196,7 +202,7 @@ public class WordSemiCRFFeatureManager extends FeatureManager {
 		
 		int[] child_arr = network.getNodeArray(children_k[0]);
 		int childPos = child_arr[0]-1;
-		NodeType childType = NodeType.values()[child_arr[1]];
+//		NodeType childType = NodeType.values()[child_arr[1]];
 		int childLabelId = child_arr[2]-1;
 		
 		GlobalNetworkParam param_g = this._param_g;

@@ -17,6 +17,12 @@ import com.statnlp.hybridnetworks.NetworkIDMapper;
 
 import edu.stanford.nlp.util.StringUtils;
 
+/**
+ * The class that defines the network/graph structure<br>
+ * This is based on StatNLP framework for CRF on acyclic graphs
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class WordSemiCRFNetworkCompiler extends NetworkCompiler {
 	
 	private final static boolean DEBUG = false;

@@ -13,6 +13,15 @@ import edu.stanford.nlp.util.StringUtils;
 import justhalf.nlp.tokenizer.Tokenizer;
 import justhalf.nlp.tokenizer.WhitespaceTokenizer;
 
+/**
+ * The utility class to do tokenization<br>
+ * This class also has a main function which can tokenize the dataset with various settings,
+ * and to tokenize one file with a given setting.<br>
+ * The actual tokenizers are defined in the justhalf package, my personal Java NLP toolkit.
+ * (https://github.com/justhalf/java-nlp-toolkit)
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class SMSNPTokenizer implements Serializable {
 	
 	private static final long serialVersionUID = -2097450154196277909L;

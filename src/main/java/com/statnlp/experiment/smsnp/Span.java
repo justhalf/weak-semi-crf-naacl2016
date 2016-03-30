@@ -2,6 +2,11 @@ package com.statnlp.experiment.smsnp;
 
 import java.io.Serializable;
 
+/**
+ * This class represents a span (start and end index) with its label (a {@link SpanLabel} object)
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class Span implements Comparable<Span>, Serializable{
 	
 	private static final long serialVersionUID = 1849557517361796614L;

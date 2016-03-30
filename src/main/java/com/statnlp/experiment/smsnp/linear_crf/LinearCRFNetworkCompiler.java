@@ -33,6 +33,12 @@ import com.statnlp.hybridnetworks.Network;
 import com.statnlp.hybridnetworks.NetworkCompiler;
 import com.statnlp.hybridnetworks.NetworkIDMapper;
 
+/**
+ * The class that defines the network/graph structure<br>
+ * This is based on StatNLP framework for CRF on acyclic graphs
+ * @author Aldrian Obaja <aldrianobaja.m@gmail.com>
+ *
+ */
 public class LinearCRFNetworkCompiler extends NetworkCompiler{
 	
 	private static final long serialVersionUID = -3829680998638818730L;
