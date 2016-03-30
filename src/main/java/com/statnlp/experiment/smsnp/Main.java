@@ -610,6 +610,9 @@ public class Main {
 				+ "\tThe features to be used. The available features depend on the algorithm used.\n"
 				+ "-numExamplesPrinted\n"
 				+ "\tSpecify the number of examples printed during evaluation. Default to 10\n"
+				+ "-fixModel\n"
+				+ "\tA flag to tell the code to fix models created by older version of this software\n"
+				+ "\tNote that this was only used once, but is kept for historical reasons."
 				);
 	}
 
