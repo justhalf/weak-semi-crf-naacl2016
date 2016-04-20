@@ -103,6 +103,8 @@ public class Main {
 		boolean writeModelText = false;
 		NetworkConfig._numThreads = 4;
 		NetworkConfig.L2_REGULARIZATION_CONSTANT = 0.125;
+		NetworkConfig._SEQUENTIAL_FEATURE_EXTRACTION = true;
+		NetworkConfig._BUILD_FEATURES_FROM_LABELED_ONLY = false;
 		NetworkConfig.objtol = 1e-6;
 		String weightInit = "random";
 		
@@ -217,6 +219,14 @@ public class Main {
 					break;
 				case "fixModel":
 					fixModel = true;
+					argIndex += 1;
+					break;
+				case "parallelTouch":
+					NetworkConfig._SEQUENTIAL_FEATURE_EXTRACTION = false;
+					argIndex += 1;
+					break;
+				case "reduceFeatures":
+					NetworkConfig._BUILD_FEATURES_FROM_LABELED_ONLY = true;
 					argIndex += 1;
 					break;
 				case "h":

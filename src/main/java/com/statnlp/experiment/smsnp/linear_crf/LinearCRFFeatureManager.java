@@ -219,7 +219,7 @@ public class LinearCRFFeatureManager extends FeatureManager{
 		int child_tag_id = network.getNodeArray(children_k[0])[1]-1;
 		
 		if(FeatureType.CHEAT.enabled()){
-			int cheatFeature = param_g.toFeature(FeatureType.CHEAT.name(), tag_id+"", Math.abs(instance.getInstanceId())+" "+pos+""+child_tag_id);
+			int cheatFeature = param_g.toFeature(net, FeatureType.CHEAT.name(), tag_id+"", Math.abs(instance.getInstanceId())+" "+pos+""+child_tag_id);
 			return new FeatureArray(new int[]{cheatFeature});
 		}
 
@@ -240,9 +240,9 @@ public class LinearCRFFeatureManager extends FeatureManager{
 					word = words[idx];
 				}
 				if(wordOnlyLeftWindow && idx > pos) continue;
-				wordWindowFeatures[i] = param_g.toFeature(FeatureType.WORD+":"+relIdx, tag_id+"", word);
+				wordWindowFeatures[i] = param_g.toFeature(net, FeatureType.WORD+":"+relIdx, tag_id+"", word);
 				if(FeatureType.WORD_SHAPE.enabled()){
-					wordShapeWindowFeatures[i] = param_g.toFeature(FeatureType.WORD_SHAPE+":"+relIdx, tag_id+"", wordShape(word));
+					wordShapeWindowFeatures[i] = param_g.toFeature(net, FeatureType.WORD_SHAPE+":"+relIdx, tag_id+"", wordShape(word));
 				}
 			}
 			FeatureArray wordFeatures = new FeatureArray(wordWindowFeatures, features);
@@ -253,7 +253,7 @@ public class LinearCRFFeatureManager extends FeatureManager{
 		}
 		
 		if(FeatureType.BROWN_CLUSTER.enabled()){
-			int brownClusterFeature = param_g.toFeature(FeatureType.BROWN_CLUSTER.name(), tag_id+"", getBrownCluster(words[pos]));
+			int brownClusterFeature = param_g.toFeature(net, FeatureType.BROWN_CLUSTER.name(), tag_id+"", getBrownCluster(words[pos]));
 			features = new FeatureArray(new int[]{brownClusterFeature}, features);
 		}
 		
@@ -273,7 +273,7 @@ public class LinearCRFFeatureManager extends FeatureManager{
 						bigram += " ";
 					}
 				}
-				bigramFeatures[i] = param_g.toFeature(FeatureType.WORD_BIGRAM+":"+i, tag_id+"", bigram);
+				bigramFeatures[i] = param_g.toFeature(net, FeatureType.WORD_BIGRAM+":"+i, tag_id+"", bigram);
 			}
 			features = new FeatureArray(bigramFeatures, features);
 		}
@@ -283,7 +283,7 @@ public class LinearCRFFeatureManager extends FeatureManager{
 			int[] prefixFeatures = new int[3];
 			for(int i=0; i<prefixLength; i++){
 				String prefix = curWord.substring(0, Math.min(curWord.length(), i+1));
-				prefixFeatures[i] = param_g.toFeature(FeatureType.PREFIX+"", tag_id+"", prefix);
+				prefixFeatures[i] = param_g.toFeature(net, FeatureType.PREFIX+"", tag_id+"", prefix);
 			}
 			features = new FeatureArray(prefixFeatures, features);
 		}
@@ -293,7 +293,7 @@ public class LinearCRFFeatureManager extends FeatureManager{
 			int[] suffixFeatures = new int[3];
 			for(int i=0; i<suffixLength; i++){
 				String suffix = curWord.substring(Math.max(0, curWord.length()-i-1), curWord.length());
-				suffixFeatures[i] = param_g.toFeature(FeatureType.SUFFIX+"", tag_id+"", suffix);
+				suffixFeatures[i] = param_g.toFeature(net, FeatureType.SUFFIX+"", tag_id+"", suffix);
 			}
 			features = new FeatureArray(suffixFeatures, features);
 		}
@@ -303,7 +303,7 @@ public class LinearCRFFeatureManager extends FeatureManager{
 			if(child_tag_id == -1){
 				
 			} else {
-				int transitionFeature = param_g.toFeature(FeatureType.TRANSITION.name(), child_tag_id+"-"+tag_id, "");
+				int transitionFeature = param_g.toFeature(net, FeatureType.TRANSITION.name(), child_tag_id+"-"+tag_id, "");
 				features = new FeatureArray(new int[]{transitionFeature}, features);
 			}
 		}
