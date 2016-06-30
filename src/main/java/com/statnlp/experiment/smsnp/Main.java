@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+import com.statnlp.commons.ml.opt.OptimizerFactory;
 import com.statnlp.commons.types.Instance;
 import com.statnlp.experiment.smsnp.SMSNPTokenizer.TokenizerMethod;
 import com.statnlp.experiment.smsnp.linear_crf.LinearCRFFeatureManager;
@@ -40,6 +41,7 @@ import com.statnlp.hybridnetworks.GenerativeNetworkModel;
 import com.statnlp.hybridnetworks.GlobalNetworkParam;
 import com.statnlp.hybridnetworks.NetworkCompiler;
 import com.statnlp.hybridnetworks.NetworkConfig;
+import com.statnlp.hybridnetworks.NetworkConfig.ModelType;
 import com.statnlp.hybridnetworks.NetworkModel;
 
 /**
@@ -105,10 +107,13 @@ public class Main {
 		NetworkConfig.L2_REGULARIZATION_CONSTANT = 0.125;
 		NetworkConfig._SEQUENTIAL_FEATURE_EXTRACTION = true;
 		NetworkConfig._BUILD_FEATURES_FROM_LABELED_ONLY = false;
+		NetworkConfig.MODEL_TYPE = ModelType.CRF;
+		NetworkConfig.USE_BATCH_SGD = false;
+		NetworkConfig.SVM_MARGIN = 10;
 		NetworkConfig.objtol = 1e-6;
 		String weightInit = "random";
 		
-		int maxNumIterations = 5000;
+		int maxNumIterations = 250;
 		
 		String[] features = new String[0];
 		
@@ -198,6 +203,17 @@ public class Main {
 						algo = Algorithm.valueOf(args[argIndex+1].toUpperCase());
 					} catch (IllegalArgumentException e){
 						throw new IllegalArgumentException("Unrecognized algorithm: "+args[argIndex+1]+"\n"+Algorithm.helpString());
+					}
+					argIndex += 2;
+					break;
+				case "useSSVM":
+					NetworkConfig.MODEL_TYPE = ModelType.SSVM;
+					argIndex += 1;
+					break;
+				case "batchSize":
+					NetworkConfig.batchSize = Integer.parseInt(args[argIndex+1]);
+					if(NetworkConfig.batchSize > 0){
+						NetworkConfig.USE_BATCH_SGD = true;
 					}
 					argIndex += 2;
 					break;
@@ -378,26 +394,33 @@ public class Main {
 				
 				print("Read.."+size+" instances.", true, outstream, System.err);
 				
+				GlobalNetworkParam gParam;
+				if(NetworkConfig.MODEL_TYPE == ModelType.SSVM){
+					gParam = new GlobalNetworkParam(OptimizerFactory.getGradientDescentFactoryUsingAdaDelta());
+				} else {
+					gParam = new GlobalNetworkParam(OptimizerFactory.getLBFGSFactory());
+				}
+				
 				WordLabel[] wordLabels = WordLabel.LABELS.values().toArray(new WordLabel[WordLabel.LABELS.size()]);
 				switch(algo){
 				case LINEAR_CRF:
-					fm = new LinearCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, brownMap, features, moreArgs);
+					fm = new LinearCRFFeatureManager(gParam, tokenizerMethod, brownMap, features, moreArgs);
 					compiler = new LinearCRFNetworkCompiler(wordLabels, tokenizerMethod);
 					break;
 				case CHAR_SEMI_CRF:
-					fm = new CharSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, brownMap, features, moreArgs);
+					fm = new CharSemiCRFFeatureManager(gParam, tokenizerMethod, brownMap, features, moreArgs);
 					compiler = new CharSemiCRFNetworkCompiler(labels, maxLength, maxSegmentLength);
 					break;
 				case CHAR_WEAK_SEMI_CRF:
-					fm = new CharWeakSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, brownMap, features, moreArgs);
+					fm = new CharWeakSemiCRFFeatureManager(gParam, tokenizerMethod, brownMap, features, moreArgs);
 					compiler = new CharWeakSemiCRFNetworkCompiler(labels, maxLength, maxSegmentLength);
 					break;
 				case WORD_SEMI_CRF:
-					fm = new WordSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, brownMap, features, moreArgs);
+					fm = new WordSemiCRFFeatureManager(gParam, tokenizerMethod, brownMap, features, moreArgs);
 					compiler = new WordSemiCRFNetworkCompiler(labels, maxLength, maxSegmentLength);
 					break;
 				case WORD_WEAK_SEMI_CRF:
-					fm = new WordWeakSemiCRFFeatureManager(new GlobalNetworkParam(), tokenizerMethod, brownMap, features, moreArgs);
+					fm = new WordWeakSemiCRFFeatureManager(gParam, tokenizerMethod, brownMap, features, moreArgs);
 					compiler = new WordWeakSemiCRFNetworkCompiler(labels, maxLength, maxSegmentLength);
 					break;
 				case TOKENIZED_GOLD: // Won't happen since we are inside `if (algo != Algorithm.TOKENIZED_GOLD)` block

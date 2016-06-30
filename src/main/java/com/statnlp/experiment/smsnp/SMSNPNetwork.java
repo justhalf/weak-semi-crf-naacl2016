@@ -2,6 +2,7 @@ package com.statnlp.experiment.smsnp;
 
 import com.statnlp.commons.types.Instance;
 import com.statnlp.hybridnetworks.LocalNetworkParam;
+import com.statnlp.hybridnetworks.NetworkCompiler;
 import com.statnlp.hybridnetworks.TableLookupNetwork;
 
 /**
@@ -19,12 +20,12 @@ public class SMSNPNetwork extends TableLookupNetwork {
 
 	public SMSNPNetwork() {}
 
-	public SMSNPNetwork(int networkId, Instance inst, LocalNetworkParam param) {
-		super(networkId, inst, param);
+	public SMSNPNetwork(int networkId, Instance inst, LocalNetworkParam param, NetworkCompiler compiler) {
+		super(networkId, inst, param, compiler);
 	}
 
-	public SMSNPNetwork(int networkId, Instance inst, long[] nodes, int[][][] children, LocalNetworkParam param, int numNodes) {
-		super(networkId, inst, nodes, children, param);
+	public SMSNPNetwork(int networkId, Instance inst, long[] nodes, int[][][] children, LocalNetworkParam param, int numNodes, NetworkCompiler compiler) {
+		super(networkId, inst, nodes, children, param, compiler);
 		this.numNodes = numNodes;
 	}
 	

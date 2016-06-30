@@ -73,7 +73,7 @@ public class LinearCRFNetworkCompiler extends NetworkCompiler{
 	
 	
 	private SMSNPNetwork compile_labeled(int networkId, SMSNPInstance inst, LocalNetworkParam param){
-		SMSNPNetwork network = new SMSNPNetwork(networkId, inst, param);
+		SMSNPNetwork network = new SMSNPNetwork(networkId, inst, param, this);
 		List<WordLabel> outputs = inst.getOutputTokenized();
 		
 		// Add leaf
@@ -120,7 +120,7 @@ public class LinearCRFNetworkCompiler extends NetworkCompiler{
 		int numNodes = pos+1; // Num nodes should equals to (instanceSize * (numLabels+1)) + 1
 //		System.out.println(String.format("Instance size: %d, Labels size: %d, numNodes: %d", size, _labels.size(), numNodes));
 		
-		return new SMSNPNetwork(networkId, inst, this._allNodes, this._allChildren, param, numNodes);
+		return new SMSNPNetwork(networkId, inst, this._allNodes, this._allChildren, param, numNodes, this);
 		
 	}
 	

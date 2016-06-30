@@ -76,7 +76,7 @@ public class WordWeakSemiCRFNetworkCompiler extends NetworkCompiler {
 	}
 	
 	private SMSNPNetwork compileLabeled(int networkId, SMSNPInstance instance, LocalNetworkParam param){
-		SMSNPNetwork network = new SMSNPNetwork(networkId, instance, param);
+		SMSNPNetwork network = new SMSNPNetwork(networkId, instance, param, this);
 		
 		List<WordLabel> output = instance.getOutputTokenized();
 		int size = output.size();
@@ -130,7 +130,7 @@ public class WordWeakSemiCRFNetworkCompiler extends NetworkCompiler {
 		long root = toNode_root(size);
 		int root_k = Arrays.binarySearch(allNodes, root);
 		int numNodes = root_k + 1;
-		return new SMSNPNetwork(networkId, instance, allNodes, allChildren, param, numNodes);
+		return new SMSNPNetwork(networkId, instance, allNodes, allChildren, param, numNodes, this);
 	}
 	
 	private void buildUnlabeled(){

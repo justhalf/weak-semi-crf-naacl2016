@@ -69,7 +69,7 @@ public class CharSemiCRFNetworkCompiler extends NetworkCompiler {
 	}
 	
 	private SMSNPNetwork compileLabeled(int networkId, SMSNPInstance instance, LocalNetworkParam param){
-		SMSNPNetwork network = new SMSNPNetwork(networkId, instance, param);
+		SMSNPNetwork network = new SMSNPNetwork(networkId, instance, param, this);
 		
 		int size = instance.size();
 		List<Span> output = instance.getOutput();
@@ -107,7 +107,7 @@ public class CharSemiCRFNetworkCompiler extends NetworkCompiler {
 		long root = toNode_root(size-1);
 		int root_k = Arrays.binarySearch(allNodes, root);
 		int numNodes = root_k + 1;
-		return new SMSNPNetwork(networkId, instance, allNodes, allChildren, param, numNodes);
+		return new SMSNPNetwork(networkId, instance, allNodes, allChildren, param, numNodes, this);
 	}
 	
 	private void buildUnlabeled(){
