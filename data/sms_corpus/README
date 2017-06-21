@@ -1,0 +1,26 @@
+--------------------
+Description of files
+--------------------
+# Data preparation files
+print_stats_and_group.py - To print statistics of smsCorpus.json and print the
+                           SMS grouping in the students/ folder based on
+                           student_ids.txt_
+                           NOTE: Need to be run with Python 3 to give the same
+                           result as the annotations we have here.
+                           Python 2 behaves differently in terms of random
+                           number generation although seed is the same
+xml_to_txt.py - To convert the original XML file into txt (and JSON)
+prepare_annotations.bash - To create the .ann files, and to set up the proper
+                           permissions to the files and folders
+
+# Brat annotation config files
+annotations.conf - To define the list of tags
+visual.conf - To define how the tags appear (the text and colors)
+kb_shortcuts.conf - To define keyboard shortcut in annotating the text
+tools.conf - To define other tools (tokenizer, etc.)
+
+# Data Processing Flow
+`python xml_to_txt.py` generates smsCorpus.json
+`python3 print_stats_and_group.py` generates students/ folder and its contents
+`bash prepare_annotations.bash` sets up students/ folder for annotation
+After annotation process is completed, the script in data/ folder will follow

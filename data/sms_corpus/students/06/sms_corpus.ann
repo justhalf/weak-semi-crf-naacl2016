@@ -1,0 +1,746 @@
+T1	Noun-Phrase 27 31	Jack
+T2	Noun-Phrase 46 52	report
+T3	Noun-Phrase 2273 2274	I
+T4	Noun-Phrase 503 504	u
+T5	Noun-Phrase 494 495	I
+T6	Noun-Phrase 523 530	my baby
+T7	Noun-Phrase 422 423	I
+T8	Noun-Phrase 562 563	I
+T9	Noun-Phrase 1127 1128	I
+T10	Noun-Phrase 11270 11271	I
+T11	Noun-Phrase 11615 11616	I
+T12	Noun-Phrase 26183 26191	password
+T13	Noun-Phrase 26007 26015	comments
+T14	Noun-Phrase 26126 26133	website
+T15	Noun-Phrase 25283 25285	we
+T16	Noun-Phrase 25246 25249	gym
+T17	Noun-Phrase 25312 25317	shirt
+T18	Noun-Phrase 24887 24894	canteen
+T19	Noun-Phrase 24919 24922	gym
+T20	Noun-Phrase 24979 24983	call
+T21	Noun-Phrase 24999 25000	I
+T22	Noun-Phrase 24989 24990	u
+T23	Noun-Phrase 25115 25117	He
+T24	Noun-Phrase 25153 25154	I
+T25	Noun-Phrase 25197 25199	he
+T26	Noun-Phrase 126 134	hardcopy
+T27	Noun-Phrase 159 165	effort
+T28	Noun-Phrase 430 431	u
+T29	Noun-Phrase 1136 1142	laptop
+T30	Noun-Phrase 1193 1205	school stuff
+T31	Noun-Phrase 1303 1307	home
+T32	Noun-Phrase 1384 1392	my paper
+T33	Noun-Phrase 1446 1451	movie
+T34	Noun-Phrase 299 306	flyover
+T35	Noun-Phrase 1737 1743	server
+T36	Noun-Phrase 267 273	my boy
+T37	Noun-Phrase 761 766	cache
+T38	Noun-Phrase 435 444	something
+T39	Noun-Phrase 999 1008	paperwork
+T40	Noun-Phrase 358 370	presentation
+T41	Noun-Phrase 1123 1126	sem
+T42	Noun-Phrase 615 625	everything
+T43	Noun-Phrase 1612 1615	sem
+T44	Noun-Phrase 883 890	lecture
+T45	Noun-Phrase 965 971	father
+T46	Noun-Phrase 1675 1678	DVD
+T47	Noun-Phrase 1690 1702	compensation
+T48	Noun-Phrase 1828 1832	pple
+T49	Noun-Phrase 1852 1856	pple
+T50	Noun-Phrase 2385 2388	smu
+T51	Noun-Phrase 2457 2468	calculation
+T52	Noun-Phrase 2819 2825	zombie
+T53	Noun-Phrase 3111 3118	surname
+T54	Noun-Phrase 3163 3169	engine
+T55	Noun-Phrase 3246 3257	sample data
+T56	Noun-Phrase 3276 3280	dump
+T57	Noun-Phrase 3319 3325	choice
+T58	Noun-Phrase 3445 3454	workbench
+T59	Noun-Phrase 3506 3510	file
+T60	Noun-Phrase 3791 3796	sales
+T61	Noun-Phrase 3829 3842	Chinese essay
+T62	Noun-Phrase 3892 3899	twitter
+T63	Noun-Phrase 4664 4671	meeting
+T64	Noun-Phrase 4634 4640	laptop
+T65	Noun-Phrase 4572 4583	old version
+T66	Noun-Phrase 4444 4448	file
+T67	Noun-Phrase 4330 4338	products
+T68	Noun-Phrase 4131 4136	China
+T69	Noun-Phrase 4124 4127	biz
+T70	Noun-Phrase 4856 4859	Mac
+T71	Noun-Phrase 4929 4933	disc
+T72	Noun-Phrase 5065 5074	MacDonald
+T73	Noun-Phrase 5085 5090	house
+T74	Noun-Phrase 5095 5102	grandma
+T75	Noun-Phrase 5107 5111	maid
+T76	Noun-Phrase 5116 5125	relatives
+T77	Noun-Phrase 5168 5179	small thing
+T78	Noun-Phrase 5242 5248	dinner
+T79	Noun-Phrase 5634 5642	Tampines
+T80	Noun-Phrase 5685 5695	power plug
+T81	Noun-Phrase 5742 5756	security guard
+T82	Noun-Phrase 5838 5845	mission
+T83	Noun-Phrase 5536 5541	adobe
+T84	Noun-Phrase 5294 5300	Office
+T85	Noun-Phrase 5309 5315	serial
+T86	Noun-Phrase 5344 5348	copy
+T87	Noun-Phrase 5373 5377	copy
+T88	Noun-Phrase 5463 5467	home
+T89	Noun-Phrase 5455 5456	I
+T90	Noun-Phrase 5477 5478	u
+T91	Noun-Phrase 5063 5064	u
+T92	Noun-Phrase 5904 5912	schedule
+T93	Noun-Phrase 5968 5977	fone book
+T94	Noun-Phrase 6084 6085	I
+T95	Noun-Phrase 6196 6197	u
+T96	Noun-Phrase 6206 6209	Jan
+T97	Noun-Phrase 6274 6278	bday
+T98	Noun-Phrase 6337 6344	present
+T99	Noun-Phrase 6473 6480	present
+T100	Noun-Phrase 6461 6465	time
+T101	Noun-Phrase 6648 6649	u
+T102	Noun-Phrase 6641 6642	I
+T103	Noun-Phrase 6676 6680	pple
+T104	Noun-Phrase 6739 6747	Tampines
+T105	Noun-Phrase 6706 6707	u
+T106	Noun-Phrase 6664 6667	who
+T107	Noun-Phrase 6307 6308	u
+T108	Noun-Phrase 6364 6365	I
+T109	Noun-Phrase 6553 6554	I
+T110	Noun-Phrase 7078 7079	I
+T111	Noun-Phrase 7122 7123	I
+T112	Noun-Phrase 5958 5959	I
+T113	Noun-Phrase 5625 5626	I
+T114	Noun-Phrase 5387 5388	I
+T115	Noun-Phrase 4621 4622	I
+T116	Noun-Phrase 4693 4694	I
+T117	Noun-Phrase 4914 4915	I
+T118	Noun-Phrase 4524 4525	I
+T119	Noun-Phrase 4387 4388	I
+T120	Noun-Phrase 4400 4401	I
+T121	Noun-Phrase 4420 4421	I
+T122	Noun-Phrase 4434 4435	I
+T123	Noun-Phrase 4266 4267	I
+T124	Noun-Phrase 4256 4257	I
+T125	Noun-Phrase 3541 3542	I
+T126	Noun-Phrase 3483 3484	I
+T127	Noun-Phrase 3423 3424	I
+T128	Noun-Phrase 2789 2790	I
+T129	Noun-Phrase 2976 2977	I
+T130	Noun-Phrase 2944 2945	I
+T131	Noun-Phrase 3016 3017	I
+T132	Noun-Phrase 3099 3100	I
+T133	Noun-Phrase 3124 3125	I
+T134	Noun-Phrase 3258 3259	I
+T135	Noun-Phrase 2363 2364	I
+T136	Noun-Phrase 2409 2410	I
+T137	Noun-Phrase 2312 2313	I
+T138	Noun-Phrase 2320 2321	u
+T139	Noun-Phrase 2494 2495	I
+T140	Noun-Phrase 2528 2529	I
+T141	Noun-Phrase 2558 2570	easier stats
+T142	Noun-Phrase 2575 2586	integration
+T143	Noun-Phrase 2624 2629	exams
+T144	Noun-Phrase 2587 2596	last time
+T145	Noun-Phrase 2680 2686	papers
+T146	Noun-Phrase 2715 2722	Raffles
+T147	Noun-Phrase 2723 2725	he
+T148	Noun-Phrase 2730 2733	him
+T149	Noun-Phrase 2755 2772	Singapore studies
+T150	Noun-Phrase 2844 2848	luck
+T151	Noun-Phrase 2853 2858	paper
+T152	Noun-Phrase 2874 2879	study
+T153	Noun-Phrase 2907 2911	here
+T154	Noun-Phrase 2963 2967	time
+T155	Noun-Phrase 3055 3059	com1
+T156	Noun-Phrase 3089 3093	idea
+T157	Noun-Phrase 1298 1299	I
+T158	Noun-Phrase 1664 1665	I
+T159	Noun-Phrase 1897 1898	u
+T160	Noun-Phrase 3702 3708	source
+T161	Noun-Phrase 3730 3738	t-shirts
+T162	Noun-Phrase 3744 3754	threadless
+T163	Noun-Phrase 3765 3771	xinrou
+T164	Noun-Phrase 3648 3652	hall
+T165	Noun-Phrase 14794 14795	I
+T166	Noun-Phrase 14738 14739	I
+T167	Noun-Phrase 14536 14537	I
+T168	Noun-Phrase 14462 14463	I
+T169	Noun-Phrase 14241 14242	I
+T170	Noun-Phrase 14277 14278	I
+T171	Noun-Phrase 14107 14108	I
+T172	Noun-Phrase 14168 14169	I
+T173	Noun-Phrase 14194 14195	I
+T174	Noun-Phrase 14063 14064	I
+T175	Noun-Phrase 13748 13749	I
+T176	Noun-Phrase 14026 14027	I
+T177	Noun-Phrase 13309 13310	I
+T178	Noun-Phrase 13190 13191	I
+T179	Noun-Phrase 13173 13174	I
+T180	Noun-Phrase 13362 13363	i
+T181	Noun-Phrase 13065 13066	I
+T182	Noun-Phrase 12757 12758	I
+T183	Noun-Phrase 12785 12786	I
+T184	Noun-Phrase 12928 12929	I
+T185	Noun-Phrase 12826 12827	I
+T186	Noun-Phrase 12571 12572	I
+T187	Noun-Phrase 11905 11906	I
+T188	Noun-Phrase 11896 11897	I
+T189	Noun-Phrase 11937 11938	I
+T190	Noun-Phrase 11767 11768	I
+T191	Noun-Phrase 11555 11556	I
+T192	Noun-Phrase 11351 11352	I
+T193	Noun-Phrase 10919 10920	I
+T194	Noun-Phrase 10869 10870	I
+T195	Noun-Phrase 10646 10647	I
+T196	Noun-Phrase 10693 10694	I
+T197	Noun-Phrase 10615 10616	I
+T198	Noun-Phrase 10521 10522	I
+T199	Noun-Phrase 10377 10378	I
+T200	Noun-Phrase 10337 10338	I
+T201	Noun-Phrase 10199 10200	I
+T202	Noun-Phrase 9999 10000	I
+T203	Noun-Phrase 9836 9837	I
+T204	Noun-Phrase 9721 9722	I
+T205	Noun-Phrase 9617 9618	I
+T206	Noun-Phrase 9546 9547	I
+T207	Noun-Phrase 8852 8853	I
+T208	Noun-Phrase 8304 8305	I
+T209	Noun-Phrase 8387 8388	I
+T210	Noun-Phrase 8072 8073	I
+T211	Noun-Phrase 7953 7954	I
+T212	Noun-Phrase 7606 7607	I
+T213	Noun-Phrase 7308 7309	I
+T214	Noun-Phrase 7269 7270	I
+T215	Noun-Phrase 20449 20450	I
+T216	Noun-Phrase 20054 20055	I
+T217	Noun-Phrase 19892 19893	I
+T218	Noun-Phrase 19815 19816	I
+T219	Noun-Phrase 19556 19557	I
+T220	Noun-Phrase 19366 19367	I
+T221	Noun-Phrase 19230 19231	I
+T222	Noun-Phrase 19155 19156	I
+T223	Noun-Phrase 19147 19148	I
+T224	Noun-Phrase 18740 18741	I
+T225	Noun-Phrase 18636 18637	I
+T226	Noun-Phrase 18571 18572	I
+T227	Noun-Phrase 18535 18536	I
+T228	Noun-Phrase 18338 18339	I
+T229	Noun-Phrase 18172 18173	I
+T230	Noun-Phrase 17670 17671	I
+T231	Noun-Phrase 17678 17683	lunch
+T232	Noun-Phrase 17695 17699	Lucy
+T233	Noun-Phrase 17520 17521	I
+T234	Noun-Phrase 17224 17225	I
+T235	Noun-Phrase 16564 16565	I
+T236	Noun-Phrase 15571 15572	I
+T237	Noun-Phrase 14875 14876	I
+T238	Noun-Phrase 15023 15024	I
+T239	Noun-Phrase 15336 15337	I
+T240	Noun-Phrase 15528 15529	I
+T241	Noun-Phrase 15520 15521	I
+T242	Noun-Phrase 15604 15605	I
+T243	Noun-Phrase 26072 26073	I
+T244	Noun-Phrase 25782 25783	I
+T245	Noun-Phrase 25754 25755	I
+T246	Noun-Phrase 25686 25687	I
+T247	Noun-Phrase 25615 25616	I
+T248	Noun-Phrase 25626 25628	it
+T249	Noun-Phrase 25706 25708	it
+T250	Noun-Phrase 25654 25655	I
+T251	Noun-Phrase 25548 25555	details
+T252	Noun-Phrase 25541 25542	I
+T253	Noun-Phrase 25376 25377	I
+T254	Noun-Phrase 25381 25396	boarding office
+T255	Noun-Phrase 25412 25414	me
+T256	Noun-Phrase 23272 23273	I
+T257	Noun-Phrase 24097 24098	I
+T258	Noun-Phrase 24207 24208	I
+T259	Noun-Phrase 24117 24118	I
+T260	Noun-Phrase 24052 24053	I
+T261	Noun-Phrase 23744 23745	I
+T262	Noun-Phrase 23592 23593	I
+T263	Noun-Phrase 23598 23605	someone
+T264	Noun-Phrase 23479 23480	I
+T265	Noun-Phrase 23441 23442	I
+T266	Noun-Phrase 23061 23062	I
+T267	Noun-Phrase 24179 24180	I
+T268	Noun-Phrase 24245 24246	I
+T269	Noun-Phrase 24513 24514	I
+T270	Noun-Phrase 24295 24296	I
+T271	Noun-Phrase 25072 25073	I
+T272	Noun-Phrase 1550 1558	fat girl
+T273	Noun-Phrase 1582 1585	she
+T274	Noun-Phrase 1324 1325	u
+T275	Noun-Phrase 1254 1255	u
+T276	Noun-Phrase 1529 1530	u
+T277	Noun-Phrase 240 241	U
+T279	Noun-Phrase 318 319	u
+T280	Noun-Phrase 340 341	u
+T282	Noun-Phrase 407 408	u
+T278	Noun-Phrase 193 194	u
+T281	Noun-Phrase 201 205	jack
+T283	Noun-Phrase 216 224	hardcopy
+T284	Noun-Phrase 4158 4159	u
+T285	Noun-Phrase 3724 3725	u
+T286	Noun-Phrase 4049 4052	leg
+T287	Noun-Phrase 4072 4073	y
+T288	Noun-Phrase 4109 4110	u
+T289	Noun-Phrase 4987 4992	exams
+T290	Noun-Phrase 24186 24197	math honors
+T291	Noun-Phrase 24682 24689	sentosa
+T292	Noun-Phrase 24675 24678	ppl
+T293	Noun-Phrase 24723 24726	uss
+T294	Noun-Phrase 24769 24777	Anything
+T295	Noun-Phrase 24794 24797	gym
+T296	Noun-Phrase 24801 24809	clementi
+T297	Noun-Phrase 24818 24820	me
+T298	Noun-Phrase 24825 24832	yuanwei
+T299	Noun-Phrase 24950 24959	rehearsal
+T300	Noun-Phrase 25103 25105	us
+T301	Noun-Phrase 25169 25171	Sj
+T302	Noun-Phrase 25222 25230	Who else
+T303	Noun-Phrase 21420 21425	movie
+T304	Noun-Phrase 21404 21405	u
+T305	Noun-Phrase 21139 21147	activity
+T306	Noun-Phrase 21109 21118	my friend
+T307	Noun-Phrase 21218 21223	movie
+T308	Noun-Phrase 21230 21240	my friends
+T309	Noun-Phrase 21326 21330	need
+T310	Noun-Phrase 21341 21346	pants
+T311	Noun-Phrase 21499 21508	red light
+T312	Noun-Phrase 21562 21564	he
+T313	Noun-Phrase 21608 21614	Sunday
+T314	Noun-Phrase 11294 11299	astro
+T315	Noun-Phrase 11315 11322	Tuesday
+T316	Noun-Phrase 10974 10979	class
+T317	Noun-Phrase 10852 10856	camp
+T318	Noun-Phrase 10837 10839	we
+T319	Noun-Phrase 10709 10712	you
+T320	Noun-Phrase 10628 10631	you
+T321	Noun-Phrase 10491 10492	i
+T322	Noun-Phrase 10454 10464	open house
+T323	Noun-Phrase 10412 10415	you
+T324	Noun-Phrase 10344 10347	you
+T325	Noun-Phrase 10086 10089	sch
+T326	Noun-Phrase 9801 9804	bus
+T327	Noun-Phrase 9743 9746	bus
+T328	Noun-Phrase 9750 9758	far east
+T329	Noun-Phrase 10556 10558	he
+T330	Noun-Phrase 10567 10571	keys
+T331	Noun-Phrase 10785 10788	you
+T332	Noun-Phrase 10778 10784	poster
+T333	Noun-Phrase 10819 10822	net
+T334	Noun-Phrase 10798 10800	it
+T335	Noun-Phrase 11362 11368	others
+T336	Noun-Phrase 12321 12325	time
+T337	Noun-Phrase 12326 12328	we
+T338	Noun-Phrase 12338 12343	sushi
+T339	Noun-Phrase 12347 12359	icon village
+T340	Noun-Phrase 12307 12310	You
+T341	Noun-Phrase 12237 12248	mrt station
+T342	Noun-Phrase 7227 7230	you
+T343	Noun-Phrase 7276 7279	you
+T344	Noun-Phrase 7324 7334	your email
+T345	Noun-Phrase 7301 7307	Mr tan
+T346	Noun-Phrase 7385 7396	alumni card
+T347	Noun-Phrase 6858 6859	u
+T348	Noun-Phrase 6970 6979	endeavors
+T349	Noun-Phrase 6938 6941	you
+T350	Noun-Phrase 6924 6931	vincent
+T351	Noun-Phrase 6919 6923	year
+T352	Noun-Phrase 7022 7032	bauch&lomb
+T353	Noun-Phrase 7106 7109	you
+T354	Noun-Phrase 7006 7012	my mom
+T355	Noun-Phrase 7424 7426	me
+T356	Noun-Phrase 7408 7411	you
+T357	Noun-Phrase 7478 7481	you
+T358	Noun-Phrase 7664 7666	it
+T359	Noun-Phrase 7670 7676	anyone
+T360	Noun-Phrase 7680 7684	home
+T361	Noun-Phrase 7710 7714	ipod
+T362	Noun-Phrase 7790 7796	iphone
+T363	Noun-Phrase 7814 7820	iphone
+T364	Noun-Phrase 7825 7831	itouch
+T365	Noun-Phrase 7759 7762	mp3
+T366	Noun-Phrase 8026 8030	time
+T367	Noun-Phrase 8047 8052	stuff
+T368	Noun-Phrase 7996 7999	you
+T369	Noun-Phrase 7964 7970	itouch
+T370	Noun-Phrase 8192 8195	you
+T371	Noun-Phrase 8487 8490	you
+T372	Noun-Phrase 8544 8548	camp
+T373	Noun-Phrase 8599 8611	Friday night
+T374	Noun-Phrase 8703 8709	school
+T375	Noun-Phrase 8668 8673	class
+T376	Noun-Phrase 8628 8631	you
+T377	Noun-Phrase 8741 8749	my house
+T378	Noun-Phrase 8785 8788	you
+T379	Noun-Phrase 25970 25975	class
+T380	Noun-Phrase 26152 26155	nus
+T381	Noun-Phrase 26053 26060	nus vpn
+T382	Noun-Phrase 26021 26027	others
+T383	Noun-Phrase 25919 25925	school
+T384	Noun-Phrase 25942 25947	video
+T385	Noun-Phrase 23939 23944	study
+T386	Noun-Phrase 23996 24000	time
+T387	Noun-Phrase 23981 23984	wad
+T388	Noun-Phrase 24033 24039	grades
+T389	Noun-Phrase 24153 24163	transcript
+T390	Noun-Phrase 24123 24126	irp
+T391	Noun-Phrase 23859 23864	study
+T392	Noun-Phrase 23662 23672	flashpoint
+T393	Noun-Phrase 23869 23871	we
+T394	Noun-Phrase 23563 23566	Gym
+T395	Noun-Phrase 23755 23758	arp
+T396	Noun-Phrase 23003 23010	Drummer
+T397	Noun-Phrase 23029 23037	position
+T398	Noun-Phrase 23233 23236	gym
+T399	Noun-Phrase 23244 23252	Clementi
+T400	Noun-Phrase 23308 23319	celebration
+T401	Noun-Phrase 23351 23354	mum
+T402	Noun-Phrase 22992 22995	gym
+T403	Noun-Phrase 22975 22982	morning
+T404	Noun-Phrase 22884 22893	black guy
+T405	Noun-Phrase 22821 22830	signature
+T406	Noun-Phrase 22764 22774	Paya lebar
+T407	Noun-Phrase 22744 22750	my way
+T408	Noun-Phrase 22642 22643	I
+T409	Noun-Phrase 22635 22636	I
+T410	Noun-Phrase 22715 22716	I
+T411	Noun-Phrase 22566 22567	I
+T412	Noun-Phrase 22517 22518	I
+T413	Noun-Phrase 22523 22528	class
+T414	Noun-Phrase 22529 22535	dinner
+T415	Noun-Phrase 22590 22594	days
+T416	Noun-Phrase 22469 22472	mrt
+T417	Noun-Phrase 22447 22452	phone
+T418	Noun-Phrase 22401 22407	hostel
+T419	Noun-Phrase 22420 22426	stuffs
+T420	Noun-Phrase 22361 22364	sea
+T421	Noun-Phrase 22197 22198	I
+T422	Noun-Phrase 22297 22303	hostel
+T423	Noun-Phrase 22184 22190	hostel
+T424	Noun-Phrase 21988 22005	boarding assembly
+T425	Noun-Phrase 21923 21929	hostel
+T426	Noun-Phrase 21831 21839	Fighting
+T427	Noun-Phrase 21873 21878	anger
+T428	Noun-Phrase 21890 21894	form
+T429	Noun-Phrase 21710 21711	u
+T430	Noun-Phrase 21695 21699	date
+T431	Noun-Phrase 21628 21629	I
+T432	Noun-Phrase 21656 21664	long day
+T433	Noun-Phrase 21794 21800	stuffs
+T434	Noun-Phrase 21270 21276	friend
+T435	Noun-Phrase 21281 21285	bday
+T436	Noun-Phrase 21081 21085	time
+T437	Noun-Phrase 21003 21010	problem
+T438	Noun-Phrase 21028 21033	movie
+T439	Noun-Phrase 20899 20901	us
+T440	Noun-Phrase 20946 20948	He
+T441	Noun-Phrase 20878 20881	You
+T442	Noun-Phrase 20863 20868	speed
+T443	Noun-Phrase 20777 20781	they
+T444	Noun-Phrase 20800 20803	one
+T445	Noun-Phrase 20808 20811	you
+T446	Noun-Phrase 20754 20757	box
+T447	Noun-Phrase 25991 25994	one
+T448	Noun-Phrase 14885 14888	you
+T449	Noun-Phrase 14973 14975	We
+T450	Noun-Phrase 15004 15007	you
+T451	Noun-Phrase 15120 15123	age
+T452	Noun-Phrase 15087 15094	Ms Chan
+T453	Noun-Phrase 15305 15309	this
+T454	Noun-Phrase 15354 15358	home
+T455	Noun-Phrase 15415 15418	you
+T456	Noun-Phrase 13731 13741	programmes
+T457	Noun-Phrase 14470 14473	you
+T458	Noun-Phrase 14602 14604	He
+T459	Noun-Phrase 2694 2695	u
+T460	Noun-Phrase 2651 2653	he
+T461	Noun-Phrase 24877 24881	time
+T462	Noun-Phrase 24862 24866	time
+T463	Noun-Phrase 25525 25533	training
+T464	Noun-Phrase 25420 25426	change
+T465	Noun-Phrase 25729 25739	bishan mrt
+T466	Noun-Phrase 18871 18878	comment
+T467	Noun-Phrase 19085 19091	people
+T468	Noun-Phrase 18691 18698	Vincent
+T469	Noun-Phrase 7566 7568	me
+T470	Noun-Phrase 8139 8144	class
+T471	Noun-Phrase 10169 10175	school
+T472	Noun-Phrase 10018 10024	bridge
+T473	Noun-Phrase 9934 9945	possibility
+T474	Noun-Phrase 10266 10268	me
+T475	Noun-Phrase 10307 10313	dinner
+T476	Noun-Phrase 11177 11180	you
+T477	Noun-Phrase 11070 11072	me
+T478	Noun-Phrase 11047 11050	one
+T479	Noun-Phrase 11003 11008	class
+T480	Noun-Phrase 10939 10946	advisor
+T481	Noun-Phrase 13682 13690	birthday
+T482	Noun-Phrase 14496 14506	classmates
+T483	Noun-Phrase 14565 14571	friend
+T484	Noun-Phrase 14743 14750	holland
+T485	Noun-Phrase 14932 14938	dinner
+T486	Noun-Phrase 17268 17272	time
+T487	Noun-Phrase 17273 17276	you
+T488	Noun-Phrase 17304 17315	fujitsu guy
+T489	Noun-Phrase 18328 18332	mail
+T490	Noun-Phrase 18507 18511	room
+T491	Noun-Phrase 19566 19574	transfer
+T492	Noun-Phrase 19902 19905	you
+T493	Noun-Phrase 19847 19850	She
+T494	Noun-Phrase 19810 19813	msg
+T495	Noun-Phrase 20371 20378	cockpit
+T496	Noun-Phrase 26161 26164	one
+T497	Noun-Phrase 3755 3756	u
+T498	Noun-Phrase 3904 3905	u
+T499	Noun-Phrase 3951 3952	u
+T500	Noun-Phrase 3988 3989	u
+T501	Noun-Phrase 4176 4177	u
+T502	Noun-Phrase 4502 4503	u
+T503	Noun-Phrase 4822 4823	u
+T504	Noun-Phrase 4998 4999	u
+T505	Noun-Phrase 5185 5186	u
+T506	Noun-Phrase 5632 5633	u
+T507	Noun-Phrase 6730 6731	u
+T508	Noun-Phrase 6794 6795	u
+T509	Noun-Phrase 7533 7536	you
+T510	Noun-Phrase 8999 9002	her
+T511	Noun-Phrase 9880 9896	high possibility
+T512	Noun-Phrase 10528 10533	david
+T513	Noun-Phrase 11799 11802	you
+T514	Noun-Phrase 11200 11206	fringe
+T515	Noun-Phrase 11142 11144	me
+T516	Noun-Phrase 11136 11138	it
+T517	Noun-Phrase 11148 11154	monday
+T518	Noun-Phrase 74 84	Everything
+T519	Noun-Phrase 16792 16795	you
+T520	Noun-Phrase 16929 16936	nothing
+T521	Noun-Phrase 17363 17366	You
+T522	Noun-Phrase 17480 17484	Andy
+T523	Noun-Phrase 17497 17506	usb cable
+T524	Noun-Phrase 894 896	he
+T525	Noun-Phrase 1209 1220	my cute Mac
+T526	Noun-Phrase 1224 1228	home
+T527	Noun-Phrase 1263 1278	service science
+T528	Noun-Phrase 1842 1844	we
+T529	Noun-Phrase 1807 1809	we
+T530	Noun-Phrase 1785 1787	we
+T531	Noun-Phrase 9771 9773	we
+T532	Noun-Phrase 9472 9478	mr tan
+T533	Noun-Phrase 9274 9288	your own notes
+T534	Noun-Phrase 9358 9361	You
+T535	Noun-Phrase 9124 9143	her way of teaching
+T536	Noun-Phrase 9217 9223	racism
+T537	Noun-Phrase 9188 9194	reason
+T538	Noun-Phrase 9027 9037	Your class
+T539	Noun-Phrase 8976 8979	you
+T540	Noun-Phrase 8874 8877	you
+T541	Noun-Phrase 8823 8836	relc building
+T542	Noun-Phrase 17142 17145	you
+T543	Noun-Phrase 17058 17062	hers
+T544	Noun-Phrase 17018 17028	your tummy
+T545	Noun-Phrase 17085 17087	it
+T546	Noun-Phrase 17232 17234	it
+T547	Noun-Phrase 20200 20203	You
+T548	Noun-Phrase 20351 20358	problem
+T549	Noun-Phrase 20138 20141	you
+T550	Noun-Phrase 20158 20161	you
+T551	Noun-Phrase 21726 21728	He
+T552	Noun-Phrase 21542 21547	movie
+T553	Noun-Phrase 21466 21473	trailer
+T554	Noun-Phrase 22097 22104	my case
+T555	Noun-Phrase 22113 22117	they
+T556	Noun-Phrase 22132 22134	us
+T557	Noun-Phrase 21804 21811	ppl car
+T558	Noun-Phrase 21745 21753	cip shit
+T559	Noun-Phrase 23077 23101	weight to strength ratio
+T560	Noun-Phrase 23112 23123	requirement
+T561	Noun-Phrase 23215 23222	morning
+T562	Noun-Phrase 23190 23198	training
+T563	Noun-Phrase 25035 25036	u
+T564	Noun-Phrase 17738 17744	Regina
+T565	Noun-Phrase 17730 17736	Mrs Ho
+T566	Noun-Phrase 17751 17754	you
+T567	Noun-Phrase 17763 17766	her
+T568	Noun-Phrase 17790 17808	anemail discussion
+T569	Noun-Phrase 17937 17957	ladies and gentlemen
+T570	Noun-Phrase 17975 17979	trip
+T571	Noun-Phrase 18040 18042	me
+T572	Noun-Phrase 18051 18054	you
+T573	Noun-Phrase 16706 16712	My mom
+T574	Noun-Phrase 16539 16542	you
+T575	Noun-Phrase 16618 16621	you
+T576	Noun-Phrase 16636 16644	My laobu
+T577	Noun-Phrase 16654 16657	you
+T578	Noun-Phrase 16350 16352	us
+T579	Noun-Phrase 16406 16414	my phone
+T580	Noun-Phrase 16485 16487	me
+T581	Noun-Phrase 16493 16496	you
+T582	Noun-Phrase 16500 16517	the way back home
+T583	Noun-Phrase 15996 16004	birthday
+T584	Noun-Phrase 15965 15975	my messagr
+T586	Noun-Phrase 15952 15955	You
+T587	Noun-Phrase 15852 15855	you
+T588	Noun-Phrase 15832 15835	him
+T585	Noun-Phrase 15871 15873	he
+T589	Noun-Phrase 15887 15901	what equipment
+T590	Noun-Phrase 15933 15944	photography
+T591	Noun-Phrase 15759 15761	it
+T592	Noun-Phrase 15713 15725	meeting time
+T593	Noun-Phrase 15627 15632	david
+T594	Noun-Phrase 15484 15492	my mummy
+T595	Noun-Phrase 15560 15569	mr alfred
+T596	Noun-Phrase 14950 14971	marina squareyukiyaki
+T597	Noun-Phrase 14813 14816	bus
+T598	Noun-Phrase 14340 14350	your class
+T599	Noun-Phrase 13966 13976	internship
+T600	Noun-Phrase 14014 14019	david
+T601	Noun-Phrase 14037 14048	information
+T602	Noun-Phrase 14183 14185	it
+T603	Noun-Phrase 14125 14128	you
+T604	Noun-Phrase 13707 13714	lynette
+T605	Noun-Phrase 13754 13764	my friends
+T606	Noun-Phrase 13788 13799	admin stuff
+T607	Noun-Phrase 13579 13594	my participants
+T608	Noun-Phrase 13644 13658	publicity head
+T609	Noun-Phrase 13496 13502	people
+T610	Noun-Phrase 13554 13561	schools
+T611	Noun-Phrase 13567 13571	week
+T612	Noun-Phrase 14002 14005	you
+T613	Noun-Phrase 13210 13216	dvdrip
+T614	Noun-Phrase 13238 13255	blue ray category
+T615	Noun-Phrase 13010 13022	kungfu panda
+T616	Noun-Phrase 12950 12953	You
+T617	Noun-Phrase 13091 13094	you
+T618	Noun-Phrase 12935 12938	you
+T619	Noun-Phrase 12837 12840	you
+T620	Noun-Phrase 12844 12853	yourhouse
+T621	Noun-Phrase 12857 12860	you
+T622	Noun-Phrase 12881 12884	you
+T623	Noun-Phrase 11522 11525	You
+T624	Noun-Phrase 11078 11081	You
+T625	Noun-Phrase 11032 11035	you
+T626	Noun-Phrase 11022 11025	you
+T627	Noun-Phrase 10214 10217	you
+T628	Noun-Phrase 9484 9487	you
+T629	Noun-Phrase 9971 9974	you
+T630	Noun-Phrase 10041 10044	you
+T631	Noun-Phrase 9897 9900	you
+T632	Noun-Phrase 9693 9696	you
+T633	Noun-Phrase 9100 9103	you
+T634	Noun-Phrase 8985 8988	you
+T635	Noun-Phrase 8361 8364	you
+T636	Noun-Phrase 8225 8228	you
+T637	Noun-Phrase 7976 7979	you
+T638	Noun-Phrase 7766 7769	you
+T639	Noun-Phrase 2918 2919	u
+T640	Noun-Phrase 572 582	darktremor
+T641	Noun-Phrase 20457 20473	lightning strike
+T642	Noun-Phrase 20478 20490	their server
+T643	Noun-Phrase 20395 20397	we
+T644	Noun-Phrase 20570 20579	a new one
+T645	Noun-Phrase 20584 20587	you
+T646	Noun-Phrase 20554 20558	they
+T647	Noun-Phrase 20594 20597	You
+T648	Noun-Phrase 20602 20619	direct connection
+T649	Noun-Phrase 20665 20673	internet
+T650	Noun-Phrase 18206 18209	cab
+T651	Noun-Phrase 18265 18268	Bus
+T652	Noun-Phrase 18443 18446	dad
+T653	Noun-Phrase 18451 18456	astro
+T654	Noun-Phrase 18407 18414	worries
+T655	Noun-Phrase 18361 18366	email
+T656	Noun-Phrase 18797 18802	astro
+T657	Noun-Phrase 19308 19315	savings
+T658	Noun-Phrase 19241 19247	zijian
+T659	Noun-Phrase 19209 19217	Your bro
+T660	Noun-Phrase 19536 19545	your time
+T661	Noun-Phrase 19427 19430	You
+T662	Noun-Phrase 19468 19471	bus
+T663	Noun-Phrase 19919 19923	zouk
+T664	Noun-Phrase 20002 20006	door
+T665	Noun-Phrase 20061 20080	both of your orders
+T666	Noun-Phrase 20240 20247	lynette
+T667	Noun-Phrase 21780 21781	u
+T668	Noun-Phrase 21852 21853	U
+T669	Noun-Phrase 22240 22244	Ryan
+T670	Noun-Phrase 22673 22678	extra
+T671	Noun-Phrase 23498 23510	clementi gym
+T672	Noun-Phrase 23423 23426	him
+T673	Noun-Phrase 24321 24329	easy arp
+T674	Noun-Phrase 24255 24258	bio
+T675	Noun-Phrase 24263 24270	physics
+T676	Noun-Phrase 24338 24348	transcript
+T677	Noun-Phrase 24362 24375	my math honor
+T678	Noun-Phrase 24405 24408	arp
+T679	Noun-Phrase 24431 24432	u
+T680	Noun-Phrase 24495 24510	ideal lifestyle
+T681	Noun-Phrase 23884 23891	a level
+T682	Noun-Phrase 23818 23833	script checking
+T683	Noun-Phrase 23784 23799	script checking
+T684	Noun-Phrase 19740 19743	you
+T685	Noun-Phrase 19476 19479	you
+T686	Noun-Phrase 19698 19702	rest
+T687	Noun-Phrase 18828 18839	astro funds
+T688	Noun-Phrase 19000 19012	Mr tired man
+T689	Noun-Phrase 17203 17207	meee
+T690	Noun-Phrase 16874 16877	you
+T691	Noun-Phrase 16125 16138	Hougang plaza
+T692	Noun-Phrase 16099 16101	we
+T693	Noun-Phrase 16105 16118	hougang plaza
+T694	Noun-Phrase 16157 16159	We
+T695	Noun-Phrase 16170 16181	where to go
+T696	Noun-Phrase 16186 16196	what to do
+T697	Noun-Phrase 16206 16210	idea
+T698	Noun-Phrase 16250 16252	me
+T699	Noun-Phrase 16256 16264	saturday
+T700	Noun-Phrase 15200 15207	nothing
+T701	Noun-Phrase 14081 14091	Activities
+T702	Noun-Phrase 13948 13955	lynette
+T703	Noun-Phrase 13399 13416	Actual start date
+T704	Noun-Phrase 13460 13467	members
+T705	Noun-Phrase 12467 12480	tanjong pagar
+T706	Noun-Phrase 12451 12456	place
+T707	Noun-Phrase 12502 12506	info
+T708	Noun-Phrase 12069 12090	korean bbq restaurant
+T709	Noun-Phrase 12102 12114	Reservations
+T710	Noun-Phrase 12142 12144	We
+T711	Noun-Phrase 12158 12161	7pm
+T712	Noun-Phrase 12165 12171	friday
+T713	Noun-Phrase 12182 12184	me
+T714	Noun-Phrase 12197 12200	you
+T715	Noun-Phrase 11981 12001	ladies and gentlemen
+T716	Noun-Phrase 12008 12014	friday
+T717	Noun-Phrase 12031 12046	dinnergathering
+T718	Noun-Phrase 12050 12063	telok blangah
+T719	Noun-Phrase 12281 12294	Telok blangah
+T720	Noun-Phrase 11475 11482	episode
+T721	Noun-Phrase 11505 11509	week
+T722	Noun-Phrase 11536 11538	me
+T723	Noun-Phrase 11305 11309	week
+T724	Noun-Phrase 10891 10904	forcopyrights
+T725	Noun-Phrase 10108 10116	somerset
+T726	Noun-Phrase 10122 10124	jm
+T727	Noun-Phrase 10144 10146	us
+T728	Noun-Phrase 9523 9529	friday
+T729	Noun-Phrase 8955 8959	seat
+T730	Noun-Phrase 804 815	genes n soc
+T731	Noun-Phrase 722 736	default app2sd
+T732	Noun-Phrase 692 700	internal
+T733	Noun-Phrase 3615 3622	newDump
+T734	Noun-Phrase 3575 3578	one
+T735	Noun-Phrase 3579 3581	we
+T736	Noun-Phrase 3996 4003	lecture
+T737	Noun-Phrase 3973 3981	ah tiong
+T738	Noun-Phrase 4032 4038	2 days
+T739	Noun-Phrase 6587 6588	u
+T740	Noun-Phrase 7552 7561	something
+T741	Noun-Phrase 7620 7622	it
+T742	Noun-Phrase 9058 9061	1hr
+T743	Noun-Phrase 10577 10581	rest
+T744	Noun-Phrase 12710 12716	friday
+T745	Noun-Phrase 13038 13043	links
+T746	Noun-Phrase 13285 13291	friday

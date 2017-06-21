@@ -1,11 +1,26 @@
-CRF++ was used to experiment with SMSNP full training data.
-For CRF++ experiments on SMSNP data, the commands used were:
-1. Check exec.sh, the first part is for multiple O tags (O-B, O-I, O-A), the second is for single O tag
-2. The training data SMSNP.conll.singleO.{train,test} were modified versions of SMSNP.conll.{train,test} from
-   ../../data/SMSNP
-   The files were modified manually using regex substitution (s/O-[AIB]$/O/)
-3. Run exec.sh to get all the result files:
-  - crfpp.alldata.4.0.model
-  - crfpp.alldata.4.0.singleO.model
-  - crfpp.alldata.4.0.result
-  - crfpp.alldata.4.0.singleO.result
+By: Aldrian Obaja
+Date: 30 Mar 2016
+====================
+Description of files
+====================
+train_all.bash - Run training of all models and all features in the paper
+                 Note that this will train 120 models, with total size ~15GB
+                 Total training time will be about one day on 4 threads
+                 In actual experiments, we ran each parameter setting on 
+                 separate AWS instance, downloading only the optimal model
+train_all_optimal.bash - Run training of all models and all parameters, with the
+                         optimal regularization parameter.
+                         This will train 24 models with a total size ~3GB
+                         Total training time will be a few hours on 4 threads
+train_word_lcrf.bash - Run training of Linear CRF model
+train_word_semi_crfs.bash - Run training of Semi-CRFs models
+
+run_optimal_on_test.bash - Run testing on test set to produce *.result files
+                           Note that this also gives character-level evaluation
+                           The *.result files are used by calculate_CI.bash to
+                           calculate the full table
+calculate_CI.bash - Evaluate the *.result files and do significant test.
+                    This is done both on character-level and word-level
+
+The models are not included in this package, but can be obtained through the 
+training process by running train_all_optimal.bash

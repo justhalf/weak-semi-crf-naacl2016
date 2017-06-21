@@ -1,0 +1,35 @@
+By: Aldrian Obaja
+Date: 29 Mar 2016
+====================
+Description of files
+====================
+smsCorpus_en_2015.03.09_all.xml - The original NUS SMS Corpus
+                                  URL: http://wing.comp.nus.edu.sg:8080/SMSCorpus/data/corpus/smsCorpus_en_xml_2015.03.09_all.zip
+smsCorpus_en_2015.03.09_all.txt - The text version of the SMS corpus, obtained 
+                                  through the xml_to_txt.py in sms_corpus/
+SMS_data_process.py - The script to collate all the raw annotations and split
+                      into train, dev, and test set: SMSNP.{train,dev,test}
+data_stats.bash - The bash script to count the number of tokens in the tokenized
+                  SMS dataset.
+                  Requires SMSNP.conll.{regex,whitespace}.{train,dev,test} to be 
+                  generated previously using the Java package
+SMSNP.{train,dev,test} - The NP-annotated dataset in character offset format.
+                         Each SMS message with its annotations consist of three
+                         lines:
+                         1. The SMS message text
+                         2. The list of NPs, if present, in the format:
+                            start_offset,end_offset TYPE(|start_offset,end_offset TYPE)*
+                            If there is no NP, then the second line will be empty
+                            Note that the start_offset is inclusive and the 
+                            end_offset is exclusive
+                         3. Blank line
+
+To generate the tokenized files using the Java package, run:
+    java -cp <path_to_jar> com.statnlp.experiment.smsnp.SMSNPTokenizer -convertAllSMSNPData
+or simply run:
+    bash create_tokenized_dataset.bash
+
+sms_corpus/ - This folder is used by the brat annotation tool
+              (http://brat.nlplab.org/)
+              This folder also contains all the raw annotations created by
+              students

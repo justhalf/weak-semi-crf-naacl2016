@@ -1,0 +1,1218 @@
+T1	Noun-Phrase 6 10	Dear
+T2	Noun-Phrase 11 12	I
+T3	Noun-Phrase 16 22	toilet
+T4	Noun-Phrase 40 41	u
+T6	Noun-Phrase 77 87	your exams
+T10	Noun-Phrase 95 100	Daddy
+T11	Noun-Phrase 101 102	u
+T12	Noun-Phrase 130 139	Thursdays
+T13	Noun-Phrase 140 141	I
+T14	Noun-Phrase 157 160	Mon
+T15	Noun-Phrase 194 205	the verdict
+T16	Noun-Phrase 213 216	dar
+T17	Noun-Phrase 222 224	me
+T18	Noun-Phrase 232 240	ur break
+T19	Noun-Phrase 260 264	dear
+T20	Noun-Phrase 276 281	movie
+T21	Noun-Phrase 293 303	my sisters
+T22	Noun-Phrase 306 314	the show
+T23	Noun-Phrase 324 333	liar game
+T24	Noun-Phrase 364 365	i
+T25	Noun-Phrase 370 374	them
+T7	Noun-Phrase 422 424	老公
+T8	Noun-Phrase 429 430	i
+T9	Noun-Phrase 441 442	u
+T26	Noun-Phrase 461 462	i
+T27	Noun-Phrase 474 486	wrong timing
+T28	Noun-Phrase 489 498	my lesson
+T29	Noun-Phrase 522 533	silent mode
+T30	Noun-Phrase 551 560	my sweety
+T31	Noun-Phrase 563 564	u
+T32	Noun-Phrase 572 581	The bread
+T33	Noun-Phrase 582 583	I
+T34	Noun-Phrase 625 631	2 to 3
+T35	Noun-Phrase 632 633	I
+T36	Noun-Phrase 638 646	tutorial
+T37	Noun-Phrase 660 663	3pm
+T38	Noun-Phrase 667 675	before 2
+T39	Noun-Phrase 731 738	My mama
+T40	Noun-Phrase 763 767	food
+T41	Noun-Phrase 798 801	Dar
+T42	Noun-Phrase 823 824	u
+T43	Noun-Phrase 835 849	meeting room 5
+T44	Noun-Phrase 868 876	wat time
+T45	Noun-Phrase 890 891	I
+T53	Noun-Phrase 1058 1066	the rest
+T54	Noun-Phrase 1084 1085	u
+T55	Noun-Phrase 1002 1016	the late reply
+T56	Noun-Phrase 1025 1028	tmr
+T57	Noun-Phrase 1038 1041	1pm
+T58	Noun-Phrase 1043 1044	I
+T63	Noun-Phrase 1149 1152	1pm
+T69	Noun-Phrase 1240 1243	1pm
+T70	Noun-Phrase 1247 1251	com1
+T71	Noun-Phrase 1271 1285	some materials
+T72	Noun-Phrase 1303 1322	the preferred topic
+T73	Noun-Phrase 1351 1357	genson
+T74	Noun-Phrase 1359 1361	it
+T76	Noun-Phrase 1392 1395	1pm
+T77	Noun-Phrase 1399 1403	com1
+T78	Noun-Phrase 1423 1437	some materials
+T79	Noun-Phrase 1455 1474	the preferred topic
+T80	Noun-Phrase 1508 1518	the yiheng
+T81	Noun-Phrase 1547 1549	we
+T82	Noun-Phrase 1583 1584	I
+T83	Noun-Phrase 1614 1616	it
+T84	Noun-Phrase 1627 1631	1 hr
+T85	Noun-Phrase 1668 1669	I
+T86	Noun-Phrase 1701 1712	Career talk
+T87	Noun-Phrase 1734 1735	I
+T88	Noun-Phrase 1758 1759	I
+T89	Noun-Phrase 1769 1778	a present
+T90	Noun-Phrase 1793 1795	he
+T91	Noun-Phrase 1808 1810	he
+T92	Noun-Phrase 1847 1850	him
+T93	Noun-Phrase 1854 1859	ameal
+T94	Noun-Phrase 1874 1875	I
+T95	Noun-Phrase 1886 1893	<#> min
+T98	Noun-Phrase 1930 1931	u
+T99	Noun-Phrase 1940 1945	place
+T100	Noun-Phrase 1959 1960	I
+T101	Noun-Phrase 1966 1970	them
+T102	Noun-Phrase 1982 1983	u
+T103	Noun-Phrase 1994 1995	I
+T104	Noun-Phrase 2036 2037	I
+T105	Noun-Phrase 2085 2086	u
+T106	Noun-Phrase 2095 2098	She
+T107	Noun-Phrase 2161 2162	I
+T108	Noun-Phrase 2209 2210	u
+T109	Noun-Phrase 2276 2279	You
+T110	Noun-Phrase 2304 2309	daddy
+T111	Noun-Phrase 2331 2332	u
+T112	Noun-Phrase 2370 2371	I
+T113	Noun-Phrase 2375 2382	lecture
+T114	Noun-Phrase 2410 2415	night
+T115	Noun-Phrase 2423 2428	Aunty
+T116	Noun-Phrase 2429 2435	weihao
+T117	Noun-Phrase 2446 2454	my house
+T118	Noun-Phrase 2493 2503	my dar dar
+T119	Noun-Phrase 2529 2532	you
+T120	Noun-Phrase 2533 2536	tmr
+T121	Noun-Phrase 2546 2556	my dum dum
+T122	Noun-Phrase 2573 2579	Yeiyei
+T123	Noun-Phrase 2600 2608	ur lunch
+T124	Noun-Phrase 2638 2644	bumbum
+T125	Noun-Phrase 2664 2665	I
+T126	Noun-Phrase 2678 2696	some documentation
+T129	Noun-Phrase 2741 2760	some android folder
+T130	Noun-Phrase 2764 2771	the com
+T131	Noun-Phrase 2773 2774	I
+T132	Noun-Phrase 2792 2797	tools
+T133	Noun-Phrase 2798 2799	I
+T134	Noun-Phrase 2822 2842	some executable file
+T135	Noun-Phrase 2854 2863	the phone
+T136	Noun-Phrase 2867 2874	the com
+T137	Noun-Phrase 2881 2891	老公宝贝dumdum
+T138	Noun-Phrase 2894 2895	路
+T139	Noun-Phrase 2905 2908	you
+T140	Noun-Phrase 2929 2936	ur stop
+T141	Noun-Phrase 2968 2974	yeiyei
+T142	Noun-Phrase 2984 3005	a safe trip to school
+T143	Noun-Phrase 3010 3017	Urloupo
+T144	Noun-Phrase 3024 3025	u
+T145	Noun-Phrase 3038 3045	Laogong
+T146	Noun-Phrase 3060 3068	ur lunch
+T147	Noun-Phrase 3070 3071	U
+T148	Noun-Phrase 3079 3086	meeting
+T149	Noun-Phrase 2477 2492	<DECIMAL> years
+T5	Noun-Phrase 42 54	outside coop
+T150	Noun-Phrase 188 192	what
+T151	Noun-Phrase 338 341	9pm
+T152	Noun-Phrase 508 511	urs
+T153	Noun-Phrase 692 701	<DECIMAL>
+T46	Noun-Phrase 944 980	a fren you dunwan to give present to
+T47	Noun-Phrase 1102 1131	our meeting for legal aspects
+T48	Noun-Phrase 1135 1148	tmr what time
+T49	Noun-Phrase 1167 1181	what he gave u
+T50	Noun-Phrase 1252 1261	tmr.(Wed)
+T51	Noun-Phrase 1404 1414	tmr. (Wed)
+T52	Noun-Phrase 1193 1201	reminder
+T59	Noun-Phrase 1207 1236	the meeting for legal aspects
+T60	Noun-Phrase 1376 1388	next meeting
+T61	Noun-Phrase 1563 1572	<DECIMAL>
+T62	Noun-Phrase 1820 1828	presents
+T64	Noun-Phrase 1909 1925	train from bugis
+T65	Noun-Phrase 2014 2017	<#>
+T66	Noun-Phrase 2050 2058	<#> mins
+T67	Noun-Phrase 2073 2079	[name]
+T68	Noun-Phrase 2111 2124	com1 basement
+T75	Noun-Phrase 2126 2136	Her number
+T96	Noun-Phrase 2140 2143	<#>
+T97	Noun-Phrase 2264 2267	<#>
+T154	Noun-Phrase 2250 2260	Her number
+T155	Noun-Phrase 2235 2248	com1 basement
+T156	Noun-Phrase 2219 2222	She
+T157	Noun-Phrase 2198 2203	candy
+T158	Noun-Phrase 2175 2183	<#> mins
+T159	Noun-Phrase 2351 2352	3
+T160	Noun-Phrase 2367 2368	3
+T161	Noun-Phrase 2385 2388	7pm
+T127	Noun-Phrase 2700 2707	the web
+T128	Noun-Phrase 2727 2735	the .apk
+T162	Noun-Phrase 3103 3110	lecture
+T163	Noun-Phrase 3117 3126	my laptop
+T164	Noun-Phrase 3146 3154	internet
+T165	Noun-Phrase 3166 3167	I
+T166	Noun-Phrase 3174 3176	we
+T167	Noun-Phrase 3186 3225	technologies that have improved with IC
+T168	Noun-Phrase 3235 3240	speed
+T169	Noun-Phrase 3242 3246	size
+T170	Noun-Phrase 3248 3257	functiona
+T171	Noun-Phrase 3259 3268	qualities
+T172	Noun-Phrase 3284 3338	applicationsand technology that were brought abt by ic
+T173	Noun-Phrase 3351 3371	one important impact
+T174	Noun-Phrase 3375 3377	it
+T175	Noun-Phrase 3392 3413	more use for internet
+T176	Noun-Phrase 3435 3471	creations and communication platform
+T177	Noun-Phrase 3490 3507	govt or companies
+T178	Noun-Phrase 3522 3526	info
+T179	Noun-Phrase 3530 3555	people, bills andreceipts
+T180	Noun-Phrase 3561 3599	inter-company and global communication
+T181	Noun-Phrase 3653 3654	u
+T182	Noun-Phrase 3660 3661	u
+T183	Noun-Phrase 3677 3688	the lecture
+T184	Noun-Phrase 3711 3713	it
+T185	Noun-Phrase 3744 3745	u
+T186	Noun-Phrase 3754 3765	early today
+T187	Noun-Phrase 3835 3840	Hubby
+T188	Noun-Phrase 3852 3864	ur pill pill
+T189	Noun-Phrase 3889 3897	yourself
+T190	Noun-Phrase 3925 3926	I
+T191	Noun-Phrase 3935 3948	a little late
+T192	Noun-Phrase 3963 3965	we
+T193	Noun-Phrase 3977 3979	jp
+T194	Noun-Phrase 3993 3994	U
+T195	Noun-Phrase 4019 4033	Chinese garden
+T196	Noun-Phrase 4068 4077	Next time
+T197	Noun-Phrase 4089 4090	I
+T198	Noun-Phrase 4135 4137	jp
+T199	Noun-Phrase 4140 4145	daddy
+T200	Noun-Phrase 4155 4156	u
+T201	Noun-Phrase 4183 4184	u
+T202	Noun-Phrase 4203 4204	I
+T203	Noun-Phrase 4209 4215	<name>
+T204	Noun-Phrase 4240 4262	your friend's birthday
+T205	Noun-Phrase 4277 4279	Jp
+T206	Noun-Phrase 4282 4305	what u feel like eating
+T207	Noun-Phrase 4356 4366	my friends
+T208	Noun-Phrase 4378 4379	I
+T209	Noun-Phrase 4386 4400	the four lines
+T210	Noun-Phrase 4413 4416	Dar
+T211	Noun-Phrase 4428 4434	dinner
+T212	Noun-Phrase 4439 4440	I
+T213	Noun-Phrase 4450 4452	jp
+T214	Noun-Phrase 4458 4462	them
+T215	Noun-Phrase 4472 4487	Dar dar laogong
+T216	Noun-Phrase 4496 4497	u
+T217	Noun-Phrase 4503 4504	I
+T218	Noun-Phrase 4511 4515	home
+T219	Noun-Phrase 4520 4523	<#>
+T220	Noun-Phrase 4544 4545	u
+T221	Noun-Phrase 4579 4593	my Chou baobei
+T222	Noun-Phrase 4601 4602	u
+T223	Noun-Phrase 4616 4625	yourfault
+T224	Noun-Phrase 4632 4633	u
+T225	Noun-Phrase 4654 4658	home
+T226	Noun-Phrase 4678 4693	ye he's funeral
+T227	Noun-Phrase 4706 4711	Ye ye
+T228	Noun-Phrase 4714 4715	u
+T229	Noun-Phrase 4743 4744	I
+T230	Noun-Phrase 4750 4768	something on today
+T231	Noun-Phrase 4793 4805	white shirts
+T232	Noun-Phrase 4814 4816	4+
+T233	Noun-Phrase 4827 4832	De de
+T234	Noun-Phrase 4836 4840	home
+T235	Noun-Phrase 4843 4844	u
+T236	Noun-Phrase 4871 4872	I
+T237	Noun-Phrase 4890 4891	u
+T238	Noun-Phrase 4894 4895	I
+T239	Noun-Phrase 4908 4911	now
+T240	Noun-Phrase 4923 4935	funeral wake
+T241	Noun-Phrase 4939 4953	my grandfather
+T242	Noun-Phrase 4958 4959	I
+T243	Noun-Phrase 4974 4983	soft copy
+T244	Noun-Phrase 4986 4987	u
+T245	Noun-Phrase 5047 5052	today
+T246	Noun-Phrase 5065 5066	I
+T247	Noun-Phrase 5074 5114	what I can dowhen I get home tmr morning
+T248	Noun-Phrase 5149 5150	u
+T249	Noun-Phrase 5169 5171	it
+T250	Noun-Phrase 5173 5174	I
+T251	Noun-Phrase 5191 5202	what's left
+T252	Noun-Phrase 5220 5221	I
+T253	Noun-Phrase 5250 5252	it
+T254	Noun-Phrase 5258 5266	medicine
+T255	Noun-Phrase 5282 5283	I
+T256	Noun-Phrase 5289 5294	u all
+T257	Noun-Phrase 5298 5304	<#> pm
+T258	Noun-Phrase 5310 5311	I
+T259	Noun-Phrase 5321 5330	something
+T260	Noun-Phrase 5334 5344	beforethat
+T261	Noun-Phrase 5360 5361	I
+T262	Noun-Phrase 5368 5369	I
+T263	Noun-Phrase 5390 5397	abt <#>
+T264	Noun-Phrase 5420 5421	I
+T265	Noun-Phrase 5434 5435	u
+T266	Noun-Phrase 5436 5440	then
+T267	Noun-Phrase 5450 5456	[name]
+T268	Noun-Phrase 5479 5491	from <#>to 6
+T269	Noun-Phrase 5507 5508	I
+T270	Noun-Phrase 5520 5524	them
+T271	Noun-Phrase 5552 5562	the meetup
+T272	Noun-Phrase 5581 5583	ya
+T273	Noun-Phrase 5590 5595	Aunty
+T274	Noun-Phrase 5596 5597	I
+T275	Noun-Phrase 5637 5659	the xiao long baotoday
+T276	Noun-Phrase 5670 5676	weihao
+T277	Noun-Phrase 5685 5693	my share
+T278	Noun-Phrase 5715 5725	actual day
+T279	Noun-Phrase 5774 5781	Lecture
+T280	Noun-Phrase 5796 5799	6pm
+T281	Noun-Phrase 5813 5814	I
+T282	Noun-Phrase 5827 5835	Wat time
+T283	Noun-Phrase 5836 5841	u all
+T284	Noun-Phrase 5860 5876	After lesson end
+T285	Noun-Phrase 5894 5896	he
+T286	Noun-Phrase 5905 5916	the morning
+T287	Noun-Phrase 5923 5926	You
+T288	Noun-Phrase 5932 5937	house
+T289	Noun-Phrase 5969 5970	I
+T290	Noun-Phrase 5987 5988	I
+T291	Noun-Phrase 6001 6002	I
+T292	Noun-Phrase 6010 6011	u
+T293	Noun-Phrase 6020 6021	I
+T294	Noun-Phrase 6043 6052	Teck whye
+T295	Noun-Phrase 6056 6059	lrt
+T296	Noun-Phrase 6061 6073	5 more stops
+T297	Noun-Phrase 6080 6084	That
+T298	Noun-Phrase 6094 6095	I
+T299	Noun-Phrase 6125 6142	u want to discuss
+T300	Noun-Phrase 6144 6145	I
+T301	Noun-Phrase 6151 6152	I
+T302	Noun-Phrase 6163 6166	tmr
+T303	Noun-Phrase 6189 6190	u
+T304	Noun-Phrase 6225 6226	I
+T305	Noun-Phrase 6235 6236	U
+T306	Noun-Phrase 6257 6258	u
+T307	Noun-Phrase 6285 6287	we
+T308	Noun-Phrase 6322 6324	we
+T309	Noun-Phrase 6329 6341	private date
+T310	Noun-Phrase 6362 6371	Final one
+T311	Noun-Phrase 6377 6395	last few paragraph
+T312	Noun-Phrase 6433 6439	Baobei
+T313	Noun-Phrase 6445 6446	u
+T314	Noun-Phrase 6447 6459	big big kiss
+T315	Noun-Phrase 6489 6490	I
+T316	Noun-Phrase 6499 6502	him
+T317	Noun-Phrase 6509 6512	him
+T318	Noun-Phrase 6519 6521	hp
+T319	Noun-Phrase 6534 6545	Chou baobei
+T320	Noun-Phrase 6546 6555	ur wifely
+T321	Noun-Phrase 6562 6563	u
+T322	Noun-Phrase 6564 6596	a reminder that u're supermissed
+T323	Noun-Phrase 6631 6633	me
+T324	Noun-Phrase 6634 6647	ur happy face
+T325	Noun-Phrase 6660 6661	u
+T326	Noun-Phrase 6693 6694	I
+T327	Noun-Phrase 6704 6711	outside
+T328	Noun-Phrase 6722 6724	me
+T329	Noun-Phrase 6741 6765	anything Ican do to help
+T330	Noun-Phrase 6790 6799	our notes
+T331	Noun-Phrase 6830 6847	chapter 3 onwards
+T332	Noun-Phrase 6863 6864	I
+T333	Noun-Phrase 6870 6872	it
+T334	Noun-Phrase 6884 6974	the most prominent online food guideserving all eateries and potential diners in Singapore
+T335	Noun-Phrase 7008 7034	any business establishment
+T336	Noun-Phrase 7043 7057	food anddrinks
+T337	Noun-Phrase 7059 7060	I
+T338	Noun-Phrase 7067 7069	it
+T339	Noun-Phrase 7073 7084	restaurants
+T340	Noun-Phrase 7097 7111	an early night
+T341	Noun-Phrase 7136 7142	school
+T342	Noun-Phrase 7148 7152	Food
+T343	Noun-Phrase 7160 7169	yesterday
+T344	Noun-Phrase 7201 7215	my next lesson
+T345	Noun-Phrase 7231 7234	six
+T346	Noun-Phrase 7259 7268	my lesson
+T347	Noun-Phrase 7279 7284	today
+T348	Noun-Phrase 7290 7293	you
+T349	Noun-Phrase 7310 7311	I
+T350	Noun-Phrase 7379 7388	2nd floor
+T351	Noun-Phrase 7396 7401	Daddy
+T352	Noun-Phrase 7412 7413	u
+T353	Noun-Phrase 7421 7423	It
+T354	Noun-Phrase 7435 7436	u
+T355	Noun-Phrase 7441 7468	a good time with ur friends
+T356	Noun-Phrase 7529 7541	<DECIMAL> pm
+T357	Noun-Phrase 7552 7559	Yei yei
+T358	Noun-Phrase 7560 7561	早
+T359	Noun-Phrase 7568 7577	yesterday
+T360	Noun-Phrase 7606 7610	dear
+T361	Noun-Phrase 7611 7612	i
+T362	Noun-Phrase 7628 7629	u
+T363	Noun-Phrase 7645 7647	me
+T364	Noun-Phrase 7653 7654	u
+T365	Noun-Phrase 7686 7688	me
+T366	Noun-Phrase 7689 7690	i
+T367	Noun-Phrase 7713 7726	one more stop
+T368	Noun-Phrase 7734 7741	my dear
+T369	Noun-Phrase 7777 7781	home
+T370	Noun-Phrase 7823 7837	more free time
+T371	Noun-Phrase 7851 7865	ur nxt lecture
+T372	Noun-Phrase 7879 7885	<name>
+T373	Noun-Phrase 7892 7910	ur 2nd day at work
+T374	Noun-Phrase 7912 7914	生日
+T375	Noun-Phrase 7933 7934	i
+T376	Noun-Phrase 7940 7941	u
+T377	Noun-Phrase 7946 7950	dear
+T378	Noun-Phrase 7952 7953	u
+T379	Noun-Phrase 7963 7965	tv
+T380	Noun-Phrase 7966 7969	now
+T381	Noun-Phrase 8001 8002	u
+T382	Noun-Phrase 8004 8012	wat time
+T383	Noun-Phrase 8023 8024	u
+T384	Noun-Phrase 8042 8051	my yeiyei
+T385	Noun-Phrase 8075 8076	你
+T386	Noun-Phrase 8094 8095	u
+T387	Noun-Phrase 8109 8118	com2# <#>
+T388	Noun-Phrase 8122 8130	her room
+T389	Noun-Phrase 8137 8138	u
+T390	Noun-Phrase 8150 8152	we
+T391	Noun-Phrase 8164 8168	com2
+T392	Noun-Phrase 8185 8188	ppl
+T393	Noun-Phrase 8201 8211	com2 # <#>
+T394	Noun-Phrase 8232 8233	u
+T395	Noun-Phrase 8245 8247	we
+T396	Noun-Phrase 8257 8273	the consultation
+T397	Noun-Phrase 8283 8285	we
+T398	Noun-Phrase 8302 8307	tra k
+T399	Noun-Phrase 8312 8314	we
+T400	Noun-Phrase 8332 8353	some actual contracts
+T401	Noun-Phrase 8369 8373	they
+T402	Noun-Phrase 8399 8400	i
+T403	Noun-Phrase 8418 8424	friday
+T404	Noun-Phrase 8436 8442	sunday
+T405	Noun-Phrase 8450 8458	saturday
+T406	Noun-Phrase 8459 8460	u
+T407	Noun-Phrase 8467 8469	we
+T408	Noun-Phrase 8479 8488	afternoon
+T409	Noun-Phrase 8515 8521	sunday
+T410	Noun-Phrase 8533 8534	u
+T411	Noun-Phrase 7337 7343	yishun
+T412	Noun-Phrase 7512 7517	Thurs
+T413	Noun-Phrase 7977 7986	channel 8
+T414	Noun-Phrase 8556 8559	2pm
+T415	Noun-Phrase 8563 8569	sunday
+T416	Noun-Phrase 8586 8589	you
+T417	Noun-Phrase 8593 8599	sunday
+T418	Noun-Phrase 8621 8625	home
+T419	Noun-Phrase 8629 8633	dear
+T420	Noun-Phrase 8649 8650	u
+T421	Noun-Phrase 8658 8663	daddy
+T422	Noun-Phrase 8668 8669	u
+T423	Noun-Phrase 8674 8694	xi gua to eat or not
+T424	Noun-Phrase 8704 8705	u
+T425	Noun-Phrase 8710 8715	daddy
+T426	Noun-Phrase 8735 8736	i
+T427	Noun-Phrase 8740 8744	home
+T428	Noun-Phrase 8760 8761	u
+T429	Noun-Phrase 8779 8784	daddy
+T430	Noun-Phrase 8800 8809	my baobei
+T431	Noun-Phrase 8819 8820	i
+T432	Noun-Phrase 8826 8827	i
+T433	Noun-Phrase 8833 8837	home
+T434	Noun-Phrase 8838 8843	today
+T435	Noun-Phrase 8849 8863	another report
+T436	Noun-Phrase 8867 8873	friday
+T437	Noun-Phrase 8883 8884	u
+T438	Noun-Phrase 8903 8914	chou baobei
+T439	Noun-Phrase 8915 8916	i
+T440	Noun-Phrase 8922 8923	u
+T441	Noun-Phrase 8930 8934	home
+T442	Noun-Phrase 8944 8948	dear
+T443	Noun-Phrase 8966 8967	i
+T444	Noun-Phrase 8971 8975	home
+T445	Noun-Phrase 9005 9006	i
+T446	Noun-Phrase 9007 9011	home
+T447	Noun-Phrase 9020 9024	home
+T448	Noun-Phrase 9030 9034	dear
+T449	Noun-Phrase 9055 9056	u
+T450	Noun-Phrase 9082 9083	u
+T451	Noun-Phrase 9088 9092	home
+T452	Noun-Phrase 9098 9099	u
+T453	Noun-Phrase 9109 9119	a long day
+T454	Noun-Phrase 9120 9125	today
+T455	Noun-Phrase 9140 9141	u
+T456	Noun-Phrase 9164 9168	omar
+T457	Noun-Phrase 9175 9176	u
+T458	Noun-Phrase 9189 9192	nus
+T459	Noun-Phrase 9196 9197	6
+T460	Noun-Phrase 9199 9200	i
+T461	Noun-Phrase 9232 9242	the report
+T462	Noun-Phrase 9246 9247	5
+T463	Noun-Phrase 9274 9290	chou chou baobei
+T464	Noun-Phrase 9292 9293	u
+T465	Noun-Phrase 9303 9312	more rest
+T466	Noun-Phrase 9324 9325	u
+T467	Noun-Phrase 9331 9340	next time
+T468	Noun-Phrase 9345 9352	the mug
+T469	Noun-Phrase 9358 9359	u
+T470	Noun-Phrase 9373 9385	quite awhile
+T471	Noun-Phrase 9401 9402	i
+T472	Noun-Phrase 9411 9415	home
+T473	Noun-Phrase 9419 9428	my yeiyei
+T474	Noun-Phrase 9440 9441	u
+T475	Noun-Phrase 9450 9454	dear
+T476	Noun-Phrase 9474 9479	ya xi
+T477	Noun-Phrase 9491 9494	3pm
+T478	Noun-Phrase 9551 9554	<#>
+T479	Noun-Phrase 9555 9559	dear
+T480	Noun-Phrase 9586 9587	u
+T481	Noun-Phrase 9600 9606	school
+T484	Noun-Phrase 25112 25116	love
+T485	Noun-Phrase 25132 25133	I
+T486	Noun-Phrase 25139 25142	you
+T487	Noun-Phrase 25164 25168	love
+T488	Noun-Phrase 25194 25195	I
+T489	Noun-Phrase 25244 25245	I
+T490	Noun-Phrase 25272 25273	I
+T491	Noun-Phrase 25297 25307	some sleep
+T492	Noun-Phrase 25308 25315	tonight
+T493	Noun-Phrase 25343 25348	class
+T494	Noun-Phrase 25353 25390	a video on a girlfriend in the Amazon
+T495	Noun-Phrase 25414 25419	today
+T496	Noun-Phrase 25430 25433	You
+T497	Noun-Phrase 25446 25449	ten
+T498	Noun-Phrase 25462 25466	love
+T499	Noun-Phrase 25477 25481	love
+T500	Noun-Phrase 25520 25523	you
+T501	Noun-Phrase 25532 25538	<TIME>
+T502	Noun-Phrase 25572 25575	<#>
+T503	Noun-Phrase 25597 25598	I
+T504	Noun-Phrase 25604 25607	you
+T506	Noun-Phrase 25656 25658	It
+T507	Noun-Phrase 25692 25693	I
+T508	Noun-Phrase 25750 25751	I
+T509	Noun-Phrase 25770 25772	we
+T510	Noun-Phrase 25788 25790	he
+T511	Noun-Phrase 25805 25807	me
+T512	Noun-Phrase 25812 25817	Sarah
+T513	Noun-Phrase 25832 25838	<name>
+T514	Noun-Phrase 25910 25911	I
+T515	Noun-Phrase 25918 25920	it
+T516	Noun-Phrase 25936 25940	love
+T517	Noun-Phrase 25947 25950	you
+T518	Noun-Phrase 25955 25975	a note from Dr Reyes
+T519	Noun-Phrase 25998 26006	Virginia
+T520	Noun-Phrase 26023 26024	I
+T521	Noun-Phrase 26049 26053	that
+T522	Noun-Phrase 26057 26058	I
+T523	Noun-Phrase 26080 26081	I
+T524	Noun-Phrase 26089 26107	a note for classes
+T525	Noun-Phrase 26117 26124	problem
+T526	Noun-Phrase 26141 26156	<name>'s number
+T527	Noun-Phrase 26164 26168	Work
+T528	Noun-Phrase 26187 26201	the recordings
+T529	Noun-Phrase 26203 26207	They
+T530	Noun-Phrase 26232 26234	me
+T531	Noun-Phrase 26245 26248	you
+T532	Noun-Phrase 26255 26267	some details
+T533	Noun-Phrase 26293 26295	me
+T534	Noun-Phrase 26302 26303	I
+T535	Noun-Phrase 26332 26336	here
+T536	Noun-Phrase 26370 26371	I
+T537	Noun-Phrase 26387 26388	I
+T538	Noun-Phrase 26401 26404	you
+T539	Noun-Phrase 26409 26421	my text text
+T540	Noun-Phrase 26457 26462	swype
+T541	Noun-Phrase 26469 26470	I
+T542	Noun-Phrase 26478 26484	"love"
+T543	Noun-Phrase 26516 26517	I
+T544	Noun-Phrase 26544 26546	it
+T545	Noun-Phrase 26552 26564	another name
+T546	Noun-Phrase 26592 26606	Transit center
+T547	Noun-Phrase 26610 26611	I
+T548	Noun-Phrase 26619 26620	I
+T549	Noun-Phrase 26630 26632	it
+T550	Noun-Phrase 26643 26646	you
+T551	Noun-Phrase 26684 26686	It
+T552	Noun-Phrase 26698 26723	the languages I end up on
+T553	Noun-Phrase 26739 26740	I
+T554	Noun-Phrase 26770 26774	east
+T555	Noun-Phrase 26784 26793	those lgs
+T556	Noun-Phrase 26854 26855	I
+T557	Noun-Phrase 26868 26869	I
+T558	Noun-Phrase 26884 26890	Friday
+T559	Noun-Phrase 26895 26897	it
+T560	Noun-Phrase 26912 26916	then
+T561	Noun-Phrase 26932 26933	I
+T562	Noun-Phrase 26939 26942	you
+T563	Noun-Phrase 26953 26956	you
+T564	Noun-Phrase 26993 27000	my text
+T565	Noun-Phrase 27014 27022	birthday
+T566	Noun-Phrase 27029 27035	<name>
+T567	Noun-Phrase 27045 27051	<name>
+T568	Noun-Phrase 27096 27099	you
+T569	Noun-Phrase 27111 27114	you
+T570	Noun-Phrase 27130 27137	college
+T571	Noun-Phrase 27144 27148	that
+T572	Noun-Phrase 27163 27172	Hornstein
+T573	Noun-Phrase 27187 27196	<#> times
+T574	Noun-Phrase 27209 27210	I
+T575	Noun-Phrase 27220 27226	dinner
+T576	Noun-Phrase 27248 27251	You
+T577	Noun-Phrase 27260 27271	a Chomskyan
+T578	Noun-Phrase 27284 27287	you
+T579	Noun-Phrase 27296 27308	Aspects ch 1
+T580	Noun-Phrase 27314 27317	you
+T581	Noun-Phrase 27330 27341	Dan Everett
+T582	Noun-Phrase 27362 27368	dinner
+T583	Noun-Phrase 27381 27390	my guitar
+T584	Noun-Phrase 27404 27417	your birthday
+T585	Noun-Phrase 27428 27431	you
+T586	Noun-Phrase 27447 27514	another opportunity to sufficiently hurtEverett before Noam's death
+T587	Noun-Phrase 27542 27543	I
+T588	Noun-Phrase 27555 27558	Ice
+T589	Noun-Phrase 27569 27590	Everett's first paper
+T590	Noun-Phrase 27594 27595	I
+T591	Noun-Phrase 27612 27626	either of them
+T592	Noun-Phrase 27639 27643	Seth
+T593	Noun-Phrase 27655 27670	the story's end
+T594	Noun-Phrase 27685 27700	xenon tutorials
+T595	Noun-Phrase 27702 27706	Shit
+T596	Noun-Phrase 27734 27743	character
+T597	Noun-Phrase 27760 27764	name
+T598	Noun-Phrase 27782 27786	This
+T599	Noun-Phrase 27798 27802	five
+T600	Noun-Phrase 27809 27812	You
+T601	Noun-Phrase 27817 27829	an ass ho le
+T482	Noun-Phrase 9624 9628	dear
+T483	Noun-Phrase 9630 9631	i
+T505	Noun-Phrase 9637 9645	sandwich
+T602	Noun-Phrase 9650 9656	emgine
+T603	Noun-Phrase 9658 9659	u
+T604	Noun-Phrase 9689 9690	i
+T605	Noun-Phrase 9703 9706	she
+T606	Noun-Phrase 9713 9731	the discussion qns
+T607	Noun-Phrase 9732 9737	today
+T608	Noun-Phrase 9763 9775	further door
+T609	Noun-Phrase 9800 9816	we discussing on
+T610	Noun-Phrase 9824 9848	wed befotr the ubs yhing
+T611	Noun-Phrase 9859 9863	Dear
+T612	Noun-Phrase 9864 9877	one more stop
+T613	Noun-Phrase 9892 9900	ting wei
+T614	Noun-Phrase 9906 9907	u
+T615	Noun-Phrase 9916 9921	Thurs
+T616	Noun-Phrase 9925 9937	<DECIMAL> am
+T617	Noun-Phrase 9939 9941	We
+T618	Noun-Phrase 9955 9967	the contract
+T619	Noun-Phrase 9980 9984	help
+T620	Noun-Phrase 9999 10008	the terms
+T621	Noun-Phrase 10030 10054	My lovely lovely darling
+T622	Noun-Phrase 10055 10056	I
+T623	Noun-Phrase 10064 10068	soon
+T624	Noun-Phrase 10080 10094	sunshine place
+T625	Noun-Phrase 10098 10103	Thurs
+T626	Noun-Phrase 10111 10125	Sunshine place
+T627	Noun-Phrase 10136 10138	we
+T628	Noun-Phrase 10143 10152	last time
+T629	Noun-Phrase 10168 10169	u
+T630	Noun-Phrase 10176 10182	school
+T631	Noun-Phrase 10189 10201	<DECIMAL> pm
+T632	Noun-Phrase 10212 10213	I
+T633	Noun-Phrase 10225 10235	the report
+T634	Noun-Phrase 10239 10248	<DECIMAL>
+T635	Noun-Phrase 10294 10296	ew
+T636	Noun-Phrase 10304 10319	Blk s1a level 6
+T637	Noun-Phrase 10351 10352	u
+T638	Noun-Phrase 10374 10377	Twh
+T639	Noun-Phrase 10398 10404	celery
+T640	Noun-Phrase 10432 10440	Two pple
+T641	Noun-Phrase 10448 10459	Ur headache
+T642	Noun-Phrase 10476 10482	<name>
+T643	Noun-Phrase 10494 10504	5pm.lesson
+T644	Noun-Phrase 10528 10529	u
+T645	Noun-Phrase 10545 10571	<#> gsm a4 paper one stack
+T646	Noun-Phrase 10572 10574	$5
+T647	Noun-Phrase 10610 10611	u
+T648	Noun-Phrase 10683 10684	u
+T649	Noun-Phrase 10735 10736	u
+T650	Noun-Phrase 10751 10752	I
+T651	Noun-Phrase 10761 10772	ly they all
+T652	Noun-Phrase 10777 10780	<#>
+T653	Noun-Phrase 10784 10797	the afternoon
+T654	Noun-Phrase 10817 10823	school
+T655	Noun-Phrase 10845 10851	Cathay
+T656	Noun-Phrase 10858 10863	movie
+T657	Noun-Phrase 10866 10875	next time
+T658	Noun-Phrase 10915 10921	school
+T659	Noun-Phrase 10939 10940	u
+T660	Noun-Phrase 10948 10953	Movie
+T661	Noun-Phrase 10977 10981	home
+T662	Noun-Phrase 10985 10989	dear
+T663	Noun-Phrase 11013 11020	tingwei
+T664	Noun-Phrase 11040 11055	<#> pm on Thurs
+T665	Noun-Phrase 11067 11069	He
+T666	Noun-Phrase 11117 11118	U
+T667	Noun-Phrase 11146 11147	u
+T668	Noun-Phrase 11164 11167	bus
+T669	Noun-Phrase 11174 11183	Tml night
+T670	Noun-Phrase 11184 11186	he
+T671	Noun-Phrase 11196 11211	what time u can
+T672	Noun-Phrase 11219 11226	Tonight
+T673	Noun-Phrase 11227 11228	I
+T674	Noun-Phrase 11232 11237	thing
+T675	Noun-Phrase 25618 25622	love
+T676	Noun-Phrase 25638 25641	bus
+T677	Noun-Phrase 26671 26673	it
+T678	Noun-Phrase 11256 11258	he
+T679	Noun-Phrase 11283 11286	Fri
+T680	Noun-Phrase 11287 11288	i
+T681	Noun-Phrase 11304 11321	Tonight <DECIMAL>
+T682	Noun-Phrase 11333 11334	U
+T683	Noun-Phrase 11344 11347	cck
+T684	Noun-Phrase 11366 11375	<DECIMAL>
+T685	Noun-Phrase 11381 11398	clementi platform
+T686	Noun-Phrase 11399 11404	later
+T687	Noun-Phrase 11419 11430	Tonight <#>
+T688	Noun-Phrase 11434 11442	sunshine
+T689	Noun-Phrase 11457 11458	I
+T690	Noun-Phrase 11495 11500	Daddy
+T691	Noun-Phrase 11501 11518	tonight <DECIMAL>
+T692	Noun-Phrase 11524 11534	the person
+T693	Noun-Phrase 11544 11545	I
+T694	Noun-Phrase 11561 11568	Raffles
+T695	Noun-Phrase 11570 11580	7 to abt 9
+T696	Noun-Phrase 11619 11621	ya
+T697	Noun-Phrase 11629 11631	We
+T698	Noun-Phrase 11637 11638	u
+T699	Noun-Phrase 11642 11659	Raffles place mrt
+T700	Noun-Phrase 11663 11669	Junhui
+T701	Noun-Phrase 11711 11712	u
+T702	Noun-Phrase 11718 11727	<DECIMAL>
+T703	Noun-Phrase 11734 11736	we
+T704	Noun-Phrase 11771 11775	food
+T705	Noun-Phrase 11785 11786	U
+T706	Noun-Phrase 11812 11813	u
+T707	Noun-Phrase 11841 11842	I
+T708	Noun-Phrase 11853 11857	camp
+T709	Noun-Phrase 11886 11887	I
+T710	Noun-Phrase 11895 11906	that person
+T711	Noun-Phrase 11914 11926	Cancellation
+T712	Noun-Phrase 11989 11993	they
+T713	Noun-Phrase 12014 12015	I
+T714	Noun-Phrase 12029 12033	they
+T715	Noun-Phrase 12044 12046	me
+T716	Noun-Phrase 12102 12104	me
+T717	Noun-Phrase 12173 12176	<#>
+T718	Noun-Phrase 14615 14632	my awesome coffee
+T719	Noun-Phrase 12227 12230	you
+T720	Noun-Phrase 12253 12257	them
+T721	Noun-Phrase 12273 12281	My paper
+T722	Noun-Phrase 12290 12296	<#> am
+T723	Noun-Phrase 12298 12317	What time yours end
+T724	Noun-Phrase 12330 12343	4 hours paper
+T725	Noun-Phrase 12363 12366	You
+T726	Noun-Phrase 12382 12384	me
+T727	Noun-Phrase 12416 12417	I
+T728	Noun-Phrase 12428 12432	mine
+T729	Noun-Phrase 12482 12492	this paper
+T730	Noun-Phrase 14605 14606	I
+T731	Noun-Phrase 12548 12549	2
+T732	Noun-Phrase 12555 12572	programming paper
+T733	Noun-Phrase 12583 12589	people
+T734	Noun-Phrase 12603 12605	me
+T735	Noun-Phrase 12606 12626	your passport number
+T736	Noun-Phrase 12689 12692	You
+T737	Noun-Phrase 12703 12708	yours
+T738	Noun-Phrase 12729 12730	I
+T739	Noun-Phrase 12749 12750	I
+T740	Noun-Phrase 12764 12768	them
+T741	Noun-Phrase 12769 12780	the numbers
+T742	Noun-Phrase 12797 12801	time
+T743	Noun-Phrase 12879 12894	2 extra tickets
+T744	Noun-Phrase 12953 12967	jm and vanessa
+T745	Noun-Phrase 12984 12986	Jm
+T746	Noun-Phrase 12998 13002	exam
+T747	Noun-Phrase 13034 13048	morning flight
+T748	Noun-Phrase 13077 13080	you
+T749	Noun-Phrase 13094 13106	new passport
+T750	Noun-Phrase 13134 13143	afternoon
+T751	Noun-Phrase 13168 13179	Good friday
+T752	Noun-Phrase 13194 13195	I
+T753	Noun-Phrase 13265 13279	too much shows
+T754	Noun-Phrase 13326 13327	I
+T755	Noun-Phrase 13341 13351	Your paper
+T756	Noun-Phrase 13420 13422	We
+T757	Noun-Phrase 13481 13483	it
+T758	Noun-Phrase 13491 13520	another platform for stalking
+T759	Noun-Phrase 13532 13541	what time
+T760	Noun-Phrase 13569 13577	everyone
+T761	Noun-Phrase 13606 13609	you
+T762	Noun-Phrase 13632 13633	i
+T763	Noun-Phrase 13642 13643	I
+T764	Noun-Phrase 13650 13651	I
+T765	Noun-Phrase 13668 13684	a trillion times
+T766	Noun-Phrase 13742 13752	my funeral
+T767	Noun-Phrase 13753 13760	you all
+T768	Noun-Phrase 13790 13792	me
+T769	Noun-Phrase 13805 13813	my karma
+T770	Noun-Phrase 13841 13843	it
+T771	Noun-Phrase 13848 13851	you
+T772	Noun-Phrase 13862 13864	me
+T773	Noun-Phrase 13892 13893	I
+T774	Noun-Phrase 13955 13956	I
+T775	Noun-Phrase 13963 13965	it
+T776	Noun-Phrase 13985 13992	you all
+T777	Noun-Phrase 14010 14014	toto
+T778	Noun-Phrase 14054 14055	I
+T779	Noun-Phrase 14066 14071	a car
+T780	Noun-Phrase 14091 14097	feasts
+T781	Noun-Phrase 14098 14110	every outing
+T782	Noun-Phrase 14133 14156	the "you go and die la"
+T783	Noun-Phrase 14160 14187	"you strike toto jackpotla"
+T784	Noun-Phrase 14207 14218	the purpose
+T785	Noun-Phrase 14229 14231	me
+T786	Noun-Phrase 14239 14243	toto
+T787	Noun-Phrase 14276 14278	me
+T788	Noun-Phrase 14337 14346	that time
+T789	Noun-Phrase 14377 14380	dey
+T790	Noun-Phrase 14382 14383	I
+T791	Noun-Phrase 14395 14418	the middle of the night
+T792	Noun-Phrase 14444 14445	I
+T793	Noun-Phrase 14464 14467	koi
+T794	Noun-Phrase 14473 14475	It
+T795	Noun-Phrase 14496 14498	me
+T796	Noun-Phrase 14513 14535	all the way till night
+T797	Noun-Phrase 14543 14553	7am to 9am
+T798	Noun-Phrase 14652 14656	them
+T799	Noun-Phrase 14668 14676	the list
+T800	Noun-Phrase 14712 14732	a troublesome sunday
+T801	Noun-Phrase 14738 14746	that guy
+T802	Noun-Phrase 14770 14772	he
+T803	Noun-Phrase 14788 14790	me
+T804	Noun-Phrase 14820 14822	me
+T805	Noun-Phrase 14842 14843	I
+T806	Noun-Phrase 14873 14876	him
+T807	Noun-Phrase 14877 14878	I
+T808	Noun-Phrase 14884 14893	no people
+T809	Noun-Phrase 14925 14931	<#> am
+T810	Noun-Phrase 15001 15009	his name
+T811	Noun-Phrase 15045 15063	all my information
+T812	Noun-Phrase 15072 15079	jocelyn
+T813	Noun-Phrase 15166 15169	you
+T814	Noun-Phrase 15175 15191	a place to sleep
+T815	Noun-Phrase 15211 15214	you
+T816	Noun-Phrase 15231 15232	I
+T817	Noun-Phrase 15238 15241	you
+T818	Noun-Phrase 15242 15256	after my exams
+T819	Noun-Phrase 15258 15259	I
+T820	Noun-Phrase 15277 15285	my money
+T821	Noun-Phrase 15317 15323	Mr tan
+T822	Noun-Phrase 15328 15331	you
+T823	Noun-Phrase 15341 15379	my email regarding about my cca points
+T824	Noun-Phrase 15387 15388	I
+T825	Noun-Phrase 15401 15404	tar
+T826	Noun-Phrase 15450 15451	I
+T827	Noun-Phrase 15470 15479	the email
+T828	Noun-Phrase 15496 15504	This one
+T829	Noun-Phrase 15520 15531	Bad feeling
+T830	Noun-Phrase 15548 15574	anything I can do about it
+T831	Noun-Phrase 15594 15600	mr tan
+T832	Noun-Phrase 15602 15603	I
+T833	Noun-Phrase 15616 15626	the points
+T834	Noun-Phrase 15638 15644	mr tan
+T835	Noun-Phrase 15649 15651	we
+T836	Noun-Phrase 15657 15749	a bank account for astronomy club to depositthe camp fees from the student's edusave account
+T837	Noun-Phrase 15770 15771	I
+T838	Noun-Phrase 15786 15844	an invoice under astronomy club's nameto charge the school
+T839	Noun-Phrase 15855 15863	any ways
+T840	Noun-Phrase 15874 15875	i
+T841	Noun-Phrase 15958 15959	I
+T842	Noun-Phrase 15964 15980	the cash advance
+T843	Noun-Phrase 15990 15999	next week
+T844	Noun-Phrase 16042 16045	bss
+T845	Noun-Phrase 16074 16077	you
+T846	Noun-Phrase 16079 16085	mr tan
+T847	Noun-Phrase 16091 16094	you
+T848	Noun-Phrase 16109 16111	me
+T849	Noun-Phrase 16112 16177	a letterof authorization to collect camp fees from secondary schs
+T850	Noun-Phrase 16231 16234	you
+T851	Noun-Phrase 16257 16264	visitor
+T852	Noun-Phrase 16290 16291	I
+T853	Noun-Phrase 16303 16320	those information
+T854	Noun-Phrase 16328 16329	I
+T855	Noun-Phrase 16356 16359	you
+T856	Noun-Phrase 16375 16378	tmr
+T857	Noun-Phrase 16425 16428	you
+T858	Noun-Phrase 16437 16446	steamboat
+T859	Noun-Phrase 16509 16510	i
+T860	Noun-Phrase 16522 16533	both nights
+T861	Noun-Phrase 16538 16548	that price
+T862	Noun-Phrase 16556 16560	That
+T863	Noun-Phrase 16567 16581	garden terrace
+T864	Noun-Phrase 16600 16602	it
+T865	Noun-Phrase 16654 16656	we
+T866	Noun-Phrase 16682 16685	you
+T867	Noun-Phrase 16699 16709	the chalet
+T868	Noun-Phrase 16720 16734	not staying de
+T869	Noun-Phrase 16753 16759	chalet
+T870	Noun-Phrase 16806 16814	everyone
+T871	Noun-Phrase 16824 16834	the chalet
+T872	Noun-Phrase 16887 16893	people
+T873	Noun-Phrase 16911 16917	6 beds
+T874	Noun-Phrase 16937 16940	You
+T875	Noun-Phrase 16987 16988	I
+T876	Noun-Phrase 16996 16997	I
+T877	Noun-Phrase 17013 17024	your number
+T878	Noun-Phrase 17038 17041	you
+T879	Noun-Phrase 17067 17068	I
+T880	Noun-Phrase 17073 17082	what food
+T881	Noun-Phrase 17083 17084	I
+T882	Noun-Phrase 17120 17137	what results slip
+T883	Noun-Phrase 17138 17141	you
+T884	Noun-Phrase 17154 17158	Eggs
+T885	Noun-Phrase 17174 17179	toufu
+T886	Noun-Phrase 17204 17206	pw
+T887	Noun-Phrase 17212 17213	I
+T888	Noun-Phrase 17260 17263	you
+T889	Noun-Phrase 17324 17327	gym
+T890	Noun-Phrase 17351 17358	you all
+T891	Noun-Phrase 17365 17370	later
+T892	Noun-Phrase 17406 17412	korean
+T893	Noun-Phrase 17445 17450	games
+T894	Noun-Phrase 17511 17514	mom
+T895	Noun-Phrase 17532 17546	late afternoon
+T896	Noun-Phrase 17548 17551	You
+T897	Noun-Phrase 17564 17570	school
+T898	Noun-Phrase 17600 17606	chalet
+T899	Noun-Phrase 17629 17640	game addict
+T900	Noun-Phrase 17668 17681	timo yh and I
+T901	Noun-Phrase 17688 17694	normal
+T902	Noun-Phrase 17700 17706	wave 3
+T903	Noun-Phrase 17725 17744	a couple of Scrakes
+T904	Noun-Phrase 17762 17765	you
+T905	Noun-Phrase 17776 17778	He
+T906	Noun-Phrase 17791 17795	joel
+T907	Noun-Phrase 17829 17835	truman
+T908	Noun-Phrase 17851 17866	some other game
+T909	Noun-Phrase 17883 17917	the same thing over and over again
+T910	Noun-Phrase 17928 17936	the boss
+T911	Noun-Phrase 17958 17966	Anything
+T912	Noun-Phrase 17985 18002	the fighting fish
+T913	Noun-Phrase 18025 18033	Live one
+T914	Noun-Phrase 18046 18056	frozen one
+T915	Noun-Phrase 18070 18071	I
+T916	Noun-Phrase 18077 18087	the auntie
+T917	Noun-Phrase 18101 18118	my snails' bodies
+T918	Noun-Phrase 18124 18127	she
+T919	Noun-Phrase 18134 18136	it
+T920	Noun-Phrase 18146 18159	the container
+T921	Noun-Phrase 18173 18187	one orange one
+T922	Noun-Phrase 18206 18208	it
+T923	Noun-Phrase 18226 18229	You
+T924	Noun-Phrase 18234 18236	me
+T925	Noun-Phrase 18237 18242	money
+T926	Noun-Phrase 18250 18253	You
+T927	Noun-Phrase 18259 18267	my money
+T928	Noun-Phrase 18275 18281	drinks
+T929	Noun-Phrase 18318 18330	The internet
+T930	Noun-Phrase 18335 18339	they
+T931	Noun-Phrase 18353 18363	a few days
+T932	Noun-Phrase 18382 18384	it
+T933	Noun-Phrase 18399 18414	The largest one
+T934	Noun-Phrase 18431 18452	The twostuck together
+T935	Noun-Phrase 18453 18463	their eyes
+T936	Noun-Phrase 18477 18478	I
+T937	Noun-Phrase 18498 18502	home
+T938	Noun-Phrase 18516 18517	I
+T939	Noun-Phrase 18535 18536	I
+T940	Noun-Phrase 18554 18565	theflatfish
+T941	Noun-Phrase 18566 18595	the one I showed you just now
+T942	Noun-Phrase 18603 18604	I
+T943	Noun-Phrase 18616 18624	just now
+T944	Noun-Phrase 18632 18634	it
+T945	Noun-Phrase 18665 18668	You
+T946	Noun-Phrase 18685 18688	tmr
+T947	Noun-Phrase 18699 18700	I
+T948	Noun-Phrase 18706 18730	just now after <DECIMAL>
+T949	Noun-Phrase 18745 18751	people
+T950	Noun-Phrase 18753 18760	Forever
+T951	Noun-Phrase 18773 18779	people
+T952	Noun-Phrase 18795 18809	Johnny English
+T953	Noun-Phrase 18810 18813	tmr
+T954	Noun-Phrase 18869 18878	next time
+T955	Noun-Phrase 18886 18889	You
+T956	Noun-Phrase 18899 18927	a new tank of water for them
+T957	Noun-Phrase 18945 18946	I
+T958	Noun-Phrase 18967 18970	gym
+T959	Noun-Phrase 18976 19026	my friend who's a member ofthe gym at fusionopolis
+T960	Noun-Phrase 19044 19046	we
+T961	Noun-Phrase 19055 19058	<#>
+T962	Noun-Phrase 19062 19075	clementi mall
+T963	Noun-Phrase 19089 19101	the flatfish
+T964	Noun-Phrase 19109 19111	$4
+T965	Noun-Phrase 19116 19124	the fish
+T966	Noun-Phrase 19126 19127	I
+T967	Noun-Phrase 19134 19136	it
+T968	Noun-Phrase 19139 19151	the only one
+T969	Noun-Phrase 19156 19160	they
+T970	Noun-Phrase 19178 19180	it
+T971	Noun-Phrase 19185 19189	That
+T972	Noun-Phrase 19196 19197	I
+T973	Noun-Phrase 19220 19222	it
+T974	Noun-Phrase 19230 19231	I
+T975	Noun-Phrase 19238 19239	i
+T976	Noun-Phrase 19244 19258	breeding tanks
+T977	Noun-Phrase 19280 19281	I
+T978	Noun-Phrase 19294 19295	i
+T979	Noun-Phrase 19305 19339	the right family name for the fish
+T980	Noun-Phrase 19347 19352	Aunty
+T981	Noun-Phrase 19357 19367	bloodworms
+T982	Noun-Phrase 19393 19409	the image I sent
+T983	Noun-Phrase 19424 19449	your downloads or gallery
+T984	Noun-Phrase 19469 19470	I
+T985	Noun-Phrase 19509 19519	your gmail
+T986	Noun-Phrase 19536 19545	my friend
+T987	Noun-Phrase 19549 19558	My friend
+T988	Noun-Phrase 19572 19585	his fish.tank
+T989	Noun-Phrase 19587 19595	That one
+T990	Noun-Phrase 19599 19610	myfish tank
+T991	Noun-Phrase 19618 19623	$ <#>
+T992	Noun-Phrase 19624 19637	the fish shop
+T993	Noun-Phrase 19643 19663	the pump with filter
+T994	Noun-Phrase 19680 19688	the pump
+T995	Noun-Phrase 19721 19725	Eggs
+T996	Noun-Phrase 19727 19728	I
+T997	Noun-Phrase 19740 19753	this flatfish
+T998	Noun-Phrase 19797 19799	it
+T999	Noun-Phrase 19822 19824	it
+T1000	Noun-Phrase 19831 19837	gravel
+T1001	Noun-Phrase 19856 19870	the orange one
+T1002	Noun-Phrase 19874 19885	planorbidae
+T1003	Noun-Phrase 19911 19927	those two snails
+T1004	Noun-Phrase 19929 19942	The other one
+T1005	Noun-Phrase 19953 19962	neritidae
+T1006	Noun-Phrase 19993 19997	home
+T1007	Noun-Phrase 20032 20033	I
+T1008	Noun-Phrase 20044 20047	ytd
+T1009	Noun-Phrase 20069 20078	very soon
+T1010	Noun-Phrase 20086 20100	Tomorrow night
+T1011	Noun-Phrase 20111 20115	Gopi
+T1012	Noun-Phrase 20134 20137	you
+T1013	Noun-Phrase 20147 20150	you
+T1014	Noun-Phrase 20166 20169	now
+T1015	Noun-Phrase 20178 20179	I
+T1016	Noun-Phrase 20290 20292	It
+T1017	Noun-Phrase 20306 20320	your signature
+T1018	Noun-Phrase 20341 20348	Hurberg
+T1019	Noun-Phrase 20353 20354	I
+T1020	Noun-Phrase 20367 20377	over there
+T1021	Noun-Phrase 20397 20399	A*
+T1022	Noun-Phrase 20411 20412	I
+T1023	Noun-Phrase 20419 20423	back
+T1024	Noun-Phrase 20427 20433	friday
+T1025	Noun-Phrase 20435 20443	Thursday
+T1026	Noun-Phrase 20460 20466	school
+T1027	Noun-Phrase 20486 20493	friends
+T1028	Noun-Phrase 20518 20519	9
+T1029	Noun-Phrase 20547 20552	Stacy
+T1030	Noun-Phrase 20573 20574	I
+T1031	Noun-Phrase 20598 20604	school
+T1032	Noun-Phrase 20612 20613	I
+T1033	Noun-Phrase 20620 20640	officer cadet school
+T1034	Noun-Phrase 20657 20661	home
+T1035	Noun-Phrase 20665 20671	Friday
+T1036	Noun-Phrase 20696 20711	fighting fishes
+T1037	Noun-Phrase 20722 20728	female
+T1038	Noun-Phrase 20731 20739	terrapin
+T1039	Noun-Phrase 20752 20774	shrimps and flatfishes
+T1040	Noun-Phrase 20787 20788	I
+T1041	Noun-Phrase 20794 20811	half a pellet leh
+T1042	Noun-Phrase 20822 20832	the snails
+T1043	Noun-Phrase 20868 20871	OCS
+T1044	Noun-Phrase 20872 20882	their room
+T1045	Noun-Phrase 20893 20901	two beds
+T1046	Noun-Phrase 20914 20929	School activity
+T1047	Noun-Phrase 20937 20960	Before becoming officer
+T1048	Noun-Phrase 20972 20979	two bed
+T1049	Noun-Phrase 20984 21006	after becoming officer
+T1050	Noun-Phrase 21011 21014	you
+T1051	Noun-Phrase 21019 21040	air conditioned rooms
+T1052	Noun-Phrase 21071 21088	<#> beds per bunk
+T1053	Noun-Phrase 21096 21104	This one
+T1054	Noun-Phrase 21123 21129	hostel
+T1055	Noun-Phrase 21140 21145	table
+T1056	Noun-Phrase 21156 21170	bad conditions
+T1057	Noun-Phrase 21178 21179	I
+T1058	Noun-Phrase 21190 21195	today
+T1059	Noun-Phrase 21199 21200	I
+T1060	Noun-Phrase 21218 21235	boarding assembly
+T1061	Noun-Phrase 21243 21246	All
+T1062	Noun-Phrase 21265 21275	orange one
+T1063	Noun-Phrase 21306 21318	more shrimps
+T1064	Noun-Phrase 21384 21399	swimming trunks
+T1065	Noun-Phrase 21434 21439	shirt
+T1066	Noun-Phrase 21452 21453	I
+T1067	Noun-Phrase 21481 21488	weekend
+T1068	Noun-Phrase 21504 21506	It
+T1069	Noun-Phrase 21521 21528	my dear
+T1070	Noun-Phrase 21549 21554	Stacy
+T1071	Noun-Phrase 21558 21566	the room
+T1072	Noun-Phrase 21579 21582	she
+T1073	Noun-Phrase 21608 21611	you
+T1074	Noun-Phrase 21617 21619	me
+T1075	Noun-Phrase 21626 21640	some documents
+T1076	Noun-Phrase 21642 21643	I
+T1077	Noun-Phrase 21657 21669	your hotmail
+T1078	Noun-Phrase 21699 21714	subway vouchers
+T1079	Noun-Phrase 21718 21721	you
+T1080	Noun-Phrase 21740 21756	the facebook one
+T1081	Noun-Phrase 21773 21777	that
+T1082	Noun-Phrase 21828 21829	I
+T1083	Noun-Phrase 21857 21861	mine
+T1084	Noun-Phrase 21865 21898	the person who doesnt have it lah
+T1085	Noun-Phrase 21929 21931	he
+T1086	Noun-Phrase 21952 21954	he
+T1087	Noun-Phrase 21972 21973	1
+T1088	Noun-Phrase 22054 22059	hands
+T1089	Noun-Phrase 22087 22095	my phone
+T1090	Noun-Phrase 22105 22106	I
+T1091	Noun-Phrase 22130 22138	your cca
+T1092	Noun-Phrase 22155 22158	now
+T1093	Noun-Phrase 22165 22168	you
+T1094	Noun-Phrase 22198 22202	home
+T1095	Noun-Phrase 22204 22215	Fish babies
+T1096	Noun-Phrase 22234 22242	the week
+T1097	Noun-Phrase 22268 22283	half adult size
+T1098	Noun-Phrase 22334 22336	it
+T1099	Noun-Phrase 22348 22352	they
+T1100	Noun-Phrase 22405 22407	it
+T1101	Noun-Phrase 22415 22418	you
+T1102	Noun-Phrase 22422 22427	my ex
+T1103	Noun-Phrase 22429 22447	A lot alot of them
+T1104	Noun-Phrase 22495 22511	a few that lives
+T1105	Noun-Phrase 22526 22532	my mum
+T1106	Noun-Phrase 22548 22552	them
+T1107	Noun-Phrase 22576 22584	The Boys
+T1108	Noun-Phrase 22596 22597	I
+T1109	Noun-Phrase 22628 22631	You
+T1110	Noun-Phrase 22642 22651	rehearsal
+T1111	Noun-Phrase 22663 22670	meeting
+T1112	Noun-Phrase 22696 22700	home
+T1113	Noun-Phrase 22740 22756	The bibliography
+T1114	Noun-Phrase 22760 22762	we
+T1115	Noun-Phrase 22783 22798	the correct way
+T1116	Noun-Phrase 22817 22819	it
+T1117	Noun-Phrase 22820 22828	that way
+T1118	Noun-Phrase 22834 22835	I
+T1119	Noun-Phrase 22875 22876	I
+T1120	Noun-Phrase 22882 22885	you
+T1121	Noun-Phrase 22886 22929	what I have filled in for the research plan
+T1122	Noun-Phrase 22940 22942	it
+T1123	Noun-Phrase 22949 22950	I
+T1124	Noun-Phrase 22970 22976	things
+T1125	Noun-Phrase 22986 22996	references
+T1126	Noun-Phrase 22997 22998	I
+T1127	Noun-Phrase 23010 23012	it
+T1128	Noun-Phrase 23016 23031	the correct way
+T1129	Noun-Phrase 23038 23040	we
+T1130	Noun-Phrase 23061 23063	it
+T1131	Noun-Phrase 23067 23081	thecorrect way
+T1132	Noun-Phrase 23113 23119	dinner
+T1133	Noun-Phrase 23137 23140	you
+T1134	Noun-Phrase 23141 23146	later
+T1135	Noun-Phrase 23189 23190	I
+T1136	Noun-Phrase 23209 23210	I
+T1137	Noun-Phrase 23245 23259	that last text
+T1138	Noun-Phrase 23268 23272	that
+T1139	Noun-Phrase 23281 23289	"hahaha"
+T1140	Noun-Phrase 23293 23306	the beginning
+T1141	Noun-Phrase 23313 23314	I
+T1142	Noun-Phrase 23333 23334	I
+T1143	Noun-Phrase 23361 23362	I
+T1144	Noun-Phrase 23371 23377	morals
+T1145	Noun-Phrase 23409 23413	food
+T1146	Noun-Phrase 23433 23506	<#> or <#> more than I'd get to before not being ableto gm hold myself up
+T1147	Noun-Phrase 23563 23577	those portions
+T1148	Noun-Phrase 23618 23642	adding spaghetti noodles
+T1149	Noun-Phrase 23663 23664	I
+T1150	Noun-Phrase 23676 23687	raw noodles
+T1151	Noun-Phrase 23697 23698	I
+T1152	Noun-Phrase 23711 23715	them
+T1153	Noun-Phrase 23726 23727	I
+T1154	Noun-Phrase 23743 23747	them
+T1155	Noun-Phrase 23754 23757	You
+T1156	Noun-Phrase 23771 23773	it
+T1157	Noun-Phrase 23784 23790	Guitar
+T1158	Noun-Phrase 23791 23798	reading
+T1159	Noun-Phrase 23811 23813	we
+T1160	Noun-Phrase 23835 23844	Good idea
+T1161	Noun-Phrase 23864 23865	u
+T1162	Noun-Phrase 23892 23895	you
+T1163	Noun-Phrase 23906 23907	I
+T1164	Noun-Phrase 23925 23926	I
+T1165	Noun-Phrase 23936 23938	It
+T1166	Noun-Phrase 23959 23961	we
+T1167	Noun-Phrase 23968 23993	this fairly obscure field
+T1168	Noun-Phrase 24009 24011	it
+T1169	Noun-Phrase 24024 24051	the best thing in the world
+T1170	Noun-Phrase 24088 24092	love
+T1171	Noun-Phrase 24125 24128	bed
+T1172	Noun-Phrase 24147 24151	That
+T1173	Noun-Phrase 24158 24159	I
+T1174	Noun-Phrase 24171 24182	two friends
+T1175	Noun-Phrase 24193 24197	them
+T1176	Noun-Phrase 24204 24213	my friend
+T1177	Noun-Phrase 24229 24230	I
+T1178	Noun-Phrase 24242 24245	you
+T1179	Noun-Phrase 24251 24268	one of my friends
+T1180	Noun-Phrase 24346 24350	love
+T1181	Noun-Phrase 24354 24355	u
+T1182	Noun-Phrase 24361 24365	your
+T1183	Noun-Phrase 24393 24396	you
+T1184	Noun-Phrase 24400 24410	themorning
+T1185	Noun-Phrase 24423 24435	my dear love
+T1186	Noun-Phrase 24452 24456	live
+T1187	Noun-Phrase 24490 24497	the bus
+T1188	Noun-Phrase 24534 24547	Our schedules
+T1189	Noun-Phrase 24572 24573	I
+T1190	Noun-Phrase 24578 24582	home
+T1191	Noun-Phrase 24593 24594	I
+T1192	Noun-Phrase 24604 24624	when you're still up
+T1193	Noun-Phrase 24646 24648	it
+T1194	Noun-Phrase 24655 24673	an accidental call
+T1195	Noun-Phrase 24680 24683	you
+T1196	Noun-Phrase 24694 24698	Ohio
+T1197	Noun-Phrase 24758 24760	we
+T1198	Noun-Phrase 24775 24779	That
+T1199	Noun-Phrase 24818 24854	we do that people in SLUgSwould know
+T1200	Noun-Phrase 24862 24863	I
+T1201	Noun-Phrase 24873 24875	we
+T1202	Noun-Phrase 24881 24886	teams
+T1203	Noun-Phrase 24887 24889	we
+T1204	Noun-Phrase 24899 24937	people with knowledgeable other people
+T1205	Noun-Phrase 24944 24945	I
+T1206	Noun-Phrase 24955 24970	Water Buffaloes
+T1207	Noun-Phrase 24990 24992	we
+T1208	Noun-Phrase 25002 25014	a fob medley
+T1209	Noun-Phrase 25058 25065	morning
+T1210	Noun-Phrase 12826 12835	good news
+T1211	Noun-Phrase 14569 14573	that
+T1212	Noun-Phrase 15118 15122	that
+T1213	Noun-Phrase 15422 15423	I
+T1214	Noun-Phrase 16469 16470	I
+T1215	Noun-Phrase 23529 23548	your push up dreams
+T1216	Noun-Phrase 25092 25098	<name>
+T1217	Noun-Phrase 26809 26810	I
+T1218	Noun-Phrase 7251 7257	Yeiyei

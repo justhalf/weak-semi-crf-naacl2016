@@ -1,0 +1,1 @@
+java -cp target/experiments-smsnp-1.0-SNAPSHOT.jar com.statnlp.experiment.smsnp.SMSNPUtil -getStats -tokenizer regex -input data/SMSNP.train -includePercentile 0.995,0.996,0.999,0.9995,0.9999 -labels B-NP,I-NP,NP
