@@ -109,7 +109,7 @@ public class Main {
 		NetworkConfig._BUILD_FEATURES_FROM_LABELED_ONLY = false;
 		NetworkConfig.MODEL_TYPE = ModelType.CRF;
 		NetworkConfig.USE_BATCH_SGD = false;
-		NetworkConfig.SVM_MARGIN = 10;
+		NetworkConfig.MARGIN = 10;
 		NetworkConfig.objtol = 1e-6;
 		String weightInit = "random";
 		

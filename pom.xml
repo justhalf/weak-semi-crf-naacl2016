@@ -10,9 +10,9 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>justhalf.nlp</groupId>
+            <groupId>com.github.justhalf.nlp</groupId>
             <artifactId>java-nlp-toolkit</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.1.0</version>
         </dependency>
     </dependencies>
     <build>
